@@ -21,11 +21,11 @@ class GroupsSeeder extends Seeder
 
         for ($i=0; $i <10 ; $i++) { 
             Groups::create([
-                'name'=>$faker->word(),
-                'user_id'=>$users->random(),
-                'description'=>$faker->paragraph(),
-                'status' => rand(0, 1),
-                'photo'=>'https://via.placeholder.com/150',
+                'name'        => $faker->word(),
+                'user_id'     => $users->random(),
+                'description' => $faker->paragraph(),
+                'status'      => rand(0, 1),
+                'photo'       => 'https://via.placeholder.com/150',
             ]);
         }
     }

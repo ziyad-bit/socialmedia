@@ -15,13 +15,13 @@ class RolesSeeder extends Seeder
     public function run()
     {
         Roles::create([
-            'name'=>'group_member',
-            'description'=>'basic permission'
+            'name'        => 'group_member',
+            'description' => 'basic permission'
         ]);
 
         Roles::create([
-            'name'=>'group_admin',
-            'description'=>'mid level permission'
+            'name'        => 'group_admin',
+            'description' => 'mid level permission'
         ]);
     }
 }

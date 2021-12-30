@@ -23,9 +23,9 @@ class GroupUsersSeeder extends Seeder
 
         for ($i=0; $i <10 ; $i++) { 
             Group_users::create([
-                'role_id'=>$roles->random(),
-                'user_id'=>$users->random(),
-                'group_id'=>$groups->random(),
+                'role_id'  => $roles->random(),
+                'user_id'  => $users->random(),
+                'group_id' => $groups->random(),
             ]);
         }
     }

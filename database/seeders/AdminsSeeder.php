@@ -17,9 +17,9 @@ class AdminsSeeder extends Seeder
     {
         for ($i=0; $i <10 ; $i++) { 
             Admins::create([
-                'name'=>'ziyad'.$i,
-                'email'=>'ziyad199523'.$i.'yahoo.com',
-                'password'=>Hash::make('12121212'),
+                'name'     => 'ziyad'.$i,
+                'email'    => 'ziyad199523'.$i.'yahoo.com',
+                'password' => Hash::make('12121212'),
             ]);
         }
         

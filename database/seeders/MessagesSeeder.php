@@ -21,9 +21,9 @@ class MessagesSeeder extends Seeder
 
         for ($i=0; $i <100 ; $i++) { 
             Messages::create([
-                'receiver_id'=>$users->random(),
-                'sender_id'=>$users->random(),
-                'text'=>$faker->sentence(),
+                'receiver_id' => $users->random(),
+                'sender_id'   => $users->random(),
+                'text'        => $faker->sentence(),
             ]);
         }
     }

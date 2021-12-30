@@ -23,10 +23,10 @@ class PostsSeeder extends Seeder
 
         for ($i=0; $i <100 ; $i++) { 
             Posts::create([
-                'text'=>$faker->paragraph(),
-                'user_id'=>$users->random(),
-                'group_id'=>$groups->random(),
-                'photo'=>'https://via.placeholder.com/150',
+                'text'     => $faker->paragraph(),
+                'user_id'  => $users->random(),
+                'group_id' => $groups->random(),
+                'photo'    => 'https://via.placeholder.com/150',
             ]);
         }
     }

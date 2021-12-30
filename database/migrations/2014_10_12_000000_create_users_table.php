@@ -55,9 +55,6 @@ shares user_id , post_id , updated_at , created_at
 
 roles name , description
 
-
-11801811863852041021
-
 php artisan make:migration create_name_table
 php artisan make:controller name -m 
 php artisan make:model name -s
