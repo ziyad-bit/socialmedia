@@ -1,5 +1,9 @@
 @extends('layouts.adminLogin')
 @section('content')
+    @if (Session::has('error'))
+        <div class="alert alert-danger text-center">{{ Session::get('error') }}</div> 
+    @endif
+    
     <div class="card text-white bg-primary mb-3" style="max-width: 26rem;margin:auto;margin-top: 150px">
         <div class="card-header">admin login</div>
         <div class="card-body">

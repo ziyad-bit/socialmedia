@@ -11,4 +11,7 @@ Route::group(['prefix'=>'admins','namespace'=>'Admins','middleware'=>'guest:admi
 ########################        dashboard           ###############################
 Route::group(['prefix'=>'admins','namespace'=>'admins','middleware'=>'auth:admins'], function () {
     Route::get ('/dashboard'       , 'DashboardController@index');
+    Route::get ('/index'           , 'AdminsController@index');
+    Route::get ('/create'          , 'AdminsController@create');
+    Route::post('/store'           , 'AdminsController@store');
 });
