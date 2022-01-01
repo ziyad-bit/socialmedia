@@ -14,10 +14,12 @@
                     <a class="nav-link" href="{{url('admins/index')}}">admins</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
+                    <a class="nav-link" href="{{route('languages.index')}}">languages</a>
                 </li>
+                
+
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    <a class="nav-link" href="{{url('admins/logout')}}">logout</a>
                 </li>
             </ul>
         </div>

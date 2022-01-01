@@ -12,14 +12,19 @@
                 <div class="form-group">
                     <label for="exampleInputEmail1">Email address</label>
                     <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <small ></small>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Password</label>
                     <input type="password" name="password" class="form-control" id="exampleInputPassword1">
-                    <small ></small>
                 </div>
                 
+                <div class="form-check">
+                    <input class="form-check-input" name="remember_me" type="checkbox"  id="flexCheckChecked" >
+                    <label class="form-check-label" for="flexCheckChecked">
+                        remember me
+                    </label>
+                </div>
+
                 <button type="submit" class="btn btn-success" style="margin-top: 10px">login</button>
             </form>
         </div>

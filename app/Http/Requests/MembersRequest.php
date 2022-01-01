@@ -26,7 +26,7 @@ class MembersRequest extends FormRequest
     {
         return [
             'name'     => 'required_without:id|string|max:50|min:3',
-            'email'    => 'required_without:id|email|max:50|min:10|unique:users,email,' . Auth::user()->id,
+            'email'    => 'required_without:id|email|max:50|min:10|unique:admins,email,' . Auth::user()->id,
             'password' => 'required_without:id|string|max:50|min:8',
             'photo'    => 'required_without:photo_id|image|mimes:jpg,gif,jpeg,png|max:14',
         ];
