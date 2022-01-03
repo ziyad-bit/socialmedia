@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+
 
 define('pagination',4);
 
@@ -24,3 +26,6 @@ Route::group(['prefix'=>'admins','namespace'=>'admins','middleware'=>'auth:admin
 
 ########################        languages           ###############################
 Route::resource('admins/languages', Admins\LanguagesController::class);
+
+########################        groups           ###############################
+Route::resource(LaravelLocalization::setLocale().'/admins/groups', Admins\GroupsController::class);

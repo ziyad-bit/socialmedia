@@ -11,4 +11,9 @@ class Groups extends Model
 
     protected $guarded=[];
     protected $table='groups';
+
+    public function scopeSelection($q)
+    {
+        return $q->select('name','description','photo','created_at','id');
+    }
 }

@@ -13,7 +13,7 @@ class LanguagesController extends Controller
     ####################################      index      ################################
     public function index():View
     {
-        $languages=Languages::paginate(pagination);
+        $languages=Languages::cursorPaginate(pagination);
         return view('admins.languages.index',compact('languages'));
     }
 

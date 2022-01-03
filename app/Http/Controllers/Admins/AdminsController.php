@@ -37,10 +37,10 @@ class AdminsController extends Controller
         return redirect('admins/login');
     }
 
-    ####################################      login      ################################
+    ####################################      index      ################################
     public function index():view
     {
-        $admins=Admins::paginate(pagination);
+        $admins=Admins::cursorPaginate(pagination);
         return view('admins.admin.index',compact('admins'));
     }
 

@@ -16,12 +16,29 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('languages.index')}}">languages</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('groups.index')}}">groups</a>
+                </li>
                 
-
                 <li class="nav-item">
                     <a class="nav-link" href="{{url('admins/logout')}}">logout</a>
                 </li>
             </ul>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ __('titles.languages') }}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                        <a rel="alternate" hreflang="{{ $localeCode }}" class="dropdown-item"
+                            href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                            {{ $properties['native'] }}
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+            
         </div>
     </div>
 </nav>
