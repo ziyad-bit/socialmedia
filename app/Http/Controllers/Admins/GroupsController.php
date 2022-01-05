@@ -85,22 +85,18 @@ class GroupsController extends Controller
             DB::rollback();
             return redirect()->back()->with(['error'=>__('messages.something went wrong')]);
         }
-
     }
 
-    public function show($id)
+    public function edit(int $id)
     {
-        //
-    }
+        $group=Groups::with('groups')->selection()->findOrfail($id);
 
-    public function edit($id)
-    {
-        //
+        return view('admins.groups.edit',compact('group'));
     }
 
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     public function destroy($id)

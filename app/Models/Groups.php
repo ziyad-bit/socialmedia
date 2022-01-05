@@ -12,8 +12,12 @@ class Groups extends Model
     protected $guarded=[];
     protected $table='groups';
 
+    public function Groups(){
+        return $this->hasMany(self::class,'trans_of');
+    }
+
     public function scopeSelection($q)
     {
-        return $q->select('name','description','photo','created_at','id');
+        return $q->select('name','description','photo','created_at','id','trans_of');
     }
 }
