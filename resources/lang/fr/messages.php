@@ -2,7 +2,7 @@
 
 return [
 
-    'you created category successfully'  => 'vous avez créé la catégorie avec succès',
-    'you updated category successfully'  => 'vous mise à jour créé la catégorie avec succès',
-    'you deleted category successfully'  => 'vous supprimé créé la catégorie avec succès',
+    'you created it successfully'  => 'vous avez créé  avec succès',
+    'you updated it successfully'  => 'vous mise à jour créé  avec succès',
+    'you deleted it successfully'  => 'vous supprimé créé  avec succès',
 ];

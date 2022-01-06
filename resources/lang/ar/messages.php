@@ -2,7 +2,7 @@
 
 return [
 
-    'you created category successfully'  => 'تم انشاء القسم بنجاح',
-    'you updated category successfully'  => 'تم تعديل القسم بنجاح',
-    'you deleted category successfully'  => 'تم حذف القسم بنجاح',
+    'you created it successfully'  => 'تم الانشاء  بنجاح',
+    'you updated it successfully'  => 'تم التعديل  بنجاح',
+    'you deleted it successfully'  => 'تم الحذف  بنجاح',
 ];

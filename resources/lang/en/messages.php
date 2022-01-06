@@ -5,7 +5,7 @@ return [
    
 
 
-    'you created category successfully'  => 'you created category successfully',
-    'you updated category successfully'  => 'you updated category successfully',
-    'you deleted category successfully'  => 'you deleted category successfully',
+    'you created it successfully'  => 'you created it successfully',
+    'you updated it successfully'  => 'you updated it successfully',
+    'you deleted it successfully'  => 'you deleted it successfully',
 ];

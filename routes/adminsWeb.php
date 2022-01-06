@@ -28,4 +28,8 @@ Route::group(['prefix'=>'admins','namespace'=>'admins','middleware'=>'auth:admin
 Route::resource('admins/languages', Admins\LanguagesController::class);
 
 ########################        groups           ###############################
+Route::group(['prefix'=>'groups','namespace'=>'admins','middleware'=>'auth:admins'], function () {
+    Route::put('/change/{id}'     , 'GroupsController@change')->name('groups.change');
+});
+
 Route::resource(LaravelLocalization::setLocale().'/admins/groups', Admins\GroupsController::class);

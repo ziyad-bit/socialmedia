@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 trait GetLanguages
 {
-    public function getDefault(array $group):array
+    public function get_data_in_default_lang(array $group):array
     {
         $collected_item=collect($group);
         $filter=$collected_item->filter(function($val){
@@ -17,7 +17,7 @@ trait GetLanguages
         return array_values($filter->all())[0];
     }
 
-    public function getOther(array $group):Collection
+    public function get_data_in_Other_langs(array $group):Collection
     {
         $collected_item=collect($group);
         return $collected_item->filter(function($val){

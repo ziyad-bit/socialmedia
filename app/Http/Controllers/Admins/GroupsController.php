@@ -21,27 +21,30 @@ class GroupsController extends Controller
         $this->middleware([ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]);
     }
 
+    ####################################      index      ################################
     public function index()
     {
         $groups=Groups::selection()->where('trans_lang',default_lang())->cursorPaginate(pagination);
         return view('admins.groups.index',compact('groups'));
     }
 
+    ####################################      create      ################################
     public function create()
     {
         $languages=Languages::select('abbr')->get();
         return view('admins.groups.create',compact('languages'));
     }
 
+    ####################################      store      ################################
     public function store(GroupRequest $request)
     {
         try{
-            DB::beginTransaction();
-
             $group=$request->group;
 
-            $defualt_group = $this->getDefault($group);
+            $defualt_group = $this->get_data_in_default_lang($group);
             $photo_name    = $this->uploadphoto($request , 'images/groups');
+
+            DB::beginTransaction();
 
             if (isset($defualt_group['name']) && isset($defualt_group['description'] ) ) {
                 $defualt_group_id=Groups::insertGetId([
@@ -57,7 +60,7 @@ class GroupsController extends Controller
                 return redirect()->back()->with('error','you should fill input in '.default_lang().'(default language)');
             }
     
-            $othergroups=$this->getOther($group);
+            $othergroups=$this->get_data_in_Other_langs($group);
     
             if(isset($othergroups)){
                 $othergroups_arr=[];
@@ -87,18 +90,48 @@ class GroupsController extends Controller
         }
     }
 
+    ####################################      edit      ################################
     public function edit(int $id)
     {
         $group=Groups::with('groups')->selection()->findOrfail($id);
 
+        if ($group->trans_of != 0) {
+            $group=Groups::with('groups')->selection()->findOrfail($group->trans_of);
+        }
+
         return view('admins.groups.edit',compact('group'));
     }
 
+    ####################################      update      ################################
     public function update(Request $request, $id)
     {
         
     }
 
+    ####################################      change      ################################
+    public function change(GroupRequest $request,int $id)
+    {
+        $group      = Groups::findOrfail($id);
+        $groups_ids = $group->groups->pluck('id')->toArray();
+
+        array_push($groups_ids,$id);
+
+        if ($request->photo) {
+            $photo_name   = $this->uploadphoto($request , 'images/groups');
+            Groups::whereIn('id',$groups_ids)->update([
+                    'photo'=>$photo_name,
+                    'status'=>$request->status
+                ]);
+        }else{
+            Groups::whereIn('id',$groups_ids)->update([
+                'status'=>$request->status
+            ]);
+        }
+        
+        return redirect()->back()->with(['success'=>__('messages.you updated it successfully')]);
+    }
+
+    ####################################      destroy      ################################
     public function destroy($id)
     {
         //
