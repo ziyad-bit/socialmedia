@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Models\Groups;
-use App\Models\Languages;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\{Languages,Groups};
+use Illuminate\Support\Facades\{Auth,DB};
 use App\Http\Requests\GroupRequest;
 use App\Http\Controllers\Controller;
-use App\Traits\GetLanguages;
-use App\Traits\UploadImage;
-use Illuminate\Support\Facades\Auth;
+use App\Traits\{UploadImage,GetLanguages};
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class GroupsController extends Controller
 {
@@ -18,25 +16,25 @@ class GroupsController extends Controller
 
     public function __construct()
     {
-        $this->middleware([ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]);
+        $this->middleware(adminMiddleware());
     }
 
     ####################################      index      ################################
-    public function index()
+    public function index():View
     {
         $groups=Groups::selection()->where('trans_lang',default_lang())->cursorPaginate(pagination);
         return view('admins.groups.index',compact('groups'));
     }
 
     ####################################      create      ################################
-    public function create()
+    public function create():View
     {
         $languages=Languages::select('abbr')->get();
         return view('admins.groups.create',compact('languages'));
     }
 
     ####################################      store      ################################
-    public function store(GroupRequest $request)
+    public function store(GroupRequest $request):RedirectResponse
     {
         try{
             $group=$request->group;
@@ -91,7 +89,7 @@ class GroupsController extends Controller
     }
 
     ####################################      edit      ################################
-    public function edit(int $id)
+    public function edit(int $id):View
     {
         $group=Groups::with('groups')->selection()->findOrfail($id);
 
@@ -103,24 +101,35 @@ class GroupsController extends Controller
     }
 
     ####################################      update      ################################
-    public function update(Request $request, $id)
+    public function update(GroupRequest $request,int $id):RedirectResponse
     {
-        
+        $group         = Groups::findOrfail($id);
+        $request_group = array_values($request->group);
+
+        $group->update([
+            'name'        => $request_group[0]['name'],
+            'description' => $request_group[0]['description'],
+        ]);
+
+        return redirect()->back()->with(['success'=>__('messages.you updated it successfully')]);
     }
 
     ####################################      change      ################################
-    public function change(GroupRequest $request,int $id)
+    public function change(GroupRequest $request,int $id):RedirectResponse
     {
         $group      = Groups::findOrfail($id);
-        $groups_ids = $group->groups->pluck('id')->toArray();
+        if ($group->trans_of != 0) {
+            $group=Groups::findOrfail($group->trans_of);
+        }
 
+        $groups_ids = $group->groups->pluck('id')->toArray();
         array_push($groups_ids,$id);
 
         if ($request->photo) {
             $photo_name   = $this->uploadphoto($request , 'images/groups');
             Groups::whereIn('id',$groups_ids)->update([
-                    'photo'=>$photo_name,
-                    'status'=>$request->status
+                    'photo'  => $photo_name,
+                    'status' => $request->status
                 ]);
         }else{
             Groups::whereIn('id',$groups_ids)->update([
@@ -132,8 +141,11 @@ class GroupsController extends Controller
     }
 
     ####################################      destroy      ################################
-    public function destroy($id)
+    public function destroy(int $id):RedirectResponse
     {
-        //
+        $group      = Groups::findOrfail($id);
+        $group->delete();
+
+        return redirect()->back()->with(['success'=>__('messages.you deleted it successfully')]);
     }
 }

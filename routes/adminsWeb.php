@@ -7,28 +7,28 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 define('pagination',4);
 
 ########################      admins login            ###############################
-Route::group(['prefix'=>'admins','namespace'=>'Admins','middleware'=>'guest:admins'], function () {
+Route::group(['prefix'=>'admins','namespace'=>'Admins'], function () {
     Route::get ('/login'       , 'AdminsController@getLogin');
     Route::post('/login'       , 'AdminsController@login');
 });
 
 ########################        auth admins           ###############################
-Route::group(['prefix'=>'admins','namespace'=>'admins','middleware'=>'auth:admins'], function () {
-    Route::get ('/dashboard'       , 'DashboardController@index');
-    Route::get ('/logout'          , 'AdminsController@logout');
-    Route::get ('/index'           , 'AdminsController@index');
-    Route::get ('/create'          , 'AdminsController@create');
-    Route::post('/store'           , 'AdminsController@store');
-    Route::get ('/edit/{id}'       , 'AdminsController@edit');
-    Route::post('/update/{id}'     , 'AdminsController@update');
-    Route::get ('/delete/{id}'     , 'AdminsController@delete');
+Route::group(['prefix'=>LaravelLocalization::setLocale().'/admins','namespace'=>'admins'], function () {
+    Route::get ('/dashboard'       , 'DashboardController@index')->name('admins.dashboard');
+    Route::get ('/logout'          , 'AdminsController@logout')->name('admins.logout');
+    Route::get ('/index'           , 'AdminsController@index')->name('admins.index');
+    Route::get ('/create'          , 'AdminsController@create')->name('admins.create');
+    Route::post('/store'           , 'AdminsController@store')->name('admins.store');
+    Route::get ('/edit/{id}'       , 'AdminsController@edit')->name('admins.edit');
+    Route::post('/update/{id}'     , 'AdminsController@update')->name('admins.update');
+    Route::get ('/delete/{id}'     , 'AdminsController@delete')->name('admins.delete');
 });
 
 ########################        languages           ###############################
-Route::resource('admins/languages', Admins\LanguagesController::class);
+Route::resource(LaravelLocalization::setLocale().'/admins/languages', Admins\LanguagesController::class);
 
 ########################        groups           ###############################
-Route::group(['prefix'=>'groups','namespace'=>'admins','middleware'=>'auth:admins'], function () {
+Route::group(['prefix'=>LaravelLocalization::setLocale().'/groups','namespace'=>'admins'], function () {
     Route::put('/change/{id}'     , 'GroupsController@change')->name('groups.change');
 });
 

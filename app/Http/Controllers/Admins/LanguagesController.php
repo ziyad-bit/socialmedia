@@ -10,6 +10,11 @@ use Illuminate\Http\RedirectResponse;
 
 class LanguagesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(adminMiddleware());
+    }
+
     ####################################      index      ################################
     public function index():View
     {

@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\{Auth,Hash};
 
 class AdminsController extends Controller
 {
+    public function __construct()
+    {
+        $loginRoutes=['getLogin','login'];
+        
+        $this->middleware(adminMiddleware())->except($loginRoutes);
+        $this->middleware('guest:admins')->only($loginRoutes);
+    }
     ####################################      getlogin      ################################
     public function getLogin():View
     {

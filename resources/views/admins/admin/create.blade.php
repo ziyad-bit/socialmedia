@@ -9,10 +9,10 @@
     <div class="row justify-content-center" style="margin-top: 100px">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('add admin') }}</div>
+                <div class="card-header">{{ __('add') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ url('admins/store') }}">
+                    <form method="POST" action="{{ route('admins.create') }}">
                         @csrf
                         <input type="hidden" value="1" name="photo_id">
                         

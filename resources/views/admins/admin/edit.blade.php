@@ -12,7 +12,7 @@
                 <div class="card-header">{{ __('edit admin') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ url('admins/update/'.$admin->id) }}">
+                    <form method="POST" action="{{ route('admins.update',$admin->id) }}">
                         @csrf
                         <input type="hidden" value="1" name="photo_id">
                         

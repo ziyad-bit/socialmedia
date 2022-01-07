@@ -9,7 +9,9 @@
         <div class="alert alert-danger text-center">{{ Session::get('error') }}</div>
     @endif
 
-    <a class="btn btn-primary" href="{{ url('admins/create') }}" style="margin-top: 20px">add admin</a>
+    <a class="btn btn-primary" href="{{ url('admins/create') }}" style="margin-top: 20px">
+        {{__('titles.add')}}
+    </a>
 
     <table class="table" style="margin-top: 20px">
         <thead class="thead-dark">
@@ -27,11 +29,11 @@
                     <td>{{ $admin->name }}</td>
                     <td>{{ $admin->email }}</td>
                     <td>
-                        <a href="{{ url('admins/edit/' . $admin->id) }}" class='btn btn-primary'>
+                        <a href="{{ route('admins.edit',$admin->id) }}" class='btn btn-primary'>
                             edit
                         </a>
 
-                        <a href="{{ url('admins/delete/' . $admin->id) }}" class='btn btn-danger'>
+                        <a href="{{ route('admins.delete',$admin->id) }}" class='btn btn-danger'>
                             delete
                         </a>
 

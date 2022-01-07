@@ -46,15 +46,17 @@
 
 
     <div class="card text-white bg-dark mb-3" style="max-width: 34rem;margin-top: 20px">
-        <div class="card-header">{{ __('titles.edit group') }}({{ __('titles.' . $group->trans_of) }})</div>
+        <div class="card-header">{{ __('titles.edit') }} ({{ __('titles.' . $group->trans_lang) }})</div>
         <div class="card-body">
             <form method="POST" action="{{ route('groups.update', $group->id) }}">
                 @csrf
+                @method('put')
 
+                <input type="hidden" name="photo_id" value="1">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">{{ __('titles.name') }}
-                        ({{ __('titles.' . $group->trans_of) }})</label>
-                    <input type="text" name="name" value="{{ $group->name }}" class="form-control"
+                    <label for="exampleInputEmail1">
+                        {{ __('titles.name' ) }}</label>
+                    <input type="text" name="group[0][name]" value="{{ $group->name }}" class="form-control"
                         aria-describedby="emailHelp">
                     @error('group.0.name')
                         <small style="color: red">
@@ -65,8 +67,8 @@
 
                 <div class="form-group">
                     <label for="exampleInputPassword1">{{ __('titles.description') }}
-                        ({{ __('titles.' . $group->trans_of) }})</label>
-                    <textarea type="text" name="description"
+                        </label>
+                    <textarea type="text" name="group[0][description]"
                         class="form-control"> {{ $group->description }} </textarea>
                     @error('group.0.description')
                         <small style="color: red">

@@ -18,6 +18,6 @@ class Groups extends Model
 
     public function scopeSelection($q)
     {
-        return $q->select('name','description','photo','created_at','id','trans_of');
+        return $q->select('name','description','photo','created_at','id','trans_of','trans_lang');
     }
 }
