@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-
 define('pagination',4);
 
 ########################      admins login            ###############################
@@ -29,7 +28,8 @@ Route::resource(LaravelLocalization::setLocale().'/admins/languages', Admins\Lan
 
 ########################        groups           ###############################
 Route::group(['prefix'=>LaravelLocalization::setLocale().'/groups','namespace'=>'admins'], function () {
-    Route::put('/change/{id}'     , 'GroupsController@change')->name('groups.change');
+    Route::put ('/change/{id}'     , 'GroupsController@change')->name('groups.change');
+    Route::post('/add/{id}'        , 'GroupsController@add_lang')->name('groups.add_lang');
 });
 
 Route::resource(LaravelLocalization::setLocale().'/admins/groups', Admins\GroupsController::class);

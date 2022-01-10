@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\Models\Groups;
+use App\Models\Languages;
 use Illuminate\Support\Collection;
 
 trait GetLanguages
@@ -24,5 +26,16 @@ trait GetLanguages
             //defaultLang() autoload from app\helpers\general
             return $val['abbr'] != default_Lang();
         });
+    }
+
+    public function langs_diff(Groups $group):array
+    {
+        $languages=Languages::pluck('abbr')->ToArray();
+        $group_langs=$group->groups->pluck('trans_lang')->toArray();
+
+        array_push($group_langs,default_lang());
+        $lang_diff= array_diff($languages,$group_langs);
+
+        return $lang_diff;
     }
 }

@@ -88,6 +88,43 @@ class GroupsController extends Controller
         }
     }
 
+    ####################################      show      ################################
+    public function show(int $id):View|RedirectResponse
+    {
+        $group=Groups::select('trans_of','id')->findOrfail($id);
+
+        if ($group->trans_of != 0) {
+            $group=Groups::findOrfail($group->trans_of);
+        }
+        
+        $lang_diff=$this->langs_diff($group);
+
+        if ($lang_diff == []) {
+            return redirect()->route('groups.index')->with('success','all languages are added');
+        }
+
+        return view('admins.groups.show',compact('lang_diff','group'));
+    }
+
+    ####################################      add lang      ################################
+    public function add_lang(int $id , GroupRequest $request):RedirectResponse
+    {
+        $group=(array)$request->group;
+        $group=Groups::find($id);
+
+        Groups::create([
+            'trans_lang'  => $request->abbr,
+            'trans_of'    => $id,
+            'name'        => $group['name'],
+            'description' => $group['description'],
+            'photo'       => $group->photo,
+            'status'      => $group->status,
+            'admin_id'    => Auth::id(),
+        ]);
+
+        return redirect()->back()->with(['success'=>'you added new language successfully for this group']);
+    }
+
     ####################################      edit      ################################
     public function edit(int $id):View
     {

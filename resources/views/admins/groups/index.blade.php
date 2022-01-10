@@ -33,6 +33,10 @@
                             edit
                         </a>
 
+                        <a href="{{ route('groups.show',$group->id) }}" class='btn btn-info' style="margin-top: 10px">
+                            add language
+                        </a>
+
                         <form action="{{route('groups.destroy',$group->id)}}" method="POST" style="display: inline-block">
                             @csrf
                             @method('delete')
