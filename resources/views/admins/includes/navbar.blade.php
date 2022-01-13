@@ -8,20 +8,20 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="#">{{__("titles.home")}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url('admins/index')}}">admins</a>
+                    <a class="nav-link" href="{{url('admins/index')}}">{{__("titles.admins")}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('languages.index')}}">languages</a>
+                    <a class="nav-link" href="{{route('languages.index')}}">{{__("titles.groups")}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('groups.index')}}">groups</a>
+                    <a class="nav-link" href="{{route('groups.index')}}">{{__("titles.languages")}}</a>
                 </li>
                 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url('admins/logout')}}">logout</a>
+                    <a class="nav-link" href="{{url('admins/logout')}}">{{__('titles.logout')}}</a>
                 </li>
             </ul>
             <div class="dropdown">

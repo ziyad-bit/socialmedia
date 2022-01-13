@@ -30,7 +30,7 @@
                     <td>{{ $language->abbr }}</td>
                     <td>
                         <a href="{{ route('languages.edit',$language->id) }}" class='btn btn-primary'>
-                            edit
+                            {{__('titles.edit')}}
                         </a>
 
                         <form action="{{route('languages.destroy',$language->id)}}" method="POST" style="display: inline-block">
@@ -38,7 +38,7 @@
                             @method('delete')
 
                             <button type="submit" onclick="return confirm('Are you sure?')" class='btn btn-danger'>
-                                delete
+                                {{__('titles.delete')}}
                             </button>
                         </form>
                     </td>

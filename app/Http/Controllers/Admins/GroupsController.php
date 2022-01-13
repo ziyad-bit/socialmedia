@@ -110,7 +110,7 @@ class GroupsController extends Controller
     public function add_lang(int $id , GroupRequest $request):RedirectResponse
     {
         $group=(array)$request->group;
-        $group=Groups::find($id);
+        $group=Groups::findOrfail($id);
 
         Groups::create([
             'trans_lang'  => $request->abbr,

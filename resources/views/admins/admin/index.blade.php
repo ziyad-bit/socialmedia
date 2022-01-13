@@ -30,11 +30,11 @@
                     <td>{{ $admin->email }}</td>
                     <td>
                         <a href="{{ route('admins.edit',$admin->id) }}" class='btn btn-primary'>
-                            edit
+                            {{__('titles.edit')}}
                         </a>
 
                         <a href="{{ route('admins.delete',$admin->id) }}" class='btn btn-danger'>
-                            delete
+                            {{__('titles.delete')}}
                         </a>
 
                         

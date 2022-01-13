@@ -22,4 +22,7 @@ return[
     'photo'        => 'photo',
     'group'        => 'group',
     'add group'    => 'add group',
+    'logout'       => 'logout',
+    'groups'       => 'groups',
+    'add language' => 'add language'
 ];

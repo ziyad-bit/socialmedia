@@ -1,4 +1,4 @@
-@extends('layouts.AdminApp')
+@extends('layouts.adminApp')
 
 @section('content')
     @if (Session::has('success'))
@@ -30,11 +30,11 @@
                     <td><img src="{{$group->photo}}" alt="loading"></td>
                     <td>
                         <a href="{{ route('groups.edit',$group->id) }}" class='btn btn-primary'>
-                            edit
+                            {{__('titles.edit')}}
                         </a>
 
                         <a href="{{ route('groups.show',$group->id) }}" class='btn btn-info' style="margin-top: 10px">
-                            add language
+                            {{__('titles.add language')}}
                         </a>
 
                         <form action="{{route('groups.destroy',$group->id)}}" method="POST" style="display: inline-block">
@@ -42,7 +42,7 @@
                             @method('delete')
 
                             <button type="submit" onclick="return confirm('Are you sure?')" class='btn btn-danger' style="margin-top: 10px">
-                                delete
+                                {{__('titles.delete')}}
                             </button>
                         </form>
                     </td>

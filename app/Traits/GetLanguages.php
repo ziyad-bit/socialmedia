@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 
 trait GetLanguages
 {
+    ####################################      get_data_in_default_lang      ################################
     public function get_data_in_default_lang(array $group):array
     {
         $collected_item=collect($group);
@@ -19,6 +20,7 @@ trait GetLanguages
         return array_values($filter->all())[0];
     }
 
+    ####################################      get_data_in_other_langs      ################################
     public function get_data_in_Other_langs(array $group):Collection
     {
         $collected_item=collect($group);
@@ -28,6 +30,7 @@ trait GetLanguages
         });
     }
 
+    ####################################      langs_diff      ################################
     public function langs_diff(Groups $group):array
     {
         $languages=Languages::pluck('abbr')->ToArray();

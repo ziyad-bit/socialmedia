@@ -22,5 +22,8 @@ return[
     'edit category'=> 'modifier la catégorie',
     'photo'        => 'photo',
     'group'        => 'groupe',
+    'groups'       => 'groupes',
     'add group'    => 'ajouter groupe',
+    'logout'       => 'logoute',
+    'add language' => 'ajouter langue'
 ];
