@@ -1,0 +1,22 @@
+.card-text {
+    position: relative;
+    left    : 102px;
+    width   : 50%;
+    bottom  : 24px;
+}
+
+.card-title{
+    font-size: large;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.card-body{
+    padding-bottom: 0 !important;
+}
+
+.btn-primary{
+    float: right;
+    position: relative;
+    bottom: -7px;
+}

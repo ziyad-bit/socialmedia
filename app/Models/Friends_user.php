@@ -12,7 +12,7 @@ class Friends_user extends Model
     protected $guarded=[];
     protected $table='friend_user';
 
-    public function friends()
+    public function users()
     {
         return $this->belongsToMany('app\Models\User','friend_user','friend_id','user_id');
     }

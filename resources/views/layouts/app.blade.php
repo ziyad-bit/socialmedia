@@ -6,7 +6,7 @@
 <body>
     @include('users.includes.navbar')
 
-    <main class="py-4">
+    <main class="container">
         @yield('content')
     </main>
 

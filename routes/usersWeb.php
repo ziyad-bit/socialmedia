@@ -21,4 +21,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('search', Users\SearchController::class);
+
+Route::group(['prefix'=>'search','namespace'=>'Users'], function () {
+    Route::any ('/index'       , 'SearchController@index')->name('users.search.index');
+    
+});
