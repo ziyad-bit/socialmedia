@@ -2,57 +2,33 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Models\User;
-use App\Models\Groups;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Groups;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
     public function index(Request $request)
     {
-        $search=$request->has('search') ? $request->get('search') : null;
+        $search = $request->has('search') ? $request->get('search') : null;
         if ($search != null) {
-            $users=User::selection()->search($search)->get();
-            $groups=Groups::select('name','description','photo')->where('trans_lang',default_lang())->search($search)->get();
-        }else{
-            return redirect()->route('users.search.index')->with('error','you should enter name in search field');
+            $users = User::selection()->search($search)->paginate(7);
+            $groups = Groups::select('name', 'description', 'photo')->where('trans_lang', default_lang())
+                ->search($search)->paginate(4);
+
+            if ($request->has('agax')) {
+                $view = view('users.search.next_search', compact('users', 'groups'))->render();
+                return response()->json(['view' => $view]);
+            }
         }
-
-        
-        return view('users\search\index',compact('users','groups'));
+        $request->flash();
+        return view('users\search\index', compact('users', 'groups'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function show_matched_results(Request $request)
     {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**

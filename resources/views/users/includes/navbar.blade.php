@@ -35,8 +35,8 @@
                         <form method="POST" action="{{route('users.search.index')}}" class="d-flex">
                             @csrf
 
-                            <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
+                            <input class="form-control me-2" id="search"  name="search" type="search" value="{{old('search')}}" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success"  type="submit">Search</button>
                         </form>
 
                         <li class="nav-item dropdown">

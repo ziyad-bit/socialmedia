@@ -25,6 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CommentsSeeder::class);
         $this->call(MessagesSeeder::class);
         */
-        $this->call(LanguagesSeeder::class);
+        //$this->call(LanguagesSeeder::class);
     }
 }

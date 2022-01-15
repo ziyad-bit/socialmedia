@@ -52,3 +52,7 @@
     </div>
 
 @endsection
+
+@section('script')
+    <script src="{{asset('js/search/index.js')}}"></script>
+@endsection
