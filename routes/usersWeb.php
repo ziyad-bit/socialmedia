@@ -24,5 +24,5 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['prefix'=>'search','namespace'=>'Users'], function () {
     Route::any ('/index'       , 'SearchController@index')->name('users.search.index');
-    
+    Route::post('/show'        , 'SearchController@show')->name('users.search.show');
 });

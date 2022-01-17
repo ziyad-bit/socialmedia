@@ -6,15 +6,15 @@
 
 @section('content')
     @if (Session::has('error'))
-        <div class="alert alert-success text-center">{{ Session::get('error') }}</div>
+        <div class="alert alert-danger text-center">{{ Session::get('error') }}</div>
     @endif
 
     <div class="d-flex justify-content-center" style="margin-top: 30px">
         <div class="card text-dark bg-light mb-3" style="width: 50rem;">
-            <div class="card-header">All</div>
-            @isset($users)
+            <div class="card-header" data-status="1">All</div>
+            @if ($users->count() > 0)
                 @foreach ($users as $user)
-                    <div class="card-body">
+                    <div class="card-body" >
                         <img src="{{ asset('images/users/' . $user->photo) }}" class="rounded-circle" style="width: 80px"
                             alt="loading">
 
@@ -25,17 +25,16 @@
                         <div class="card-text">
                             {{ $user->work }}
                         </div>
-
                     </div>
                 @endforeach
-            @endisset
+            @endif
 
 
-            @isset($groups)
+            @if ($groups->count() > 0)
                 @foreach ($groups as $group)
                     <div class="card-body">
-                        <img src="{{ asset('images/groups/' . $group->photo) }}" class="rounded-circle" style="width: 100px"
-                            alt="loading">
+                        <img src="{{ asset('images/groups/' . $group->photo) }}" class="rounded-circle"
+                            style="width: 100px" alt="loading">
                         <span class="card-title">
                             {{ $group->name }}
                         </span>
@@ -43,10 +42,10 @@
                         <div class="card-text">
                             {{ $group->description }}
                         </div>
-
                     </div>
                 @endforeach
-            @endisset
+            @endif
+
 
         </div>
     </div>
@@ -54,5 +53,5 @@
 @endsection
 
 @section('script')
-    <script src="{{asset('js/search/index.js')}}"></script>
+    <script src="{{ asset('js/users/search/index.js') }}"></script>
 @endsection

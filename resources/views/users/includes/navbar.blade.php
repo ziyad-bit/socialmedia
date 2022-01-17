@@ -1,5 +1,5 @@
 <div id="app">
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', 'Laravel') }}
@@ -35,7 +35,12 @@
                         <form method="POST" action="{{route('users.search.index')}}" class="d-flex">
                             @csrf
 
-                            <input class="form-control me-2" id="search"  name="search" type="search" value="{{old('search')}}" placeholder="Search" aria-label="Search">
+                            <input required class="form-control me-2" id="search"  name="search" type="search" value="{{old('search')}}" placeholder="Search" aria-label="Search">
+                            <div class="card   search_guest " >
+                                <ul class="list-group list-group-flush "  data-req_num="0">
+                                    
+                                </ul>
+                            </div>
                             <button class="btn btn-outline-success"  type="submit">Search</button>
                         </form>
 
@@ -63,3 +68,7 @@
             </div>
         </div>
     </nav>
+
+    @auth
+        <script src="{{asset('js/users/navbar.js')}}"></script>
+    @endauth

@@ -1,0 +1,20 @@
+.list-group{
+    position: absolute;
+    top: 44px;
+    left: -209px;
+    z-index: 6;
+    width: 200px;
+    
+}
+.list-group-item{
+    background-color: rgb(195, 200, 204);
+}
+
+.list-group-item:hover{
+    cursor: pointer;
+    background-color: rgb(219, 215, 208);
+}
+
+.search_image{
+    width: 30px;
+}
