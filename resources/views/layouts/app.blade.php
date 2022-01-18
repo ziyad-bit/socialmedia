@@ -13,6 +13,7 @@
     @include('users.includes.footer')
     
     @yield('script')
+    
 </body>
 
 </html>

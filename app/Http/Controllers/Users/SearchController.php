@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Events\StoreSearches;
 use App\Http\Controllers\Controller;
 use App\Models\Groups;
+use App\Models\Searches;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,7 @@ class SearchController extends Controller
         $search = $request->has('search') ? $request->get('search') : null;
         if ($search != null) {
             $users = User::selection()->search($search)->paginate(7);
-            $groups = Groups::select('name', 'description', 'photo')->where('trans_lang', default_lang())
+            $groups = Groups::select('name', 'description', 'photo')->defaultLang()
                 ->search($search)->paginate(4);
 
             $request->flash();
@@ -22,6 +24,8 @@ class SearchController extends Controller
             if ($request->has('agax')) {
                 $view = view('users.search.next_search', compact('users', 'groups'))->render();
                 return response()->json(['view' => $view]);
+            }else{
+                event(new StoreSearches($search));
             }
         }else{
             return redirect()->route('users.search.index')->with('error', 'you should enter name in search field');

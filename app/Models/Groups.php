@@ -20,8 +20,7 @@ class Groups extends Model
             'groups.description' => 7,
         ],
     ];
-
-    
+    ################################    relations    #####################################
 
     public function users_in_groups()
     {
@@ -33,8 +32,14 @@ class Groups extends Model
         return $this->belongsTo("App\Models\User",'user_id');
     }
 
+    ################################    scope    #####################################
     public function scopeSelection($q)
     {
         return $q->select('name','description','photo','created_at','id','trans_of','trans_lang');
+    }
+
+    public function scopeDefaultLang($q)
+    {
+        return $q->where('trans_lang', default_lang());
     }
 }

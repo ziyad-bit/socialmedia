@@ -22,7 +22,7 @@ class GroupsController extends Controller
     ####################################      index      ################################
     public function index():View
     {
-        $groups=Groups::selection()->where('trans_lang',default_lang())->cursorPaginate(pagination);
+        $groups=Groups::selection()->defaultLang()->cursorPaginate(pagination);
         return view('admins.groups.index',compact('groups'));
     }
 

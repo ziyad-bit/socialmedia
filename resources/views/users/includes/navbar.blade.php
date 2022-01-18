@@ -32,16 +32,17 @@
                             </li>
                         @endif
                     @else
-                        <form method="POST" action="{{route('users.search.index')}}" class="d-flex">
+                        <form method="POST" id="search_form" action="{{ route('users.search.index') }}" class="d-flex">
                             @csrf
 
-                            <input required class="form-control me-2" id="search"  name="search" type="search" value="{{old('search')}}" placeholder="Search" aria-label="Search">
-                            <div class="card   search_guest " >
-                                <ul class="list-group list-group-flush "  data-req_num="0">
-                                    
+                            <input required class="form-control me-2" id="search" name="search" type="search"
+                                value="{{ old('search') }}" placeholder="Search" aria-label="Search">
+                            <div class="card   search_guest ">
+                                <ul class="list-group list-group-flush " data-req_num="0">
+
                                 </ul>
                             </div>
-                            <button class="btn btn-outline-success"  type="submit">Search</button>
+                            <button class="btn btn-outline-success" id="search_btn" type="submit">Search</button>
                         </form>
 
                         <li class="nav-item dropdown">
@@ -52,8 +53,8 @@
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                        
-                                                        document.getElementById('logout-form').submit();">
+                                                            
+                                                            document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
 
@@ -68,7 +69,3 @@
             </div>
         </div>
     </nav>
-
-    @auth
-        <script src="{{asset('js/users/navbar.js')}}"></script>
-    @endauth

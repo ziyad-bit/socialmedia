@@ -31,8 +31,6 @@ class User extends Authenticatable
         ],
     ];
 
-
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -52,6 +50,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    #############################    relations   ########################################
+
     public function friends()
     {
         return $this->belongsToMany(self::class,'friend_user','user_id','friend_id');
@@ -62,11 +62,17 @@ class User extends Authenticatable
         return $this->belongsToMany("App\Models\Groups",'Group_users','user_id','group_id');
     }
 
-    public function groups()
+    public function searches()
     {
-        return $this->hasMany("App\Models\Groups",'user_id');
+        return $this->hasMany("App\Models\Searches",'user_id');
     }
 
+    public function users()
+    {
+        return $this->belongsTo('App/Models/User','user_id');
+    }
+
+    #############################    scope   ########################################
     public function scopeSelection($q)
     {
         return $q->select('name','work','photo','email');

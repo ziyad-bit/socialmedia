@@ -1,6 +1,7 @@
 window.onload = function () {
     //load pages
-    let search_ele = document.getElementById('search');
+    const search_ele  = document.getElementById('search'),
+        card_header = document.querySelector('.card-header');
     let search=search_ele.value;
 
     function loadPages(page) {
@@ -10,7 +11,7 @@ window.onload = function () {
                 if (view != "") {
                     document.querySelector('.text-dark').insertAdjacentHTML('beforeend', view);
                 } else {
-                    document.querySelector('.card-header').setAttribute('data-status', '0');
+                    card_header.setAttribute('data-status', '0');
                 }
             })
     }
@@ -19,7 +20,7 @@ window.onload = function () {
     let page = 1;
     window.onscroll = function () {
         if (window.scrollY + window.innerHeight >= document.body.clientHeight) {
-            let data_status = document.querySelector('.card-header').getAttribute('data-status');
+            let data_status = card_header.getAttribute('data-status');
             
             if (data_status != "0") {
                 page++;
@@ -27,6 +28,5 @@ window.onload = function () {
             }
         }
     }
-
 }
 
