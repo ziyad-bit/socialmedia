@@ -34,9 +34,9 @@
                     @else
                         <form method="POST" id="search_form" action="{{ route('users.search.index') }}" class="d-flex">
                             @csrf
-
+    
                             <input required class="form-control me-2" id="search" name="search" type="search"
-                                value="{{ old('search') }}" placeholder="Search" aria-label="Search">
+                                value="{{ old('search') }}" placeholder="Search" aria-label="Search" >
                             <div class="card   search_guest ">
                                 <ul class="list-group list-group-flush " data-req_num="0">
 

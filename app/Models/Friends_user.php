@@ -10,7 +10,7 @@ class Friends_user extends Model
     use HasFactory;
 
     protected $guarded=[];
-    protected $table='friend_user';
+    protected $table='friends_user';
 
     public function users()
     {

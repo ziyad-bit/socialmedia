@@ -28,5 +28,16 @@ window.onload = function () {
             }
         }
     }
+
+
+    //add friend
+    generalEventListener('click','.add_btn',e=>{
+        console.log(e.target)
+        let friend_id=e.target.getAttribute('data-user_id');
+        axios.post('/friends',{'friend_id':friend_id})
+    })
+
+    
+    
 }
 

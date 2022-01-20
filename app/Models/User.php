@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -75,6 +76,11 @@ class User extends Authenticatable
     #############################    scope   ########################################
     public function scopeSelection($q)
     {
-        return $q->select('name','work','photo','email');
+        return $q->select('name','work','photo','email','id');
+    }
+
+    public function scopeNotAuth($q)
+    {
+        return $q->where('id','!=',Auth::id());
     }
 }

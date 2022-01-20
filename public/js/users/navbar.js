@@ -1,12 +1,47 @@
-const search_ele = document.getElementById('search');
-const  list_ele = document.getElementsByClassName('list-group-item');
+const search_ele = document.getElementById('search'),
+        list_ele = document.getElementsByClassName('list-group-item'),
+        list_group = document.querySelector('.list-group');
 
 function generalEventListener(type, selector, callback) {
     document.addEventListener(type, e => {
         if (e.target.matches(selector)) {
-            callback(e)
+            callback(e);
         }
-    })
+    });
+}
+
+//submit search form on click
+generalEventListener('click','.list-group-item',e=>{
+    let text=e.target.textContent;
+    let pure_text=text.replace(/ /g, "");
+
+    search_ele.value=pure_text;
+
+    document.getElementById('search_form').submit();
+});
+
+//show recent searches
+function show_recent_searches(){
+    axios.get('search/show/recent')
+        .then(function(res){
+            let req_num = list_group.getAttribute('data-req_num');
+            if (req_num == '1') {
+                for (let i = 0; i < list_ele.length; i++) {
+                    list_ele[i].style.display = 'none';
+                }
+            }
+
+            list_group.setAttribute('data-req_num', '1');
+
+            let recent_searches=res.data.recent_searches
+            for (let i = 0; i < recent_searches.length; i++) {
+                list_group.insertAdjacentHTML('beforeend',
+                    `<li class="list-group-item" >
+                        <span>${recent_searches[i].search}</span> 
+                    </li>`
+                );
+            }
+        });
 }
 
 //show matched search results
@@ -15,7 +50,6 @@ search_ele.onkeyup = function () {
     if (search) {
         axios.post('/search/show', { 'search': search })
             .then(function (res) {
-                const list_group = document.querySelector('.list-group');
                 let req_num = list_group.getAttribute('data-req_num');
 
                 if (req_num == '1') {
@@ -23,15 +57,6 @@ search_ele.onkeyup = function () {
                         list_ele[i].style.display = 'none';
                     }
                 }
-
-                generalEventListener('click','.list-group-item',e=>{
-                    let text=e.target.textContent;
-                    let pure_text=text.replace(/ /g, "");
-
-                    search_ele.value=pure_text;
-
-                    document.getElementById('search_form').submit()
-                })
 
                 list_group.setAttribute('data-req_num', '1');
 
@@ -55,7 +80,17 @@ search_ele.onkeyup = function () {
                     );
                 }
             });
+    }else{
+        show_recent_searches()
     }
 };
 
+
+//show recent searches
+search_ele.onfocus=function(){
+    let search=search_ele.value;
+    if (! search) {
+        show_recent_searches()
+    }
+}
 
