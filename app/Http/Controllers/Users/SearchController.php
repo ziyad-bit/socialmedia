@@ -13,11 +13,13 @@ use Illuminate\Support\Facades\Auth;
 class SearchController extends Controller
 {
     #######################################    index    #####################################
-    public function index(SearchRequest $request):View|JsonResponse
+    public function index(SearchRequest $request)//:View|JsonResponse
     {
         $search=$request->search;
         
-        $users = User::selection()->notAuth()->search($search)->paginate(7);
+         $users = User::with(['friends'=>fn($q)=>$q->select('status')])
+            ->selection()->notAuth()->search($search)->paginate(7);
+
         $groups = Groups::select('name', 'description', 'photo')->defaultLang()
             ->search($search)->paginate(4);
         

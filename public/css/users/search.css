@@ -15,7 +15,7 @@
     padding-bottom: 0 !important;
 }
 
-.btn-primary{
+.btn-primary,.btn-success{
     float: right;
     position: relative;
     bottom: -7px;

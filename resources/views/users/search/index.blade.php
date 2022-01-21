@@ -24,8 +24,31 @@
                             <span class="card-title">
                                 {{ $user->name }}
                             </span>
-                            
-                            <button class="btn btn-primary add_btn" data-user_id="{{$user->id}}" >add</button>
+
+                            @if ($user->friends->count() > 0)
+                                @foreach ($user->friends as $friend)
+                                    @if ($friend->status == 0 || $friend->status == 2 )
+                                        <button class="btn btn-primary" disabled="true">
+                                            awaiting approval
+                                        </button>
+                                    @endif
+
+                                    @if ($friend->status == 1)
+                                        <a class="btn btn-success ">
+                                            message
+                                        </a>
+                                    @endif
+
+                
+                                @endforeach
+                            @else
+                                <button class="btn btn-primary add_btn" data-user_id="{{$user->id}}">
+                                    add
+                                </button>
+                            @endif
+
+
+
                             <div class="card-text">
                                 {{ $user->work }}
                             </div>

@@ -17,6 +17,7 @@ class CreateFriendsUserTable extends Migration
             $table->id();
             $table->foreignId('friend_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->tinyInteger('status',false,true)->default(0);
             $table->timestamps();
         });
     }

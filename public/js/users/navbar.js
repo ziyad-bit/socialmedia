@@ -22,36 +22,10 @@ generalEventListener('click','.list-group-item',e=>{
 
 //show recent searches
 function show_recent_searches(){
-    axios.get('search/show/recent')
-        .then(function(res){
-            let req_num = list_group.getAttribute('data-req_num');
-            if (req_num == '1') {
-                for (let i = 0; i < list_ele.length; i++) {
-                    list_ele[i].style.display = 'none';
-                }
-            }
-
-            list_group.setAttribute('data-req_num', '1');
-
-            let recent_searches=res.data.recent_searches
-            for (let i = 0; i < recent_searches.length; i++) {
-                list_group.insertAdjacentHTML('beforeend',
-                    `<li class="list-group-item" >
-                        <span>${recent_searches[i].search}</span> 
-                    </li>`
-                );
-            }
-        });
-}
-
-//show matched search results
-search_ele.onkeyup = function () {
-    let search = search_ele.value;
-    if (search) {
-        axios.post('/search/show', { 'search': search })
-            .then(function (res) {
+    axios.get('/search/show/recent')
+        .then(res=>{
+            if (res.status == 200) {
                 let req_num = list_group.getAttribute('data-req_num');
-
                 if (req_num == '1') {
                     for (let i = 0; i < list_ele.length; i++) {
                         list_ele[i].style.display = 'none';
@@ -60,25 +34,57 @@ search_ele.onkeyup = function () {
 
                 list_group.setAttribute('data-req_num', '1');
 
-                let users = res.data.users;
-                for (let i = 0; i < users.length; i++) {
+                let recent_searches=res.data.recent_searches
+                for (let i = 0; i < recent_searches.length; i++) {
                     list_group.insertAdjacentHTML('beforeend',
                         `<li class="list-group-item" >
-                            <img src="/images/users/${users[i].photo}" class="rounded-circle search_image">
-                            <span>${users[i].name}</span> 
+                            <span>${recent_searches[i].search}</span> 
                         </li>`
                     );
                 }
+            }
+            
+        });
+}
 
-                let groups = res.data.groups;
-                for (let i = 0; i < groups.length; i++) {
-                    list_group.insertAdjacentHTML('beforeend',
-                        `<li class="list-group-item" >
-                            <img src="/images/groups/${groups[i].photo}" class="rounded-circle search_image">
-                            <span>${groups[i].name}</span> 
-                        </li>`
-                    );
+//show matched search results
+search_ele.onkeyup = function () {
+    let search = search_ele.value;
+    if (search) {
+        axios.post('/search/show', { 'search': search })
+            .then(res=> {
+                if (res.status == 200) {
+                    let req_num = list_group.getAttribute('data-req_num');
+
+                    if (req_num == '1') {
+                        for (let i = 0; i < list_ele.length; i++) {
+                            list_ele[i].style.display = 'none';
+                        }
+                    }
+
+                    list_group.setAttribute('data-req_num', '1');
+
+                    let users = res.data.users;
+                    for (let i = 0; i < users.length; i++) {
+                        list_group.insertAdjacentHTML('beforeend',
+                            `<li class="list-group-item" >
+                                <img src="/images/users/${users[i].photo}" class="rounded-circle search_image">
+                                <span>${users[i].name}</span> 
+                            </li>`
+                        );
+                    }
+
+                    let groups = res.data.groups;
+                    for (let i = 0; i < groups.length; i++) {
+                        list_group.insertAdjacentHTML('beforeend',
+                            `<li class="list-group-item" >
+                                <img src="/images/groups/${groups[i].photo}" class="rounded-circle search_image">
+                                <span>${groups[i].name}</span> 
+                            </li>`
+                        );
+                    }
                 }
+                
             });
     }else{
         show_recent_searches()
