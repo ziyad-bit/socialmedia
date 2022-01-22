@@ -17,7 +17,7 @@ class SearchController extends Controller
     {
         $search=$request->search;
         
-         $users = User::with(['friends'=>fn($q)=>$q->select('status')])
+        $users = User::with(['add_friends'=>fn($q)=>$q->select('status')])
             ->selection()->notAuth()->search($search)->paginate(7);
 
         $groups = Groups::select('name', 'description', 'photo')->defaultLang()

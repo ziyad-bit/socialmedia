@@ -25,8 +25,8 @@
                                 {{ $user->name }}
                             </span>
 
-                            @if ($user->friends->count() > 0)
-                                @foreach ($user->friends as $friend)
+                            @if ($user->add_friends->count() > 0)
+                                @foreach ($user->add_friends as $friend)
                                     @if ($friend->status == 0 || $friend->status == 2 )
                                         <button class="btn btn-primary" disabled="true">
                                             awaiting approval
@@ -39,15 +39,12 @@
                                         </a>
                                     @endif
 
-                
                                 @endforeach
                             @else
                                 <button class="btn btn-primary add_btn" data-user_id="{{$user->id}}">
                                     add
                                 </button>
                             @endif
-
-
 
                             <div class="card-text">
                                 {{ $user->work }}

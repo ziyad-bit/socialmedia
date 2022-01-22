@@ -54,9 +54,15 @@ class User extends Authenticatable
 
     #############################    relations   ########################################
 
-    public function friends()
+    public function add_friends()
     {
         return $this->belongsToMany(self::class,'friend_user','friend_id','user_id')
+            ->withPivot('status');
+    }
+
+    public function friends_add()
+    {
+        return $this->belongsToMany(self::class,'friend_user','user_id','friend_id')
             ->withPivot('status');
     }
 

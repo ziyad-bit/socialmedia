@@ -36,7 +36,7 @@
                             @csrf
     
                             <input required class="form-control me-2" id="search" name="search" type="search"
-                                value="{{ old('search') }}" placeholder="Search" aria-label="Search" >
+                                value="{{ old('search') }}" placeholder="Search" aria-label="Search" autocomplete="off" >
                             <div class="card   search_guest ">
                                 <ul class="list-group list-group-flush " data-req_num="0">
 
@@ -52,9 +52,12 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{route('users.friends.show_requests')}}">
+                                    Requests
+                                </a>
+
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                            
-                                                            document.getElementById('logout-form').submit();">
+                                    document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
 

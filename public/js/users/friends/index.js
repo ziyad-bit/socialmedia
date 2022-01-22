@@ -1,38 +1,35 @@
 window.onload = function () {
+    const card_header = document.querySelector('.card-header'); 
     //load pages
-    const search_ele  = document.getElementById('search'),
-        
-    let search=search_ele.value;
-
-    function loadPages(page) {
-        axios.post("?page=" + page, { 'search': search, 'agax': 1 })
+    function loadPages(page_code) {
+        axios.post("?cursor=" + page_code,{'agax':1})
             .then(res=> {
                 if (res.status == 200) {
-                    let view = res.data.view;
+                    let view   = res.data.view;
+                    let cursor = res.data.page_code;
+                    
+                    card_header.setAttribute('data-page_code',cursor);
+
                     if (view != "") {
                         document.querySelector('.text-dark').insertAdjacentHTML('beforeend', view);
-                    } else {
-                        card_header.setAttribute('data-status', '0');
                     }
                 }
             })
     }
 
 
-    let page = 1;
     window.onscroll = function () {
         if (window.scrollY + window.innerHeight >= document.body.clientHeight) {
-            let data_status = card_header.getAttribute('data-status');
-            
-            if (data_status != "0") {
-                page++;
-                loadPages(page);
+            let page_code = card_header.getAttribute('data-page_code');
+            if (page_code) {
+                loadPages(page_code);
             }
         }
     }
 
 
     //add friend
+    /*
     generalEventListener('click','.add_btn',e=>{
         let friend_id=e.target.getAttribute('data-user_id');
         axios.post('/friends',{'friend_id':friend_id})
@@ -44,7 +41,7 @@ window.onload = function () {
                 }
             })
     })
-
+*/
     
     
 }

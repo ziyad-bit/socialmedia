@@ -28,6 +28,10 @@ Route::group(['prefix'=>'search','namespace'=>'Users'], function () {
     Route::get ('/show/recent' , 'SearchController@show_recent');
 });
 
+
+#######################################     users     ######################################
 Route::resource('users',Users\UsersController::class);
 
+#######################################     friends     ######################################
+Route::any ('friends/requests'  , 'Users\FriendsController@show_requests')->name('users.friends.show_requests');
 Route::apiResource('friends',Users\FriendsController::class);
