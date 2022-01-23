@@ -27,21 +27,38 @@
 
                             @if ($user->add_friends->count() > 0)
                                 @foreach ($user->add_friends as $friend)
-                                    @if ($friend->status == 0 || $friend->status == 2 )
+                                    @if ($friend->request->status == 0 || $friend->request->status == 2)
                                         <button class="btn btn-primary" disabled="true">
                                             awaiting approval
                                         </button>
                                     @endif
 
-                                    @if ($friend->status == 1)
+                                    @if ($friend->request->status == 1)
                                         <a class="btn btn-success ">
                                             message
                                         </a>
                                     @endif
-
                                 @endforeach
-                            @else
-                                <button class="btn btn-primary add_btn" data-user_id="{{$user->id}}">
+                            @endif
+
+                            @if ($user->friends_add->count() > 0)
+                                @foreach ($user->friends_add as $friend)
+                                    @if ($friend->request->status == 0 || $friend->request->status == 2)
+                                        <button class="btn btn-primary" disabled="true">
+                                            awaiting approval
+                                        </button>
+                                    @endif
+
+                                    @if ($friend->request->status == 1)
+                                        <a class="btn btn-success ">
+                                            message
+                                        </a>
+                                    @endif
+                                @endforeach
+                            @endif
+
+                            @if ($user->add_friends->count() == 0 && $user->friends_add->count() == 0)
+                                <button class="btn btn-primary add_btn" data-user_id="{{ $user->id }}">
                                     add
                                 </button>
                             @endif

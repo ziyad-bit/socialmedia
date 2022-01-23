@@ -11,16 +11,13 @@ use Illuminate\Support\Facades\Auth;
 
 class FriendsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    ##########################################    show_requests    #########################
     public function show_requests(Request $request)
     {
-        $friend_reqs = User::whereHas('friends_add', fn($q) => $q->where(['status' => 0, 'friend_id' => Auth::id()]))
+        $friend_reqs = User::with('friends_add:name,photo')
+            ->whereHas('friends_add',fn($q)=>$q->where(['status'=>0,'friend_id'=>Auth::id()]))
             ->selection()->cursorPaginate(5);
-
+        
         $page_code='';
         if ($friend_reqs->hasMorePages()) {
             $page_code = $friend_reqs->nextCursor()->encode();
@@ -34,6 +31,7 @@ class FriendsController extends Controller
         return view('users.friends.index', compact('friend_reqs','page_code'));
     }
 
+    ##########################################    store    ###################################
     public function store(FriendRequest $request)
     {
         Friends_user::create($request->validated() + ['user_id' => Auth::id()]);
@@ -41,37 +39,22 @@ class FriendsController extends Controller
         return response()->json();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    ##########################################    update    #################################
+    public function update(Request $request,int $id)
     {
-
+        $friend_req=Friends_user::findOrfail($id);
+        $this->authorize('update_or_delete',$friend_req);
+        
+        $friend_req->update(['status'=>1]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    ##########################################    show    #################################
+    //ignore friends request
+    public function show(int $id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $friend_req=Friends_user::findOrfail($id);
+        $this->authorize('update_or_delete',$friend_req);
+        
+        $friend_req->update(['status'=>2]);
     }
 }

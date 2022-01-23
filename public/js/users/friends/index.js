@@ -29,20 +29,28 @@ window.onload = function () {
 
 
     //add friend
-    /*
-    generalEventListener('click','.add_btn',e=>{
-        let friend_id=e.target.getAttribute('data-user_id');
-        axios.post('/friends',{'friend_id':friend_id})
+    
+    generalEventListener('click','.approve_btn',e=>{
+        let friend_req_id=e.target.getAttribute('data-friend_req_id');
+        axios.put('/friends/'+friend_req_id)
             .then(res=>{
                 if (res.status == 200) {
-                    const add_btn=document.querySelector(`[data-user_id="${friend_id}"]`);
-                    add_btn.disabled=true
-                    add_btn.textContent="awaiting approval"
+                    document.querySelector(`[data-friend_req="${friend_req_id}"]`)
+                        .style.display='none';
                 }
             })
     })
-*/
-    
+
+    generalEventListener('click','.ignore_btn',e=>{
+        let friend_req_id=e.target.getAttribute('data-friend_req_id');
+        axios.get('/friends/'+friend_req_id)
+            .then(res=>{
+                if (res.status == 200) {
+                    document.querySelector(`[data-friend_req="${friend_req_id}"]`)
+                        .style.display='none';
+                }
+            })
+    })
     
 }
 

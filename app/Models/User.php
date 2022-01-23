@@ -40,7 +40,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-        'pivot'
+        
     ];
 
     /**
@@ -53,17 +53,16 @@ class User extends Authenticatable
     ];
 
     #############################    relations   ########################################
-
     public function add_friends()
     {
         return $this->belongsToMany(self::class,'friend_user','friend_id','user_id')
-            ->withPivot('status');
+            ->as('request')->withPivot('status');
     }
 
     public function friends_add()
     {
         return $this->belongsToMany(self::class,'friend_user','user_id','friend_id')
-            ->withPivot('status');
+            ->as('request')->withPivot('id');
     }
 
     public function groups_joined()

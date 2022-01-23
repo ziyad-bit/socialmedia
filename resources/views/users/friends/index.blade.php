@@ -14,29 +14,29 @@
     @else
         <div class="d-flex justify-content-center" style="margin-top: 30px">
             <div class="card text-dark bg-light mb-3" style="width: 50rem;">
-                <div class="card-header"  data-page_code="{{$page_code}}">All</div>
+                <div class="card-header" data-page_code="{{ $page_code }}">All</div>
                 @foreach ($friend_reqs as $friend_req)
-                    <div class="card-body">
-                        <img src="{{ asset('images/users/' . $friend_req->photo) }}" class="rounded-circle"
-                            style="width: 80px" alt="loading">
+                    @if ($friend_req->friends_add->count() > 0)
+                        @foreach ($friend_req->friends_add as $friend)
+                            <div class="card-body"  data-friend_req="{{ $friend->request->id }}">
+                                <img src="{{ asset('images/users/' . $friend_req->photo) }}" class="rounded-circle"
+                                    style="width: 80px" alt="loading">
 
-                        <span class="card-title">
-                            {{ $friend_req->name }}
-                        </span>
+                                <span class="card-title">
+                                    {{ $friend_req->name }}
+                                </span>
 
-                        <button class="btn btn-primary" data-friend_req_id="{{ $friend_req->id }}">
-                            approve
-                        </button>
+                                <button class="btn btn-primary approve_btn"
+                                    data-friend_req_id="{{ $friend->request->id }}">
+                                    approve
+                                </button>
 
-                        <button class="btn btn-danger add_btn" data-friend_req_id="{{ $friend_req->id }}">
-                            ignore
-                        </button>
-
-
-                        <div class="card-text">
-                            {{ $friend_req->work }}
-                        </div>
-                    </div>
+                                <button class="btn btn-danger ignore_btn" data-friend_req_id="{{ $friend->request->id }}">
+                                    ignore
+                                </button>
+                            </div>
+                        @endforeach
+                    @endif
                 @endforeach
             </div>
         </div>
