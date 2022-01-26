@@ -13,15 +13,14 @@ use Illuminate\Support\Facades\Auth;
 class SearchController extends Controller
 {
     #######################################    index    #####################################
-    public function index(SearchRequest $request)//:View|JsonResponse
+    public function index(SearchRequest $request):View|JsonResponse
     {
         $search=$request->search;
         
-        $users = User::with(['add_friends:id','friends_add:id'])
-            ->selection()->notAuth()->search($search)->paginate(7);
+        $users = User::with(['auth_add_friends:id','friends_add_auth:id'])->selection()
+            ->notAuth()->search($search)->paginate(7);
 
-        $groups = Groups::select('name', 'description', 'photo')->defaultLang()
-            ->search($search)->paginate(4);
+        $groups = Groups::min_selection()->defaultLang()->search($search)->paginate(4);
         
         if ($request->has('agax')) {
             $view = view('users.search.next_search', compact('users', 'groups'))->render();
@@ -41,8 +40,7 @@ class SearchController extends Controller
         $search = $request->search;
         
         $users = User::selection()->notAuth()->search($search)->limit(4)->get();
-        $groups = Groups::select('name', 'description', 'photo')->defaultLang()
-            ->search($search)->limit(4)->get();
+        $groups = Groups::min_selection()->defaultLang()->search($search)->limit(4)->get();
         
         return response()->json(['users' => $users,'groups'=>$groups]);
     }

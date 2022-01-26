@@ -1,7 +1,6 @@
 window.onload = function () {
     //load pages
-    const search_ele  = document.getElementById('search'),
-        
+    const search_ele  = document.getElementById('search');
     let search=search_ele.value;
 
     function loadPages(page) {

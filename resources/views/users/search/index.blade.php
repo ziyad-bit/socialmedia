@@ -25,8 +25,8 @@
                                 {{ $user->name }}
                             </span>
 
-                            @if ($user->add_friends->count() > 0)
-                                @foreach ($user->add_friends as $friend)
+                            @if ($user->auth_add_friends->count() > 0)
+                                @foreach ($user->auth_add_friends as $friend)
                                     @if ($friend->request->status == 0 || $friend->request->status == 2)
                                         <button class="btn btn-primary" disabled="true">
                                             awaiting approval
@@ -41,8 +41,8 @@
                                 @endforeach
                             @endif
 
-                            @if ($user->friends_add->count() > 0)
-                                @foreach ($user->friends_add as $friend)
+                            @if ($user->friends_add_auth->count() > 0)
+                                @foreach ($user->friends_add_auth as $friend)
                                     @if ($friend->request->status == 0 || $friend->request->status == 2)
                                         <button class="btn btn-primary" disabled="true">
                                             awaiting approval
@@ -57,7 +57,7 @@
                                 @endforeach
                             @endif
 
-                            @if ($user->add_friends->count() == 0 && $user->friends_add->count() == 0)
+                            @if ($user->auth_add_friends->count() == 0 && $user->friends_add_auth->count() == 0)
                                 <button class="btn btn-primary add_btn" data-user_id="{{ $user->id }}">
                                     add
                                 </button>

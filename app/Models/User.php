@@ -53,13 +53,13 @@ class User extends Authenticatable
     ];
 
     #############################    relations   ########################################
-    public function add_friends()
+    public function auth_add_friends()
     {
         return $this->belongsToMany(self::class,'friend_user','friend_id','user_id')
             ->as('request')->withPivot('status');
     }
 
-    public function friends_add()
+    public function friends_add_auth()
     {
         return $this->belongsToMany(self::class,'friend_user','user_id','friend_id')
             ->as('request')->withPivot('id');
@@ -80,14 +80,25 @@ class User extends Authenticatable
         return $this->belongsTo('App/Models/User','user_id');
     }
 
-    #############################    scope   ########################################
+    #############################       scopes        ########################################
     public function scopeSelection($q)
     {
-        return $q->select('name','work','photo','email','id');
+        return $q->select('name','work','photo','id');
     }
 
     public function scopeNotAuth($q)
     {
         return $q->where('id','!=',Auth::id());
     }
+
+    public function scopeFriends_add_auth($q)
+    {
+        return $q->where(['status' => 1, 'friend_id' => Auth::id()]);
+    }
+
+    public function scopeAuth_add_friends($q)
+    {
+        return $q->where(['status' => 1, 'user_id' => Auth::id()]);
+    }
+
 }

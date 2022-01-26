@@ -1,0 +1,10 @@
+#list-tab{
+    max-height: 193px;
+    overflow-y: scroll;
+    position: relative;
+}
+
+.rounded-circle{
+    width: 40px;
+    float: right;
+}

@@ -1,6 +1,6 @@
 const search_ele = document.getElementById('search'),
-        list_ele = document.getElementsByClassName('list-group-item'),
-        list_group = document.querySelector('.list-group');
+        list_ele = document.getElementsByClassName('search_item'),
+        list_group = document.querySelector('.list_search');
 
 function generalEventListener(type, selector, callback) {
     document.addEventListener(type, e => {
@@ -11,7 +11,7 @@ function generalEventListener(type, selector, callback) {
 }
 
 //submit search form on click
-generalEventListener('click','.list-group-item',e=>{
+generalEventListener('click','.search_item',e=>{
     let text=e.target.textContent;
     let pure_text=text.replace(/ /g, "");
 
@@ -37,7 +37,7 @@ function show_recent_searches(){
                 let recent_searches=res.data.recent_searches
                 for (let i = 0; i < recent_searches.length; i++) {
                     list_group.insertAdjacentHTML('beforeend',
-                        `<li class="list-group-item" >
+                        `<li class="list-group-item search_item" >
                             <span>${recent_searches[i].search}</span> 
                         </li>`
                     );
@@ -67,7 +67,7 @@ search_ele.onkeyup = function () {
                     let users = res.data.users;
                     for (let i = 0; i < users.length; i++) {
                         list_group.insertAdjacentHTML('beforeend',
-                            `<li class="list-group-item" >
+                            `<li class="list-group-item search_item" >
                                 <img src="/images/users/${users[i].photo}" class="rounded-circle search_image">
                                 <span>${users[i].name}</span> 
                             </li>`
@@ -77,7 +77,7 @@ search_ele.onkeyup = function () {
                     let groups = res.data.groups;
                     for (let i = 0; i < groups.length; i++) {
                         list_group.insertAdjacentHTML('beforeend',
-                            `<li class="list-group-item" >
+                            `<li class="list-group-item search_item" >
                                 <img src="/images/groups/${groups[i].photo}" class="rounded-circle search_image">
                                 <span>${groups[i].name}</span> 
                             </li>`

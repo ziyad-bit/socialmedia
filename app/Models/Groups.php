@@ -38,6 +38,11 @@ class Groups extends Model
         return $q->select('name','description','photo','created_at','id','trans_of','trans_lang');
     }
 
+    public function scopeMin_selection($q)
+    {
+        return $q->select('name','description','photo');
+    }
+
     public function scopeDefaultLang($q)
     {
         return $q->where('trans_lang', default_lang());

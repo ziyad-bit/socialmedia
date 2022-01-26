@@ -1,4 +1,4 @@
-.list-group{
+.list_search{
     position: absolute;
     top: 44px;
     left: -209px;
@@ -7,7 +7,11 @@
     
 }
 .list-group-item{
-    background-color: rgb(195, 200, 204);
+    background-color: rgb(166, 183, 196) ;
+}
+
+.nav-pill{
+    border: none;
 }
 
 .list-group-item:hover{

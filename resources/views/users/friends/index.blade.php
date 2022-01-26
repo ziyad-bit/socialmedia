@@ -16,8 +16,8 @@
             <div class="card text-dark bg-light mb-3" style="width: 50rem;">
                 <div class="card-header" data-page_code="{{ $page_code }}">All</div>
                 @foreach ($friend_reqs as $friend_req)
-                    @if ($friend_req->friends_add->count() > 0)
-                        @foreach ($friend_req->friends_add as $friend)
+                    @if ($friend_req->friends_add_auth->count() > 0)
+                        @foreach ($friend_req->friends_add_auth as $friend)
                             <div class="card-body"  data-friend_req="{{ $friend->request->id }}">
                                 <img src="{{ asset('images/users/' . $friend_req->photo) }}" class="rounded-circle"
                                     style="width: 80px" alt="loading">

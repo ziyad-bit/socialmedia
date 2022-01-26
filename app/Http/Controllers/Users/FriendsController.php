@@ -14,9 +14,9 @@ class FriendsController extends Controller
     ##########################################    show_requests    #########################
     public function show_requests(Request $request)
     {
-        $friend_reqs = User::with('friends_add:name,photo')
-            ->whereHas('friends_add',fn($q)=>$q->where(['status'=>0,'friend_id'=>Auth::id()]))
-            ->selection()->cursorPaginate(5);
+        $friend_reqs = User::with('friends_add_auth:id')
+            ->whereHas('friends_add_auth',fn($q)=>$q->where(['status'=>0,'friend_id'=>Auth::id()]))
+            ->selection()->orderByDesc('id')->cursorPaginate(4);
         
         $page_code='';
         if ($friend_reqs->hasMorePages()) {
@@ -46,6 +46,7 @@ class FriendsController extends Controller
         $this->authorize('update_or_delete',$friend_req);
         
         $friend_req->update(['status'=>1]);
+        return response()->json();
     }
 
     ##########################################    show    #################################
@@ -56,5 +57,6 @@ class FriendsController extends Controller
         $this->authorize('update_or_delete',$friend_req);
         
         $friend_req->update(['status'=>2]);
+        return response()->json();
     }
 }

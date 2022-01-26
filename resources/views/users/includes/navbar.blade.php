@@ -12,8 +12,11 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav me-auto">
 
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('users.chat.index_friends')}}">Chat</a>
+                    </li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -32,13 +35,14 @@
                             </li>
                         @endif
                     @else
-                        <form method="POST" id="search_form" action="{{ route('users.search.index') }}" class="d-flex">
+                        <form method="POST" id="search_form" action="{{ route('users.search.index') }}"
+                            class="d-flex">
                             @csrf
-    
+
                             <input required class="form-control me-2" id="search" name="search" type="search"
-                                value="{{ old('search') }}" placeholder="Search" aria-label="Search" autocomplete="off" >
+                                value="{{ old('search') }}" placeholder="Search" aria-label="Search" autocomplete="off">
                             <div class="card   search_guest ">
-                                <ul class="list-group list-group-flush " data-req_num="0">
+                                <ul class="list-group list-group-flush list_search" data-req_num="0">
 
                                 </ul>
                             </div>
@@ -52,12 +56,12 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{route('users.friends.show_requests')}}">
+                                <a class="dropdown-item" href="{{ route('users.friends.show_requests') }}">
                                     Requests
                                 </a>
 
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">
+                                        document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
                                 </a>
 
