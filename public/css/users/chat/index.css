@@ -4,7 +4,15 @@
     position: relative;
 }
 
-.rounded-circle{
+.image{
     width: 40px;
     float: right;
+}
+
+.card-body{
+    overflow-y: scroll;
+}
+
+.nav-pill{
+    border: 1px !important;
 }

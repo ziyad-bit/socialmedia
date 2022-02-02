@@ -80,6 +80,11 @@ class User extends Authenticatable
         return $this->belongsTo('App/Models/User','user_id');
     }
 
+    public function messages()
+    {
+        return $this->hasMany('App\Models\Messages','sender_id');
+    }
+
     #############################       scopes        ########################################
     public function scopeSelection($q)
     {

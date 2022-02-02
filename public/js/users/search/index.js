@@ -1,18 +1,24 @@
 window.onload = function () {
     //load pages
-    const search_ele  = document.getElementById('search');
+    const card_header = document.querySelector('.card-header'),
+        search_ele  = document.getElementById('search');
+
     let search=search_ele.value;
 
     function loadPages(page) {
         axios.post("?page=" + page, { 'search': search, 'agax': 1 })
             .then(res=> {
                 if (res.status == 200) {
-                    let view = res.data.view;
-                    if (view != "") {
-                        document.querySelector('.text-dark').insertAdjacentHTML('beforeend', view);
-                    } else {
+                    let view      = res.data.view;
+                    let next_page = res.data.friends_user.next_page_url;
+
+                    if (next_page == null) {
                         card_header.setAttribute('data-status', '0');
                     }
+
+                    if (view != "") {
+                        document.querySelector('.text-dark').insertAdjacentHTML('beforeend', view);
+                    } 
                 }
             })
     }

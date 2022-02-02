@@ -4538,11 +4538,8 @@ textarea.form-control-lg {
 }
 
 .card-body {
-  /* position: absolute; */
   flex: 1 1 auto;
   padding: 1rem 1rem;
-  /* padding-bottom: 0; */
-  height: 61%;
 }
 
 .card-title {
