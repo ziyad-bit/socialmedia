@@ -1,6 +1,9 @@
-const search_ele = document.getElementById('search'),
-        list_ele = document.getElementsByClassName('search_item'),
+const search_ele   = document.getElementById('search'),
+        list_ele   = document.getElementsByClassName('search_item'),
         list_group = document.querySelector('.list_search');
+
+let recent_req     = 0,
+    search_req_num = 0;
 
 function generalEventListener(type, selector, callback) {
     document.addEventListener(type, e => {
@@ -11,40 +14,62 @@ function generalEventListener(type, selector, callback) {
 }
 
 //submit search form on click
-generalEventListener('click','.search_item',e=>{
+function submit_search(e){
     let text=e.target.textContent;
     let pure_text=text.replace(/ /g, "");
 
     search_ele.value=pure_text;
 
     document.getElementById('search_form').submit();
+}
+
+generalEventListener('click','.search_item',e=>{
+    submit_search(e);
+});
+
+generalEventListener('click','.search_name',e=>{
+    submit_search(e);
 });
 
 //show recent searches
 function show_recent_searches(){
-    axios.get('/search/show/recent')
+    if (recent_req == 0) {
+        axios.get('/search/show/recent')
         .then(res=>{
             if (res.status == 200) {
-                let req_num = list_group.getAttribute('data-req_num');
-                if (req_num == '1') {
+                if (search_req_num == 1) {
                     for (let i = 0; i < list_ele.length; i++) {
                         list_ele[i].style.display = 'none';
                     }
                 }
 
-                list_group.setAttribute('data-req_num', '1');
+                search_req_num = 1;
+                recent_req     = 1;
 
                 let recent_searches=res.data.recent_searches
                 for (let i = 0; i < recent_searches.length; i++) {
                     list_group.insertAdjacentHTML('beforeend',
-                        `<li class="list-group-item search_item" >
-                            <span>${recent_searches[i].search}</span> 
+                        `<li class="list-group-item search_item recent_search" >
+                            <span class="search_name">${recent_searches[i].search}</span> 
                         </li>`
                     );
                 }
             }
             
         });
+    }else{
+        const recent_searches_ele = document.getElementsByClassName('recent_search');
+        
+        if (search_req_num == 1) {
+            for (let i = 0; i < list_ele.length; i++) {
+                list_ele[i].style.display = 'none';
+            }
+        }
+
+        for (let i = 0; i < recent_searches_ele.length; i++) {
+            recent_searches_ele[i].style.display = '';
+        }
+    }
 }
 
 //show matched search results
@@ -54,22 +79,20 @@ search_ele.onkeyup = function () {
         axios.post('/search/show', { 'search': search })
             .then(res=> {
                 if (res.status == 200) {
-                    let req_num = list_group.getAttribute('data-req_num');
-
-                    if (req_num == '1') {
+                    if (search_req_num == 1) {
                         for (let i = 0; i < list_ele.length; i++) {
                             list_ele[i].style.display = 'none';
                         }
                     }
 
-                    list_group.setAttribute('data-req_num', '1');
+                    search_req_num=1;
 
                     let users = res.data.users;
                     for (let i = 0; i < users.length; i++) {
                         list_group.insertAdjacentHTML('beforeend',
                             `<li class="list-group-item search_item" >
                                 <img src="/images/users/${users[i].photo}" class="rounded-circle search_image">
-                                <span>${users[i].name}</span> 
+                                <span class="search_name">${users[i].name}</span> 
                             </li>`
                         );
                     }
@@ -79,7 +102,7 @@ search_ele.onkeyup = function () {
                         list_group.insertAdjacentHTML('beforeend',
                             `<li class="list-group-item search_item" >
                                 <img src="/images/groups/${groups[i].photo}" class="rounded-circle search_image">
-                                <span>${groups[i].name}</span> 
+                                <span class="search_name">${groups[i].name}</span> 
                             </li>`
                         );
                     }
@@ -87,7 +110,7 @@ search_ele.onkeyup = function () {
                 
             });
     }else{
-        show_recent_searches()
+        show_recent_searches();
     }
 };
 
@@ -96,7 +119,7 @@ search_ele.onkeyup = function () {
 search_ele.onfocus=function(){
     let search=search_ele.value;
     if (! search) {
-        show_recent_searches()
+        show_recent_searches();
     }
 }
 

@@ -37,7 +37,7 @@ class GroupsController extends Controller
     public function store(GroupRequest $request):RedirectResponse
     {
         try{
-            $group=$request->group;
+            $group=collect($request->group);
 
             $defualt_group = $this->get_data_in_default_lang($group);
             $photo_name    = $this->uploadphoto($request , 'images/groups');
@@ -60,23 +60,26 @@ class GroupsController extends Controller
     
             $othergroups=$this->get_data_in_Other_langs($group);
     
-            if(isset($othergroups)){
+            if($othergroups){
                 $othergroups_arr=[];
                 foreach($othergroups as $othergroup){
-
-                    $othergroups_arr[]=[
-                        'trans_lang'  => $othergroup['abbr'],
-                        'trans_of'    => $defualt_group_id,
-                        'name'        => $othergroup['name'],
-                        'description' => $othergroup['description'],
-                        'photo'       => $photo_name,
-                        'status'      => $request->status,
-                        'admin_id'    => Auth::id(),
-                        'created_at'  => now(),
-                    ];
+                    if (isset($othergroup['name'])) {
+                        $othergroups_arr[]=[
+                            'trans_lang'  => $othergroup['abbr'],
+                            'trans_of'    => $defualt_group_id,
+                            'name'        => $othergroup['name'],
+                            'description' => $othergroup['description'],
+                            'photo'       => $photo_name,
+                            'status'      => $request->status,
+                            'admin_id'    => Auth::id(),
+                            'created_at'  => now(),
+                        ];
+                    }
                 }
                 
-                Groups::insert($othergroups_arr);
+                if ($othergroups_arr != []) {
+                    Groups::insert($othergroups_arr);
+                }
             }
 
             DB::commit();

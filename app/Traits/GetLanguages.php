@@ -9,10 +9,9 @@ use Illuminate\Support\Collection;
 trait GetLanguages
 {
     ####################################      get_data_in_default_lang      ################################
-    public function get_data_in_default_lang(array $group):array
+    public function get_data_in_default_lang(Collection $group):array
     {
-        $collected_item=collect($group);
-        $filter=$collected_item->filter(function($val){
+        $filter=$group->filter(function($val){
             //default_Lang() autoload from app\helpers\general
             return $val['abbr'] == default_Lang();
         });
@@ -21,10 +20,9 @@ trait GetLanguages
     }
 
     ####################################      get_data_in_other_langs      ################################
-    public function get_data_in_Other_langs(array $group):Collection
+    public function get_data_in_Other_langs(Collection $group):Collection
     {
-        $collected_item=collect($group);
-        return $collected_item->filter(function($val){
+        return $group->filter(function($val){
             //defaultLang() autoload from app\helpers\general
             return $val['abbr'] != default_Lang();
         });

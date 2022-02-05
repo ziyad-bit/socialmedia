@@ -14,10 +14,10 @@
                     <a class="nav-link" href="{{url('admins/index')}}">{{__("titles.admins")}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('languages.index')}}">{{__("titles.groups")}}</a>
+                    <a class="nav-link" href="{{route('languages.index')}}">{{__("titles.languages")}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('groups.index')}}">{{__("titles.languages")}}</a>
+                    <a class="nav-link" href="{{route('groups.index')}}">{{__("titles.groups")}}</a>
                 </li>
                 
                 <li class="nav-item">

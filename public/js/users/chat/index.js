@@ -1,16 +1,15 @@
 window.onload = function () {
     const users_box = document.getElementById('list-tab');
-
+    let old_msg=1;
     //load old messages
     function loadOldMessages(){
         const chat_box=document.getElementsByClassName('card-body')
         for (let i = 0; i < chat_box.length; i++) {
             chat_box[i].onscroll=function(e){
                 if (chat_box[i].scrollTop == 0) {
-                    let target_box     = e.target,
-                        old_msg_status = target_box.getAttribute('data-old_msg');
+                    let target_box     = e.target;
     
-                    if (old_msg_status == '1') {
+                    if (old_msg == 1) {
                         let first_msg_id = target_box.firstElementChild.id,
                             reveiver_id  = target_box.getAttribute('data-user_id');
     
@@ -34,7 +33,7 @@ window.onload = function () {
                                 }
                             })
                             .catch(err=>{
-                                target_box.setAttribute('data-old_msg','0')
+                                old_msg=0;
                             })
                     }
                 }
@@ -43,16 +42,19 @@ window.onload = function () {
         }
     }
 
+    loadOldMessages()
+
     //load friends by infinite scrolling
+    let next_friends_page=1;
     function loadPages(page) {
         axios.post("?page=" + page, { 'agax': 1 })
             .then(res => {
                 if (res.status == 200) {
-                    let users = res.data.friends_user.data;
+                    let users     = res.data.friends_user.data;
                     let next_page = res.data.friends_user.next_page_url;
 
                     if (next_page == null) {
-                        users_box.setAttribute('data-status', '0');
+                        next_friends_page=0;
                     }
 
                     if (users.length > 0) {
@@ -106,12 +108,10 @@ window.onload = function () {
     let page = 1;
     users_box.onscroll = function () {
         let height_subScroll = users_box.scrollHeight - users_box.scrollTop;
-        let box_height = users_box.offsetHeight;
+        let box_height       = users_box.offsetHeight;
 
         if (box_height == height_subScroll ) {
-            let data_status = users_box.getAttribute('data-status');
-
-            if (data_status == '1') {
+            if (next_friends_page == 1) {
                 page++
                 loadPages(page);
             }
@@ -120,8 +120,8 @@ window.onload = function () {
 
     //store message
     generalEventListener('click', '.send_btn', e => {
-        let receiver_id = e.target.getAttribute('data-receiver_id');
-        let message = document.getElementById('msg' + receiver_id).value;
+        let receiver_id = e.target.getAttribute('data-receiver_id'),
+            message     = document.getElementById('msg' + receiver_id).value;
 
         axios.post('/chat', { 'text': message, 'receiver_id': receiver_id })
             .then(res => {
@@ -150,37 +150,40 @@ window.onload = function () {
         const       box=document.getElementById('box'+id),
         data_status_ele=document.querySelector(`[data-id="${id}"]`);
 
-        axios.get("/chat/" + id)
-        .then(res=> {
-            if (res.status == 200) {
-                let messages=res.data.messages;
-                
-                for (let i = 0; i < messages.length; i++) {
-                    box.insertAdjacentHTML('afterbegin',
-                    `
-                        <h3 id="${messages[i].id}">${messages[i].users.name}</h3>
-                        <p > ${messages[i].text} </p>
-                    `);
+        let data_status=data_status_ele.getAttribute('data-status');
+        if (data_status == '0') {
+            axios.get("/chat/" + id)
+            .then(res=> {
+                if (res.status == 200) {
+                    let messages=res.data.messages;
+                    
+                    for (let i = 0; i < messages.length; i++) {
+                        box.insertAdjacentHTML('afterbegin',
+                        `
+                            <h3 id="${messages[i].id}">${messages[i].users.name}</h3>
+                            <p > ${messages[i].text} </p>
+                        `);
+                    }
+        
+                    box.scrollTo({
+                        top     : 10000,
+                        behavior: 'smooth'
+                    });
+
+                    data_status_ele.setAttribute('data-status','1');
                 }
-    
-                box.scrollTo({
-                    top     : 10000,
-                    behavior: 'smooth'
-                });
+            }).catch(err=>{
+                let error=err.response.data.error;
+            
+                box.insertAdjacentHTML('beforeend',
+                        `
+                            <h3>${error}</h3>
+                        `
+                    );
 
                 data_status_ele.setAttribute('data-status','1');
-            }
-        }).catch(err=>{
-            let error=err.response.data.error;
-        
-            box.insertAdjacentHTML('beforeend',
-                    `
-                        <h3>${error}</h3>
-                    `
-                );
-
-            data_status_ele.setAttribute('data-status','1');
-        });
+            });
+        }
     }
 
     //get messages for first user
@@ -202,14 +205,10 @@ window.onload = function () {
             getNewMessages(id);
         }
     })
-
-
-    //load old messages
-    loadOldMessages()
+    
 
 
     //subscribe channel and listen to event
-    /*
     let auth_id=document.getElementById('auth_id').value;
     Echo.private(`chat.${auth_id}`)
         .listen('MessageSend', (e) => {
@@ -228,19 +227,5 @@ window.onload = function () {
                 behavior: 'smooth'
             })
         });
-*/
-    /*
-        //ignore friend request
-        generalEventListener('click','.ignore_btn',e=>{
-            let friend_req_id=e.target.getAttribute('data-friend_req_id');
-            axios.get('/friends/'+friend_req_id)
-                .then(res=>{
-                    if (res.status == 200) {
-                        document.querySelector(`[data-friend_req="${friend_req_id}"]`)
-                            .style.display='none';
-                    }
-                })
-        })
-        */
 }
 

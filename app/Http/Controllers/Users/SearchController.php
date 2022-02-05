@@ -22,9 +22,14 @@ class SearchController extends Controller
 
         $groups = Groups::min_selection()->defaultLang()->search($search)->paginate(4);
         
+        $next_page=true;
+        if (!$groups->hasMorePages() && !$users->hasMorePages()) {
+            $next_page=false;
+        }
+
         if ($request->has('agax')) {
             $view = view('users.search.next_search', compact('users', 'groups'))->render();
-            return response()->json(['view' => $view]);
+            return response()->json(['view' => $view,'next_page'=>$next_page]);
         }else{
             $request->flash();
             event(new StoreSearches($search));
@@ -39,7 +44,7 @@ class SearchController extends Controller
     {
         $search = $request->search;
         
-        $users = User::selection()->notAuth()->search($search)->limit(4)->get();
+        $users  = User::selection()->notAuth()->search($search)->limit(4)->get();
         $groups = Groups::min_selection()->defaultLang()->search($search)->limit(4)->get();
         
         return response()->json(['users' => $users,'groups'=>$groups]);
@@ -49,7 +54,7 @@ class SearchController extends Controller
     public function show_recent():JsonResponse
     {
         $recent_searches=Searches::selection()->where('user_id',Auth::id())->limit(5)
-        ->latest()->get();
+            ->latest()->get();
 
         return response()->json(['recent_searches' => $recent_searches]);
     }

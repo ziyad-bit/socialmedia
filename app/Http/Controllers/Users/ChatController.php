@@ -5,16 +5,15 @@ namespace App\Http\Controllers\Users;
 use App\Events\MessageSend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MessageRequest;
-use App\Models\Friends_user;
-use App\Models\Messages;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\{User,Messages};
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\{Request,JsonResponse};
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-
-    public function index_friends(Request $request)
+#############################     index_friends     #######################################
+    public function index_friends(Request $request):View|JsonResponse
     {
         $friends_user = User::whereHas  ('friends_add_auth', fn($q) => $q->friends_add_auth())
                             ->orWhereHas('auth_add_friends', fn($q) => $q->auth_add_friends())
@@ -27,7 +26,8 @@ class ChatController extends Controller
         return view('users.chat.index', compact('friends_user'));
     }
 
-    public function store(MessageRequest $request)
+    #############################     store     #######################################
+    public function store(MessageRequest $request):JsonResponse
     {
         $data=$request->validated()+['sender_id'=>Auth::id()];
         Messages::create($data);
@@ -37,7 +37,8 @@ class ChatController extends Controller
         return response()->json();
     }
 
-    public function show($id)
+    #############################     show     #######################################
+    public function show(int $id):JsonResponse
     {
         $messages_user = Messages::with(['users' => fn ($q)=> $q->selection()])
             ->where  (fn ($q)=> $q->auth_receiver()->where('sender_id', $id))
@@ -51,7 +52,8 @@ class ChatController extends Controller
         return response()->json(['messages' => $messages_user]);
     }
 
-    public function update(Request $request, $receiver_id)
+    #############################     update     #######################################
+    public function update(Request $request,int $receiver_id):JsonResponse
     {
         $first_msg_id=$request->first_msg_id;
 
@@ -65,10 +67,5 @@ class ChatController extends Controller
         }
 
         return response()->json(['messages' => $messages_user]);
-    }
-
-    public function destroy($id)
-    {
-        //
     }
 }
