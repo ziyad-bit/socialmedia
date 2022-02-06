@@ -11,4 +11,21 @@ class Posts extends Model
 
     protected $guarded=[];
     protected $table='posts';
+
+    #####################################     relations     ##############################
+    public function users()
+    {
+        return $this->belongsTo('App\Models\User','user_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comments','post_id');
+    }
+
+    #####################################     scopes     ##############################
+    public function scopeSelection($q)
+    {
+        return $q->select('text','id','created_at','user_id','group_id','video','file','photo');
+    }
 }

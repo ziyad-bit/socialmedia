@@ -41,5 +41,5 @@ Route::any ('chat/index_friends'  , 'Users\ChatController@index_friends')->name(
 Route::apiResource('chat',Users\ChatController::class);
 
 #######################################     posts     ######################################
-Route::any ('/index_posts'  , 'Users\ChatController@index_friends')->name('users.posts.index_posts');
+Route::any ('/show_posts'  , 'Users\PostsController@show_posts')->name('users.posts.index_posts');
 Route::apiResource('posts',Users\ChatController::class);

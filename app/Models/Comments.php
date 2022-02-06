@@ -11,4 +11,21 @@ class Comments extends Model
 
     protected $guarded=[];
     protected $table='comments';
+
+    #####################################     relations     ##############################
+    public function posts()
+    {
+        return $this->belongsTo('App\Models\Posts','post_id');
+    }
+
+    public function users()
+    {
+        return $this->belongsTo('App\Models\User','user_id');
+    }
+
+    #####################################     scopes       ##############################
+    public function scopeSelection($q)
+    {
+        return $q->select('text','id','created_at','user_id','post_id');
+    }
 }

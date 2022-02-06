@@ -75,15 +75,21 @@ class User extends Authenticatable
         return $this->hasMany("App\Models\Searches",'user_id');
     }
 
-    public function users()
-    {
-        return $this->belongsTo('App/Models/User','user_id');
-    }
-
     public function messages()
     {
         return $this->hasMany('App\Models\Messages','sender_id');
     }
+
+    public function posts()
+    {
+        return $this->hasMany('App\Models\Posts','user_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comments','user_id');
+    }
+
 
     #############################       scopes        ########################################
     public function scopeSelection($q)
