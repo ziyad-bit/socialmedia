@@ -29,17 +29,18 @@
     </div>
 
     <!--      posts     -->
-    @if ($friends_posts)
-        @foreach ($friends_posts as $friend)
-            @foreach ($friend->posts as $post)
+    <div class="parent">
 
-                <section class="d-flex justify-content-center">
+        @if ($friends_posts)
+            @foreach ($friends_posts as $post)
+                <section class="d-flex justify-content-center" id="{{$post->id}}">
                     <div class="card bg-light mb-3" style="max-width: 35rem;">
 
                         <!--      card top      -->
                         <div class="card-header card-top">
-                            <img src="{{ asset('images/users/' . $friend->photo) }}" alt="loading" class="rounded-circle">
-                            <span> {{ $friend->name }}</span>
+                            <img src="{{ asset('images/users/' . $post->users->photo) }}" alt="loading"
+                                class="rounded-circle">
+                            <span> {{ $post->users->name }}</span>
                             <!-- diff_date is autoloaded from app\helper\general -->
                             <small>{{ diff_date($post->created_at) }}</small>
                             <p>
@@ -92,7 +93,7 @@
 
                                     <small>{{ diff_date($comment->created_at) }}</small>
 
-                                    <p >
+                                    <p>
                                         <span>{{ $comment->text }}</span>
                                         @if ($comment->user_id == Auth::user()->id)
                                             <i id="delete_icon" onclick="return confirm('Are you sure')"
@@ -105,7 +106,7 @@
                                 </div>
                             @endforeach
                             <form id="{{ 'form_comment' . $post->id }}" class="form_comment">
-                                
+
                                 <img src="{{ asset('images/users/' . Auth::user()->photo) }}" alt="loading"
                                     class="rounded-circle img_input">
                                 <textarea name="text" data-post_id="{{ $post->id }}" id="{{ 'input' . $post->id }}"
@@ -117,10 +118,12 @@
                     </div>
 
                 </section>
-            @endforeach
-        @endforeach
 
-    @endif
+            @endforeach
+
+        @endif
+    </div>
+
 
 @endsection
 

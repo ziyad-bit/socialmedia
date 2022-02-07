@@ -10,18 +10,39 @@ use Illuminate\Http\Request;
 class PostsController extends Controller
 {
 
-    public function show_posts()
+    public function index()
     {
-        $friends_posts= User::with(['posts'=>fn($q)=>$q->selection()->withCount('comments')
-                                                    ->with(['comments'=>fn($q)=>$q->selection()->with(['users'=>fn($q)=>$q->selection()])])])
-            ->whereHas  ('friends_add_auth', fn($q) => $q->friends_add_auth())
-            ->orWhereHas('auth_add_friends', fn($q) => $q->auth_add_friends())
-            ->selection()->latest()->limit(4)->get();
-
+        $friends_ids=User::whereHas('friends_add_auth', fn($q) => $q->friends_add_auth())
+                        ->orWhereHas('auth_add_friends', fn($q) => $q->auth_add_friends())
+                        ->pluck('id')->toArray();
+        
+        $friends_posts=Posts::withCount('comments')->with(['users'=>fn($q)=>$q->selection() ,
+                        'comments'=>fn($q)=>$q->selection()->with(['users'=>fn($q)=>$q->selection()])])
+                        ->whereIn('user_id',$friends_ids)->latest()->limit(2)->get();
+        
         return view('users.posts.index',compact('friends_posts'));
     }
 
-  
+    public function show(int $id)
+    {
+        $friends_ids=User::whereHas('friends_add_auth', fn($q) => $q->friends_add_auth())
+                        ->orWhereHas('auth_add_friends', fn($q) => $q->auth_add_friends())
+                        ->pluck('id')->toArray();
+
+        $friends_posts=Posts::withCount('comments')->with(['users'=>fn($q)=>$q->selection(),
+                    'comments'=>fn($q)=>$q->selection()->with(['users'=>fn($q)=>$q->selection()])])
+                    ->whereIn('user_id',$friends_ids)->where('id','<',$id)
+                    ->latest()->limit(2)->get();
+        
+        if ($friends_posts->count() == 0) {
+            return response()->json([],404);
+        }
+
+        $view=view('users.posts.index_posts',compact('friends_posts'))->render();
+        return response()->json(['view'=>$view]);
+    }
+
+
     public function store(Request $request)
     {
         //

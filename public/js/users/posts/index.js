@@ -97,4 +97,31 @@ generalEventListener('keypress', '.comment_input', e => {
 })
 
 
-//infinite scroll
+//infinite scroll for posts
+let posts_data=true;
+function loadPages(post_id) {
+    axios.get("/posts/"+post_id)
+        .then(res=> {
+            if (res.status == 200) {
+                let view      = res.data.view;
+                
+                if (view != "") {
+                    document.querySelector('.parent').insertAdjacentHTML('beforeend', view);
+                } 
+            }
+        }).catch(err=>{
+            if (err.response.status == 404) {
+                posts_data=false
+            }
+        })
+}
+
+
+window.onscroll = function () {
+    if (window.scrollY + window.innerHeight-54 >= document.body.clientHeight) {
+        if (posts_data != false) {
+            let post_id=document.getElementsByClassName('parent')[0].lastElementChild.id
+            loadPages(post_id);
+        }
+    }
+}
