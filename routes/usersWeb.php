@@ -43,3 +43,6 @@ Route::apiResource('chat',Users\ChatController::class);
 #######################################     posts     ######################################
 Route::any ('/show_posts'  , 'Users\PostsController@show_posts')->name('users.posts.index_posts');
 Route::apiResource('posts',Users\ChatController::class);
+
+#######################################     comments     ######################################
+Route::apiResource('comments',Users\CommentsController::class);

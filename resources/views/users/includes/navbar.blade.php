@@ -41,7 +41,7 @@
 
                             <input required class="form-control me-2" id="search" name="search" type="search"
                                 value="{{ old('search') }}" placeholder="Search" aria-label="Search" autocomplete="off">
-                            <div class="card   search_guest ">
+                            <div class="    ">
                                 <ul class="list-group list-group-flush list_search" data-req_num="0" data-recent_req="0">
 
                                 </ul>
