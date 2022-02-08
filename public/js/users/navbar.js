@@ -34,41 +34,42 @@ generalEventListener('click','.search_name',e=>{
 //show recent searches
 function show_recent_searches(){
     if (recent_req == 0) {
-        axios.get('/search/show/recent')
-        .then(res=>{
-            if (res.status == 200) {
-                if (search_req_num == 1) {
-                    for (let i = 0; i < list_ele.length; i++) {
-                        list_ele[i].style.display = 'none';
+        axios.get('/users_search/show/recent')
+            .then(res=>{
+                if (res.status == 200) {
+                    
+                    if (search_req_num == 1) {
+                        for (let i = 0; i < list_ele.length; i++) {
+                            list_ele[i].style.display = 'none';
+                        }
+                    }
+
+                    search_req_num = 1;
+                    recent_req     = 1;
+
+                    let recent_searches=res.data.recent_searches;
+                    for (let i = 0; i < recent_searches.length; i++) {
+                        list_group.insertAdjacentHTML('beforeend',
+                            `<li class="list-group-item search_item recent_search" >
+                                <span class="search_name">${recent_searches[i].search}</span> 
+                            </li>`
+                        );
                     }
                 }
-
-                search_req_num = 1;
-                recent_req     = 1;
-
-                let recent_searches=res.data.recent_searches
-                for (let i = 0; i < recent_searches.length; i++) {
-                    list_group.insertAdjacentHTML('beforeend',
-                        `<li class="list-group-item search_item recent_search" >
-                            <span class="search_name">${recent_searches[i].search}</span> 
-                        </li>`
-                    );
+                
+            });
+        }else{
+            if (search_req_num == 1) {
+                for (let i = 0; i < list_ele.length; i++) {
+                    list_ele[i].style.display = 'none';
                 }
             }
-            
-        });
-    }else{
-        const recent_searches_ele = document.getElementsByClassName('recent_search');
-        
-        if (search_req_num == 1) {
-            for (let i = 0; i < list_ele.length; i++) {
-                list_ele[i].style.display = 'none';
-            }
-        }
 
-        for (let i = 0; i < recent_searches_ele.length; i++) {
-            recent_searches_ele[i].style.display = '';
-        }
+            const recent_searches_ele = document.getElementsByClassName('recent_search');
+            
+            for (let i = 0; i < recent_searches_ele.length; i++) {
+                recent_searches_ele[i].style.display = '';
+            }
     }
 }
 
@@ -76,7 +77,7 @@ function show_recent_searches(){
 search_ele.onkeyup = function () {
     let search = search_ele.value;
     if (search) {
-        axios.post('/search/show', { 'search': search })
+        axios.post('/users_search/show', { 'search': search })
             .then(res=> {
                 if (res.status == 200) {
                     if (search_req_num == 1) {

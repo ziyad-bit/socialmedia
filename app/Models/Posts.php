@@ -23,6 +23,11 @@ class Posts extends Model
         return $this->hasMany('App\Models\Comments','post_id');
     }
 
+    public function likes()
+    {
+        return $this->hasMany('App\Models\Likes','post_id');
+    }
+
     #####################################     scopes     ##############################
     public function scopeSelection($q)
     {

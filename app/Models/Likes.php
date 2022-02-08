@@ -13,4 +13,9 @@ class Likes extends Model
     protected $table='likes';
 
     public $timestamps=false;
+
+    public function posts()
+    {
+        return $this->belongsTo('App\Models\Posts','post_id');
+    }
 }

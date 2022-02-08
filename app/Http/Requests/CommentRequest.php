@@ -28,4 +28,12 @@ class CommentRequest extends FormRequest
             'post_id'    => 'nullable|numeric',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'required'    => 'this field is required',
+            'max'         => 'you should enter less than 250 characters',
+        ];
+    }
 }

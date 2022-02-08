@@ -22,27 +22,25 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group(['prefix'=>'search','namespace'=>'Users'], function () {
-    Route::any ('/index'       , 'SearchController@index')->name('users.search.index');
+Route::group(['prefix'=>'users_search','namespace'=>'Users'], function () {
+    Route::any ('/index'       , 'SearchController@index')->name('users_search.index');
     Route::post('/show'        , 'SearchController@show');
     Route::get ('/show/recent' , 'SearchController@show_recent');
 });
-
 
 #######################################     users     ######################################
 Route::resource('users',Users\UsersController::class);
 
 #######################################     friends     ######################################
-Route::any ('friends/requests'  , 'Users\FriendsController@show_requests')->name('users.friends.show_requests');
-Route::apiResource('friends',Users\FriendsController::class);
+Route::any ('friends/requests'  , 'Users\FriendsController@show_requests')->name('users_friends.show_requests');
+Route::apiResource('users_friends',Users\FriendsController::class);
 
 #######################################     chat     ######################################
-Route::any ('chat/index_friends'  , 'Users\ChatController@index_friends')->name('users.chat.index_friends');
-Route::apiResource('chat',Users\ChatController::class);
+Route::any ('chat/index_friends'  , 'Users\ChatController@index_friends')->name('users_chat.index_friends');
+Route::apiResource('users_chat',Users\ChatController::class);
 
 #######################################     posts     ######################################
-Route::any ('/show_posts'  , 'Users\PostsController@show_posts')->name('users.posts.index_posts');
-Route::apiResource('posts',Users\PostsController::class);
+Route::apiResource('users_posts',Users\PostsController::class);
 
 #######################################     comments     ######################################
-Route::apiResource('comments',Users\CommentsController::class);
+Route::apiResource('users_comments',Users\CommentsController::class);

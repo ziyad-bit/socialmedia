@@ -7,26 +7,24 @@ window.onload = function () {
         for (let i = 0; i < chat_box.length; i++) {
             chat_box[i].onscroll=function(e){
                 if (chat_box[i].scrollTop == 0) {
-                    let target_box     = e.target;
-    
                     if (old_msg == 1) {
-                        let first_msg_id = target_box.firstElementChild.id,
-                            reveiver_id  = target_box.getAttribute('data-user_id');
+                        let first_msg_id = this.firstElementChild.id,
+                            reveiver_id  = this.getAttribute('data-user_id');
     
-                        axios.put("/chat/" + reveiver_id,{'first_msg_id':first_msg_id})
+                        axios.put("/users_chat/" + reveiver_id,{'first_msg_id':first_msg_id})
                             .then(res=> {
                                 if (res.status == 200) {
                                     let messages=res.data.messages;
                             
                                     for (let i = 0; i < messages.length; i++) {
-                                        target_box.insertAdjacentHTML('afterbegin',
+                                        this.insertAdjacentHTML('afterbegin',
                                         `
                                             <h3 id="${messages[i].id}">${messages[i].users.name}</h3>
                                             <p > ${messages[i].text} </p>
                                         `);
                                     }
 
-                                    target_box.scrollTo({
+                                    this.scrollTo({
                                         top     : 100,
                                         behavior: 'smooth'
                                     })
@@ -112,7 +110,7 @@ window.onload = function () {
 
         if (box_height == height_subScroll ) {
             if (next_friends_page == 1) {
-                page++
+                page++;
                 loadPages(page);
             }
         }
@@ -123,7 +121,7 @@ window.onload = function () {
         let receiver_id = e.target.getAttribute('data-receiver_id'),
             message     = document.getElementById('msg' + receiver_id).value;
 
-        axios.post('/chat', { 'text': message, 'receiver_id': receiver_id })
+        axios.post('/users_chat', { 'text': message, 'receiver_id': receiver_id })
             .then(res => {
                 if (res.status == 200) {
                     let Auth_name = document.getElementById('auth').value;
@@ -152,7 +150,7 @@ window.onload = function () {
 
         let data_status=data_status_ele.getAttribute('data-status');
         if (data_status == '0') {
-            axios.get("/chat/" + id)
+            axios.get("/users_chat/" + id)
             .then(res=> {
                 if (res.status == 200) {
                     let messages=res.data.messages;

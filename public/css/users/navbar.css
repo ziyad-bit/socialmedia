@@ -1,10 +1,9 @@
 .list_search{
     position: absolute;
-    top: 44px;
-    left: -209px;
-    z-index: 6;
-    width: 200px;
-    
+    top     : 44px;
+    right   : 261px;
+    z-index : 6;
+    width   : 200px;
 }
 .list-group-item{
     background-color: rgb(166, 183, 196) ;
@@ -15,7 +14,7 @@
 }
 
 .list-group-item:hover{
-    cursor: pointer;
+    cursor          : pointer;
     background-color: rgb(219, 215, 208);
 }
 
