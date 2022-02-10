@@ -22,9 +22,10 @@ class DatabaseSeeder extends Seeder
         $this->call(PostsSeeder::class);
         $this->call(LikesSeeder::class);
         $this->call(SharesSeeder::class);
-        $this->call(CommentsSeeder::class);
+        
         $this->call(MessagesSeeder::class);
         */
         //$this->call(LanguagesSeeder::class);
+        $this->call(CommentsSeeder::class);
     }
 }

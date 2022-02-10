@@ -109,6 +109,43 @@ generalEventListener('keypress', '.comment_input', e => {
     
 })
 
+//infinite scroll for comments
+function loadCommentsOnScroll(){
+    let comments_data=true;
+    const comments_box=document.getElementsByClassName('card-bottom');
+
+    function loadComments(com_id,post_id) {
+        axios.get("/users_comments/show_more/"+com_id+'/'+post_id)
+            .then(res=> {
+                if (res.status == 200) {
+                    let view      = res.data.view;
+                    document.getElementById('form_comment'+post_id).insertAdjacentHTML('beforebegin', view);
+                }
+            })
+            .catch(err=>{
+                if (err.response.status == 404) {
+                    comments_data=false;
+                }
+            })
+    }
+
+    for (let i = 0; i < comments_box.length; i++) {
+        comments_box[i].onscroll = function () {
+            if (comments_box[i].scrollHeight - comments_box[i].scrollTop == comments_box[i].offsetHeight) {
+                if (comments_data != false) {
+                    let post_id = this.getAttribute('data-post_id'),
+                        com_id  = document.querySelector('.parent_comments'+post_id).lastElementChild.getAttribute('data-comment_id');
+                    
+                    loadComments(com_id,post_id);
+                }
+            }
+        }
+        
+    }
+    
+}
+
+loadCommentsOnScroll()
 
 //infinite scroll for posts
 let posts_data=true;
@@ -118,6 +155,8 @@ function loadPages(post_id) {
             if (res.status == 200) {
                 let view      = res.data.view;
                 document.querySelector('.parent').insertAdjacentHTML('beforeend', view);
+
+                loadCommentsOnScroll()
             }
         })
         .catch(err=>{
@@ -137,32 +176,5 @@ window.onscroll = function () {
     }
 }
 
-//infinite scroll for comments
-let comments_data=true;
-const comments_box=document.querySelector('.card-bottom');
-function loadPages(post_id) {
-    axios.get("/users_comments/"+post_id)
-        .then(res=> {
-            if (res.status == 200) {
-                let view      = res.data.view;
-                document.querySelector('.parent').insertAdjacentHTML('beforeend', view);
-            }
-        })
-        .catch(err=>{
-            if (err.response.status == 404) {
-                comments_data=false;
-            }
-        })
-}
 
 
-comments_box.onscroll = function () {
-    if (comments_box.scrollHeight - comments_box.scrollTop == comments_box.offsetHeight) {
-        //if (comments_data != false) {
-            let post_id=this.getAttribute('data-post_id');
-            let comment_id=document.querySelector('.parent_comments'+post_id).lastElementChild.getAttribute('data-comment_id');
-            
-            //loadPages(post_id);
-        //}
-    }
-}

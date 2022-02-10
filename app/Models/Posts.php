@@ -20,7 +20,7 @@ class Posts extends Model
 
     public function comments()
     {
-        return $this->hasMany('App\Models\Comments','post_id');
+        return $this->hasMany('App\Models\Comments','post_id')->orderByDesc('id');
     }
 
     public function likes()

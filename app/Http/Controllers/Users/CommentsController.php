@@ -30,9 +30,17 @@ class CommentsController extends Controller
     }
 
  
-    public function show($id)
+    public function show_more(int $com_id,int $post_id)
     {
-        //
+        $comments=Comments::with(['users'=>fn($q)=>$q->selection()])->selection()->where('post_id',$post_id)
+            ->where('id','<',$com_id)->orderByDesc('id')->limit(5)->get();
+
+        if ($comments->count() == 0) {
+            return response()->json([],404);
+        }
+
+        $view=view('users.posts.index_comments',compact('comments'))->render();
+        return response()->json(['view'=>$view]);
     }
 
    

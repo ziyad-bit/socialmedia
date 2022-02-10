@@ -43,4 +43,5 @@ Route::apiResource('users_chat',Users\ChatController::class);
 Route::apiResource('users_posts',Users\PostsController::class);
 
 #######################################     comments     ######################################
+Route::get ('users_comments/show_more/{com_id}/{post_id}'  , 'Users\CommentsController@show_more');
 Route::apiResource('users_comments',Users\CommentsController::class);

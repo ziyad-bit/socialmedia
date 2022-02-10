@@ -31,10 +31,15 @@ class PostsController extends Controller
     {
         $friends_ids=$this->getFriendsIds();
 
-        $friends_posts=Posts::withCount('comments')->with(['users'=>fn($q)=>$q->selection(),
-                    'comments'=>fn($q)=>$q->selection()->with(['users'=>fn($q)=>$q->selection()])])
+        $friends_posts=Posts::withCount('comments')
+                    ->with(['users'=>fn($q)=>$q->selection()
+                    ,'comments'=>fn($q)=>$q->selection()->with(['users'=>fn($q)=>$q->selection()])])
                     ->whereIn('user_id',$friends_ids)->where('id','<',$id)
-                    ->latest()->limit(2)->get();
+                    ->latest()->limit(2)->get()
+                    ->map(function($post){
+                        $post->comments=$post->comments->take(4);
+                        return $post;
+                    });
         
         if ($friends_posts->count() == 0) {
             return response()->json([],404);
@@ -43,13 +48,6 @@ class PostsController extends Controller
         $view=view('users.posts.index_posts',compact('friends_posts'))->render();
         return response()->json(['view'=>$view]);
     }
-
-    public function update_comments(Request $request)
-    {
-        
-    }
-
-
 
     public function store(Request $request)
     {
