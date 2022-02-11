@@ -30,7 +30,6 @@
 
     <!--      posts     -->
     <div class="parent">
-
         @include('users.posts.index_posts')
     </div>
 

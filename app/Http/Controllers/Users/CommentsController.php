@@ -15,7 +15,6 @@ class CommentsController extends Controller
     {
         //
     }
-
     
     public function store(CommentRequest $request)
     {
@@ -44,19 +43,19 @@ class CommentsController extends Controller
     }
 
    
-    public function update(CommentRequest $request,Comments $comment)
+    public function update(CommentRequest $request,Comments $user_comment)
     {
-        $this->authorize('update_or_delete',$comment);
-        $comment->update($request->validated());
+        $this->authorize('update_or_delete',$user_comment);
+        $user_comment->update($request->validated());
 
         return response()->json(['success_msg'=>'you updated it successfully']);
     }
 
    
-    public function destroy(Comments $comment)
+    public function destroy(Comments $user_comment)
     {
-        $this->authorize('update_or_delete',$comment);
-        $comment->delete();
+        $this->authorize('update_or_delete',$user_comment);
+        $user_comment->delete();
 
         return response()->json(['success_msg'=>'you deleted it successfully']);
     }

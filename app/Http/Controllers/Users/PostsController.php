@@ -7,6 +7,7 @@ use App\Models\Posts;
 use App\Models\User;
 use App\Traits\Friends_ids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
@@ -16,7 +17,8 @@ class PostsController extends Controller
     {
         $friends_ids=$this->getFriendsIds();
         
-        $friends_posts=Posts::withCount('comments')->with(['users'=>fn($q)=>$q->selection() ,
+        $friends_posts=Posts::withCount(['comments','likes'])
+                    ->with(['users'=>fn($q)=>$q->selection() ,'likes'=>fn($q)=>$q->where('user_id',Auth::id()),
                         'comments'=>fn($q)=>$q->selection()->with(['users'=>fn($q)=>$q->selection()])])
                         ->whereIn('user_id',$friends_ids)->latest()->limit(2)->get()
                         ->map(function($post){

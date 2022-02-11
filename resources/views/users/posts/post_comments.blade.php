@@ -5,8 +5,11 @@
 
     <small>{{diff_date($comment->created_at)}}</small>
     <p>
-        {{$comment->text}}
-        <i id="{{$comment->id}}" data-toggle="modal" data-target="#delete_modal" class="fas fa-trash"></i>
-        <i  data-toggle="modal" data-target="#edit_modal" class="{{'fas fa-edit '.$comment->id}}"></i>
+         <span>{{$comment->text}}</span>
+         <i id="delete_icon" onclick="  delete_com() " class="fas fa-trash"
+         data-id="{{ $comment->id }}"></i>
+         
+     <i data-bs-toggle="modal" data-bs-target="#edit_modal"
+         class="{{ 'fas fa-edit ' . $comment->id }}"></i>
     </p>
 </div>

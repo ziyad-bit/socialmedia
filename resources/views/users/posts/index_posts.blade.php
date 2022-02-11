@@ -29,13 +29,26 @@
                                 <video src="{{ asset('videos/' . $post->video) }}" controls></video>
                             @endif
 
-                            <small class="number_comments"><span>{{ $post->comments_count }} comments</span> </small>
+                            <small class="number_comments">
+                                <span style="font-weight: bold"><span class="com_num{{$post->id}}">{{ $post->comments_count }}</span> comments</span> 
+                                <span><span class="like_num{{$post->id}}">{{ $post->likes_count }}</span> likes</span> 
+                            </small>
                         </div>
                         <a class="comment_link" post_id={{ $post->id }}>
-                            <div class="card-body d-flex justify-content-center comment_btn" id="{{ $post->id }}"
+                            <div class="card-body  comment_btn" 
                                 style="background-color:#eee ">
-                                <i class="fas fa-comment"></i>Comment
+                                @if ($post->likes->count() > 0)
+                                    <i class="fas fa-thumbs-up like liked_icon" data-post_id="{{$post->id}}" >like</i>
+                                @else
+                                    <i class="fas fa-thumbs-up like like_icon" data-post_id="{{$post->id}}">like</i>
+                                @endif
+                                
+                                <i class="fas fa-comment comment_icon" id="{{ $post->id }}">Comment</i>
+                                <i class="fas fa-share share_icon" >share</i>
+                                
                             </div>
+
+                           
                         </a>
 
                         <!--      card bottom      -->
@@ -61,9 +74,9 @@
                                             <span>{{ $comment->text }}</span>
                                             @if ($comment->user_id == Auth::user()->id)
                                                 <i id="delete_icon" onclick="return confirm('Are you sure?')"
-                                                    class="fas fa-trash" data-id="{{ $comment->id }}"></i>
+                                                    class="fas fa-trash" data-post_id="{{$post->id}}" data-id="{{ $comment->id }}"></i>
                                                 <i data-bs-toggle="modal" data-bs-target="#edit_modal"
-                                                    class="{{ 'fas fa-edit ' . $comment->id }}"></i>
+                                                    class="{{ 'fas fa-edit ' . $comment->id }}" data-post_id="{{$post->id}}"></i>
                                             @endif
                                         </p>
                                     </div>

@@ -13,6 +13,7 @@
             @if ($comment->user_id == Auth::user()->id)
                 <i id="delete_icon" onclick="return confirm('Are you sure')" class="fas fa-trash"
                     data-id="{{ $comment->id }}"></i>
+                    
                 <i data-bs-toggle="modal" data-bs-target="#edit_modal"
                     class="{{ 'fas fa-edit ' . $comment->id }}"></i>
             @endif

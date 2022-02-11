@@ -1,5 +1,5 @@
 //scroll to comment_input
-generalEventListener('click', '.comment_btn', e => {
+generalEventListener('click', '.comment_icon', e => {
     let id    = e.target.id,
         input = document.getElementById('input' + id);
 
@@ -43,17 +43,19 @@ generalEventListener('click', '.fa-edit', e => {
 //update comment
 let update_btn         = document.getElementById('update_btn');
     update_btn.onclick = function(){
-        let id      = this.getAttribute('comment_id'),
-            comment = document.getElementById('update_input').textContent;
+        let id            = this.getAttribute('comment_id'),
+            comment       = document.getElementById('update_input').textContent;
 
-        axios.put("/users_comments/" + id,{'text':comment})
+        axios.put("/user_comment/" + id,{'text':comment})
             .then(res=> {
                 if (res.status == 200) {
-                    let success_msg=res.data.success_msg;
-                    let success_ele=document.getElementById('success_msg');
+                    let success_msg=res.data.success_msg,
+                    success_ele=document.getElementById('success_msg');
 
                     success_ele.textContent=success_msg;
                     success_ele.style.display='';
+
+                    document.querySelector('#comm'+id+' p span').textContent=comment
                 }
             })
             .catch(err=>{
@@ -67,12 +69,20 @@ let update_btn         = document.getElementById('update_btn');
 
 //delete comment
 generalEventListener('click', '#delete_icon', e => {
-    let id      = e.target.getAttribute('data-id');
+    const target=e.target;
+    let com_id  = target.getAttribute('data-id'),
+        post_id = target.getAttribute('data-post_id');
 
-    axios.delete("/users_comments/" + id)
+    axios.delete("/user_comment/" + com_id)
         .then(res=> {
             if (res.status == 200) {
-                document.getElementById('comm'+id).remove();
+                document.getElementById('comm'+com_id).remove();
+
+                const comment_ele=document.querySelector('.com_num'+post_id);
+                let com_num=Number(comment_ele.textContent);
+
+                com_num--;
+                comment_ele.textContent=com_num;
             }
         })
 })
@@ -84,13 +94,19 @@ generalEventListener('keypress', '.comment_input', e => {
         formData = new FormData(form_ele);
     
     if (e.keyCode == 13) {
-        axios.post("/users_comments" ,formData)
+        axios.post("/user_comment" ,formData)
             .then(res=> {
                 if (res.status == 200) {
                     let view=res.data.view;
 
                     document.querySelector('.comment_input').value='';
                     form_ele.insertAdjacentHTML('beforebegin',view);
+
+                    const comment_ele=document.querySelector('.com_num'+id);
+                    let com_num=Number(comment_ele.textContent);
+
+                    com_num++;
+                    comment_ele.textContent=com_num;
                 }
             })
             .catch(err=>{
@@ -119,7 +135,8 @@ function loadCommentsOnScroll(){
             .then(res=> {
                 if (res.status == 200) {
                     let view      = res.data.view;
-                    document.getElementById('form_comment'+post_id).insertAdjacentHTML('beforebegin', view);
+                    console.log(view)
+                    document.querySelector('.parent_comments'+post_id).insertAdjacentHTML('beforeend', view);
                 }
             })
             .catch(err=>{
@@ -176,5 +193,32 @@ window.onscroll = function () {
     }
 }
 
+//like or unlike
 
+generalEventListener('click', '.like', e => {
+    let target  = e.target,
+        post_id = target.getAttribute('data-post_id');
+    
+    axios.post("/users_likes/store" ,{'post_id':post_id})
+        .then(res=> {
+            if (res.status == 200) {
+                const like_ele = document.querySelector('.like_num'+post_id);
+                let like_num = Number(like_ele.textContent);
+
+                if (target.classList.contains('liked_icon')) {
+                    target.classList.remove('liked_icon')
+                    target.classList.add('like_icon')
+
+                    like_num--;
+                }else{
+                    target.classList.remove('like_icon')
+                    target.classList.add('liked_icon')
+    
+                    like_num++;
+                }
+
+                like_ele.textContent=like_num;
+            }
+        })
+})
 

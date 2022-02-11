@@ -44,4 +44,7 @@ Route::apiResource('users_posts',Users\PostsController::class);
 
 #######################################     comments     ######################################
 Route::get ('users_comments/show_more/{com_id}/{post_id}'  , 'Users\CommentsController@show_more');
-Route::apiResource('users_comments',Users\CommentsController::class);
+Route::apiResource('user_comment',Users\CommentsController::class);
+
+#######################################     likes     ######################################
+Route::post ('users_likes/store'  , 'Users\LikesController@store');
