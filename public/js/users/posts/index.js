@@ -36,14 +36,14 @@ generalEventListener('click', '.fa-edit', e => {
         update_btn   = document.getElementById('update_btn'),
         update_input = document.querySelector('#update_input');
 
-    update_btn.setAttribute('comment_id',id)
+    update_btn.setAttribute('data-comment_id',id)
     update_input.textContent = comment;
 })
 
 //update comment
 let update_btn         = document.getElementById('update_btn');
     update_btn.onclick = function(){
-        let id            = this.getAttribute('comment_id'),
+        let id            = this.getAttribute('data-comment_id'),
             comment       = document.getElementById('update_input').textContent;
 
         axios.put("/user_comment/" + id,{'text':comment})
@@ -68,9 +68,20 @@ let update_btn         = document.getElementById('update_btn');
 }
 
 //delete comment
-generalEventListener('click', '#delete_icon', e => {
+generalEventListener('click', '.fa-trash', e => {
+    const target     = e.target,
+        delete_btn = document.getElementById('delete_btn');
+
+    let com_id  = target.getAttribute('data-comment_id'),
+        post_id = target.getAttribute('data-post_id');
+        
+        delete_btn.setAttribute('data-comment_id',com_id);
+        delete_btn.setAttribute('data-post_id',post_id);
+})
+
+generalEventListener('click', '#delete_btn', e => {
     const target=e.target;
-    let com_id  = target.getAttribute('data-id'),
+    let com_id  = target.getAttribute('data-comment_id'),
         post_id = target.getAttribute('data-post_id');
 
     axios.delete("/user_comment/" + com_id)
@@ -166,8 +177,8 @@ loadCommentsOnScroll()
 
 //infinite scroll for posts
 let posts_data=true;
-function loadPages(post_id) {
-    axios.get("/users_posts/"+post_id)
+function loadPages(page) {
+    axios.post("?page="+page,{'agax':1})
         .then(res=> {
             if (res.status == 200) {
                 let view      = res.data.view;
@@ -183,18 +194,17 @@ function loadPages(post_id) {
         })
 }
 
-
+let page=1;
 window.onscroll = function () {
     if (window.scrollY + window.innerHeight-54 >= document.body.clientHeight) {
         if (posts_data != false) {
-            let post_id=document.getElementsByClassName('parent')[0].lastElementChild.id;
-            loadPages(post_id);
+            page++;
+            loadPages(page);
         }
     }
 }
 
 //like or unlike
-
 generalEventListener('click', '.like', e => {
     let target  = e.target,
         post_id = target.getAttribute('data-post_id');

@@ -11,8 +11,8 @@
         <p>
             <span>{{ $comment->text }}</span>
             @if ($comment->user_id == Auth::user()->id)
-                <i id="delete_icon" onclick="return confirm('Are you sure')" class="fas fa-trash"
-                    data-id="{{ $comment->id }}"></i>
+                <i id="delete_icon"  class="fas fa-trash" data-bs-toggle="modal" data-bs-target="#delete_modal"
+                    data-comment_id="{{ $comment->id }}" data-post_id="{{$comment->post_id }}"></i>
                     
                 <i data-bs-toggle="modal" data-bs-target="#edit_modal"
                     class="{{ 'fas fa-edit ' . $comment->id }}"></i>

@@ -90,6 +90,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Comments','user_id');
     }
 
+    public function shares()
+    {
+        return $this->hasMany('App\Models\Shares','user_id');
+    }
+
 
     #############################       scopes        ########################################
     public function scopeSelection($q)

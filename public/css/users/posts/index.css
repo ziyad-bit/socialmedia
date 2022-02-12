@@ -175,6 +175,16 @@
     color: blue;
 }
 
+.shared_icon{
+    float: right;
+    margin-right: 25px;
+    color: blue;
+}
+
 .liked_icon:hover{
     cursor: pointer;
+}
+
+.number_comments span{
+    margin-left: 3px;
 }

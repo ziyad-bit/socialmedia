@@ -15,7 +15,7 @@
 
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('users_posts.index')}}">Posts</a>
+                        <a class="nav-link" href="{{route('users_posts.index_posts')}}">Posts</a>
                     </li>
 
                     <li class="nav-item">

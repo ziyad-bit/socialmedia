@@ -28,6 +28,11 @@ class Posts extends Model
         return $this->hasMany('App\Models\Likes','post_id');
     }
 
+    public function shares()
+    {
+        return $this->hasMany('App\Models\Shares','post_id');
+    }
+
     #####################################     scopes     ##############################
     public function scopeSelection($q)
     {
