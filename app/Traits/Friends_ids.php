@@ -13,7 +13,8 @@ trait Friends_ids
             ->orWhereHas('auth_add_friends', fn($q) => $q->auth_add_friends())
             ->pluck('id')->toArray();
 
-        array_push($friends_ids,Auth::id());
+            
+        array_unshift($friends_ids,Auth::id());
         return $friends_ids;
     }
 }

@@ -188,3 +188,7 @@
 .number_comments span{
     margin-left: 3px;
 }
+
+.share_name{
+    float: right;
+}
