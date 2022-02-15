@@ -20,13 +20,9 @@ class PostsController extends Controller
 
         $friends_posts=Posts::withCount(['comments','likes','shares'])
                     ->with(['users'=>fn($q)=>$q->selection() ,'likes'=>fn($q)=>$q->where('user_id',Auth::id()),
-                        'shares'=>fn($q)=>$q->with(['users'=>fn($q)=>$q->selection()]),
-                        'comments'=>fn($q)=>$q->selection()->with(['users'=>fn($q)=>$q->selection()])])
+                        'shares'=>fn($q)=>$q->whereIn('user_id',$friends_ids)->with(['users'=>fn($q)=>$q->selection()])])
                     ->whereIn('user_id',$friends_ids)->orWhereIn('id',$shared_posts_id)->latest()
-                    ->paginate(2)->map(function($post){
-                                            $post->comments=$post->comments->take(4);
-                                            return $post;
-                                        });
+                    ->paginate(3);
 
         if ($request->has('agax')) {
             $view=view('users.posts.index_posts',compact('friends_posts'))->render();
@@ -48,8 +44,11 @@ class PostsController extends Controller
     }
 
   
-    public function destroy($id)
+    public function destroy(Posts $user_post)
     {
-        //
+        $this->authorize('update_or_delete',$user_post);
+        $user_post->delete();
+
+        return response()->json(['success_msg'=>'you deleted it successfully']);
     }
 }

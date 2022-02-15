@@ -1,6 +1,6 @@
 @foreach ($comments as $comment)
     <div class="{{ 'comment com' . $comment->post_id }}" id="{{ 'comm' . $comment->id }}" 
-        data-comment_id="{{ $comment->id }}">
+        data-comment_id="{{ $comment->id }}" style="display: block">
         @if ($comment->users->photo)
             <img src="{{ asset('images/users/' . $comment->users->photo) }}" alt="loading" class="rounded-circle">
             <span>{{ $comment->users->name }}</span>

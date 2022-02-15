@@ -5,16 +5,14 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentRequest;
 use App\Models\Comments;
+use App\Models\Posts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
    
-    public function index()
-    {
-        //
-    }
+   
     
     public function store(CommentRequest $request)
     {
@@ -28,6 +26,13 @@ class CommentsController extends Controller
         return response()->json(['view'=>$view]);
     }
 
+    public function show(int $post_id)
+    {
+        $comments=Posts::findOrFail($post_id)->comments;
+
+        $view=view('users.posts.index_comments',compact('comments'))->render();
+        return response()->json(['view'=>$view]);
+    }
  
     public function show_more(int $com_id,int $post_id)
     {

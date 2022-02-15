@@ -13,20 +13,80 @@ generalEventListener('click', '.comment_icon', e => {
 
 //view comments
 generalEventListener('click','.view_comments',e=>{
-    let id            = e.target.classList[1];
-        view_comments = document.getElementById('view'+id)
-        comments      = document.getElementsByClassName('com' + id);
+    let target        = e.target,
+        id            = target.id,
+        com_req       = target.getAttribute('data-com_req');
 
-    for (let i = 0; i < comments.length; i++) {
-        if (comments[i].style.display === 'none') {
-            comments[i].style.display = '';
-            view_comments.textContent = 'hide all comments';
-        } else {
-            comments[i].style.display = 'none';
-            view_comments.textContent = 'view all comments';
+    if (com_req == 'false') {
+        axios.get("/user_comment/" + id)
+            .then(res=> {
+                if (res.status == 200) {
+                    let view      = res.data.view;
+                    document.querySelector('.parent_comments'+id).insertAdjacentHTML('beforeend', view);
+
+                    target.setAttribute('data-com_req','true');
+                    target.textContent = 'hide all comments';
+                }
+            })
+            .catch(err=>{
+                if (err.response.status == 404) {
+                    target.setAttribute('data-com_req','true');
+                }
+            })
+    }
+
+    comments      = document.getElementsByClassName('com' + id);
+    if (comments) {
+        for (let i = 0; i < comments.length; i++) {
+            if (comments[i].style.display === 'none') {
+                comments[i].style.display = '';
+                target.textContent = 'hide all comments';
+            } else {
+                comments[i].style.display = 'none';
+                target.textContent = 'view comments';
+            }
         }
     }
 })
+
+
+//infinite scroll for comments
+function loadCommentsOnScroll(){
+    comments_box=document.getElementsByClassName('card-bottom');
+
+function loadComments(com_id,post_id) {
+    axios.get("/users_comments/show_more/"+com_id+'/'+post_id)
+        .then(res=> {
+            if (res.status == 200) {
+                let view      = res.data.view;
+                document.querySelector('.parent_comments'+post_id).insertAdjacentHTML('beforeend', view);
+            }
+        })
+        .catch(err=>{
+            if (err.response.status == 404) {
+                document.getElementById(''+post_id).setAttribute('data-comments','true');
+            }
+        })
+}
+
+for (let i = 0; i < comments_box.length; i++) {
+    comments_box[i].onscroll = function () {
+        if (comments_box[i].scrollHeight - comments_box[i].scrollTop == comments_box[i].offsetHeight) {
+            let comments_data=this.getAttribute('data-comments');
+            if (comments_data != 'false') {
+                let post_id = this.getAttribute('data-post_id'),
+                    com_id  = document.querySelector('.parent_comments'+post_id).lastElementChild.getAttribute('data-comment_id');
+                
+                loadComments(com_id,post_id);
+            }
+        }
+    }
+    
+}
+
+}
+
+loadCommentsOnScroll()
 
 
 //edit comment
@@ -136,44 +196,6 @@ generalEventListener('keypress', '.comment_input', e => {
     
 })
 
-//infinite scroll for comments
-function loadCommentsOnScroll(){
-    let comments_data=true;
-    const comments_box=document.getElementsByClassName('card-bottom');
-
-    function loadComments(com_id,post_id) {
-        axios.get("/users_comments/show_more/"+com_id+'/'+post_id)
-            .then(res=> {
-                if (res.status == 200) {
-                    let view      = res.data.view;
-                    console.log(view)
-                    document.querySelector('.parent_comments'+post_id).insertAdjacentHTML('beforeend', view);
-                }
-            })
-            .catch(err=>{
-                if (err.response.status == 404) {
-                    comments_data=false;
-                }
-            })
-    }
-
-    for (let i = 0; i < comments_box.length; i++) {
-        comments_box[i].onscroll = function () {
-            if (comments_box[i].scrollHeight - comments_box[i].scrollTop == comments_box[i].offsetHeight) {
-                if (comments_data != false) {
-                    let post_id = this.getAttribute('data-post_id'),
-                        com_id  = document.querySelector('.parent_comments'+post_id).lastElementChild.getAttribute('data-comment_id');
-                    
-                    loadComments(com_id,post_id);
-                }
-            }
-        }
-        
-    }
-    
-}
-
-loadCommentsOnScroll()
 
 //infinite scroll for posts
 let posts_data=true;
@@ -231,4 +253,88 @@ generalEventListener('click', '.like', e => {
             }
         })
 })
+
+//share post
+generalEventListener('click', '.share', e => {
+    let target  = e.target,
+        post_id = target.getAttribute('data-post_id');
+    
+    document.getElementById('share_btn').setAttribute('data-post_id',post_id);
+})
+
+generalEventListener('click', '#share_btn', e => {
+    let target  = e.target,
+        post_id = target.getAttribute('data-post_id');
+    
+    axios.post("/users_shares/store" ,{'post_id':post_id})
+        .then(res=> {
+            if (res.status == 200) {
+                const share_ele = document.querySelector('.share_num'+post_id);
+                let share_num = Number(share_ele.textContent);
+
+                share_num++;
+                share_ele.textContent=share_num;
+            }
+        })
+        .catch(err=>{
+            let error=err.response;
+            if (error.status == 404) {
+                const error_ele=document.getElementById('error_share');
+                let error_msg=error.data.error;
+
+                error_ele.style.display='';
+                error_ele.textContent=error_msg;
+
+                setTimeout(function(){
+                    error_ele.style.display='none';
+                },4000)
+            }
+        })
+})
+
+//delete post
+generalEventListener('click', '.delete_post', e => {
+    let target  = e.target,
+        post_id = target.getAttribute('data-post_id');
+    
+    document.getElementById('delete_post_btn').setAttribute('data-post_id',post_id);
+})
+
+generalEventListener('click', '#delete_post_btn', e => {
+    let target  = e.target,
+        post_id = target.getAttribute('data-post_id');
+    
+    axios.delete("/user_post/"+post_id ,{'post_id':post_id})
+        .then(res=> {
+            if (res.status == 200) {
+                let msg=res.data.success_msg;
+                const msg_ele=document.getElementById('delete_post_msg');
+                
+                msg_ele.textContent=msg;
+                msg_ele.style.display='';
+                console.log(msg_ele)
+                setTimeout(function(){
+                    msg_ele.style.display='none';
+                },4000)
+
+                document.querySelector('.post'+post_id).remove();
+            }
+        })
+        .catch(err=>{
+            let error=err.response;
+            if (error.status == 404) {
+                const error_ele=document.getElementById('error_delete_post');
+                let error_msg=error.data.error;
+
+                error_ele.style.display='';
+                error_ele.textContent=error_msg;
+                
+                setTimeout(function(){
+                    error_ele.style.display='none';
+                },4000)
+            }
+        })
+})
+
+
 

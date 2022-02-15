@@ -41,7 +41,7 @@ Route::apiResource('users_chat',Users\ChatController::class);
 
 #######################################     posts     ######################################
 Route::any ('posts/index_posts'  , 'Users\PostsController@index_posts')->name('users_posts.index_posts');
-Route::apiResource('users_posts',Users\PostsController::class);
+Route::apiResource('user_post',Users\PostsController::class);
 
 #######################################     comments     ######################################
 Route::get ('users_comments/show_more/{com_id}/{post_id}'  , 'Users\CommentsController@show_more');
@@ -49,3 +49,6 @@ Route::apiResource('user_comment',Users\CommentsController::class);
 
 #######################################     likes     ######################################
 Route::post ('users_likes/store'  , 'Users\LikesController@store');
+
+#######################################     shares     ######################################
+Route::post ('users_shares/store'  , 'Users\SharesController@store');

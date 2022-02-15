@@ -22,14 +22,15 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
-                    <button type="button" id="delete_btn" data-comment_id='' data-post_id="" class="btn btn-danger">delete</button>
+                    <button type="button" id="delete_btn" data-comment_id='' data-post_id=""
+                        class="btn btn-danger">delete</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!--       edit comment modal        -->
-    <div class="modal fade" id="edit_modal" tabindex="-1" >
+    <div class="modal fade" id="edit_modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -46,6 +47,52 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
                     <button type="button" id="update_btn" data-comment_id='' class="btn btn-primary">update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--       share post        -->
+    <div class="modal fade" id="share_modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="share_modal"> share post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-success text-center" id="success_msg" style="display: none"></div>
+                    <h4>Are you want to share this post?</h4>
+                    <small style="color: red; display:none" id="error_share"></small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+                    <button type="button" id="share_btn" data-post_id='' class="btn btn-primary">share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--       delete post        -->
+    <div class="modal fade" id="delete_post_modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="delete_post"> share post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-success text-center" id="delete_post_msg" style="display: none"></div>
+                    <h4>Are you want to delete this post?</h4>
+                    <small style="color: red; display:none" id="error_delete_post"></small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+                    <button type="button" id="delete_post_btn" data-post_id='' class="btn btn-danger">delete</button>
                 </div>
             </div>
         </div>

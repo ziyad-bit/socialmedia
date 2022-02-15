@@ -1,6 +1,6 @@
 @if ($friends_posts->count() > 0)
     @foreach ($friends_posts as $post)
-        <section class="d-flex justify-content-center" id="{{ $post->id }}">
+        <section class="d-flex justify-content-center post{{$post->id}}" id="{{ $post->id }}">
             <div class="card bg-light mb-3" style="max-width: 35rem;">
 
                 <!--      card top      -->
@@ -9,6 +9,13 @@
                     <span> {{ $post->users->name }}</span>
                     <!-- diff_date is autoloaded from app\helper\general -->
                     <small>{{ diff_date($post->created_at) }}</small>
+
+                    @can('update_or_delete', $post)
+                        <i class="fas fa-edit edit_post" ></i>
+
+                        <i class="fas fa-trash delete_post" data-bs-toggle="modal"
+                        data-bs-target="#delete_post_modal" data-post_id="{{$post->id}}"></i>
+                    @endcan
 
                     @if ($post->shares->count() > 0)
                         <span class="share_name" style="margin-left: 3px">shared this post</span>
@@ -53,7 +60,7 @@
                             comments</span>
                         <span><span class="like_num{{ $post->id }}">{{ $post->likes_count }}</span> likes</span>
                         <span style="font-weight: bold"><span
-                                class="share_num{{ $post->id }}">{{ $post->shares_count }}</span>shares</span>
+                                class="share_num{{ $post->id }}">{{ $post->shares_count }}</span> shares</span>
                     </small>
                 </div>
                 <a class="comment_link" post_id={{ $post->id }}>
@@ -64,7 +71,9 @@
                             <i class="fas fa-thumbs-up like like_icon" data-post_id="{{ $post->id }}">like</i>
                         @endif
 
-                        <i class="fas fa-share share share_icon" data-post_id="{{ $post->id }}">share</i>
+                        <i class="fas fa-share share share_icon" data-bs-toggle="modal"
+                        data-bs-target="#share_modal" data-post_id="{{ $post->id }}">share</i>
+
                         <i class="fas fa-comment comment_icon" id="{{ $post->id }}">Comment</i>
                     </div>
                 </a>
@@ -72,38 +81,14 @@
                 <!--      card bottom      -->
                 <div class="card-header card-bottom" data-post_id="{{ $post->id }}">
                     @if ($post->comments_count != 0)
-                        <small class=" {{ 'view_comments ' . $post->id }}" id="{{ 'view' . $post->id }}">
+                        <small class="view_comments" data-view="false"  id="{{$post->id}}" data-comments="false" data-com_req="false">
                             view
                             comments
                         </small>
                     @endif
 
                     <div class="parent_comments{{ $post->id }}">
-                        @foreach ($post->comments as $comment)
-                            <div class="{{ 'comment com' . $post->id }}" id="{{ 'comm' . $comment->id }}"
-                                style="display: none" data-comment_id="{{ $comment->id }}">
-                                @if ($comment->users->photo)
-                                    <img src="{{ asset('images/users/' . $comment->users->photo) }}" alt="loading"
-                                        class="rounded-circle">
-                                    <span>{{ $comment->users->name }}</span>
-                                @endif
-
-                                <small>{{ diff_date($comment->created_at) }}</small>
-
-                                <p>
-                                    <span>{{ $comment->text }}</span>
-                                    @if ($comment->user_id == Auth::user()->id)
-                                        <i id="delete_icon" data-bs-toggle="modal" data-bs-target="#delete_modal"
-                                            class="fas fa-trash" data-post_id="{{ $post->id }}"
-                                            data-comment_id="{{ $comment->id }}"></i>
-
-                                        <i data-bs-toggle="modal" data-bs-target="#edit_modal"
-                                            class="{{ 'fas fa-edit ' . $comment->id }}"
-                                            data-post_id="{{ $post->id }}"></i>
-                                    @endif
-                                </p>
-                            </div>
-                        @endforeach
+                        
                     </div>
 
                     <form id="{{ 'form_comment' . $post->id }}" class="form_comment">

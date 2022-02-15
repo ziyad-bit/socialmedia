@@ -192,3 +192,19 @@
 .share_name{
     float: right;
 }
+
+.edit_post{
+    margin-left: 10px;
+    
+}
+
+.delete_post{
+    color: red;
+}
+
+.delete_post:hover{
+    cursor: pointer;
+}
+.edit_post:hover{
+    cursor: pointer;
+}
