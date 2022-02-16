@@ -19,7 +19,7 @@ class SharesSeeder extends Seeder
         $users=collect(User::all()->modelKeys());
         $posts=collect(Posts::all()->modelKeys());
 
-        for ($i=0; $i <10 ; $i++) { 
+        for ($i=0; $i <100 ; $i++) { 
             Shares::create([
                 'user_id'=>$users->random(),
                 'post_id'=>$posts->random(),

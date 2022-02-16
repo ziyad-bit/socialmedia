@@ -336,5 +336,20 @@ generalEventListener('click', '#delete_post_btn', e => {
         })
 })
 
+//add post
+const add_btn=document.getElementById('add_post_btn');
+add_btn.onclick=function(){
+    let form=document.getElementById('post_form'),
+    formData=new FormData(form);
 
+    axios.post("/user_post" ,formData)
+        .then(res=> {
+            if (res.status == 200) {
+                console.log(1)
+            }
+        })
+        .catch(err=>{
+            
+        })
+}
 

@@ -7,11 +7,13 @@ use App\Traits\Friends_ids;
 use Illuminate\Http\Request;
 use App\Traits\Shared_posts_ids;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostsRequest;
+use App\Traits\UploadImage;
 use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
-    use Friends_ids , Shared_posts_ids;
+    use Friends_ids , Shared_posts_ids , UploadImage;
 
     public function index_posts(Request $request)
     {
@@ -32,12 +34,34 @@ class PostsController extends Controller
         return view('users.posts.index',compact('friends_posts'));
     }
 
-    public function store(Request $request)
+    public function store(PostsRequest $request)
     {
-        //
+        $photo=$request->file('photo');
+        if ($photo) {
+            $photo=$this->uploadphoto($photo,'images/posts');
+        }
+
+        $file=$request->file('file');
+        if ($file) {
+            $file=$this->uploadphoto($file,'images/files');
+        }
+
+        $video=$request->file('video');
+        if ($video) {
+            $video=$this->uploadphoto($video,'images/videos');
+        }
+        
+        Posts::create([
+            'user_id' => Auth::id(),
+            'photo'   => $photo,
+            'file'    => $file,
+            'video'   => $video,
+            'text'    => $request->text,
+        ]);
+
+        return response()->json(['success'=>'you created it successfully']);
     }
 
-  
     public function update(Request $request, $id)
     {
         //

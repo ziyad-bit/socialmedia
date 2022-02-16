@@ -6,9 +6,8 @@ use Illuminate\Http\Request;
 
 trait UploadImage
 {
-    public function uploadphoto(Request $request,string $path):string
+    public function uploadphoto($file,string $path):string
     {
-        $file     = $request->file('photo');
         $fileName = $file-> hashName();
         
         $file->move($path , $fileName);

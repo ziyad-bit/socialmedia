@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(10)->create();
+        //\App\Models\User::factory(10)->create();
 /*
         $this->call(AdminsSeeder::class);
         $this->call(GroupsSeeder::class);
@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
         $this->call(PostsSeeder::class);
         $this->call(LikesSeeder::class);
         $this->call(SharesSeeder::class);
-        
-        $this->call(MessagesSeeder::class);
         */
-        //$this->call(LanguagesSeeder::class);
         $this->call(CommentsSeeder::class);
+        $this->call(MessagesSeeder::class);
+        $this->call(LanguagesSeeder::class);
+        
     }
 }

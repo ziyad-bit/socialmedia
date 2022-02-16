@@ -24,8 +24,8 @@ class CommentsSeeder extends Seeder
         for ($i=0; $i <2000 ; $i++) { 
             Comments::create([
                 'text'    => $faker->sentence(),
-                'user_id' => 13,
-                'post_id' => 11,
+                'user_id'=>$users->random(),
+                'post_id'=>$posts->random(),
             ]);
         }
     }
