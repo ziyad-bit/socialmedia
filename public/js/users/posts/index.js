@@ -14,7 +14,7 @@ generalEventListener('click', '.comment_icon', e => {
 //view comments
 generalEventListener('click','.view_comments',e=>{
     let target        = e.target,
-        id            = target.id,
+        id            = target.getAttribute('data-post_id'),
         com_req       = target.getAttribute('data-com_req');
 
     if (com_req == 'false') {
@@ -54,35 +54,35 @@ generalEventListener('click','.view_comments',e=>{
 function loadCommentsOnScroll(){
     comments_box=document.getElementsByClassName('card-bottom');
 
-function loadComments(com_id,post_id) {
-    axios.get("/users_comments/show_more/"+com_id+'/'+post_id)
-        .then(res=> {
-            if (res.status == 200) {
-                let view      = res.data.view;
-                document.querySelector('.parent_comments'+post_id).insertAdjacentHTML('beforeend', view);
-            }
-        })
-        .catch(err=>{
-            if (err.response.status == 404) {
-                document.getElementById(''+post_id).setAttribute('data-comments','true');
-            }
-        })
-}
+    function loadComments(com_id,post_id) {
+        axios.get("/users_comments/show_more/"+com_id+'/'+post_id)
+            .then(res=> {
+                if (res.status == 200) {
+                    let view      = res.data.view;
+                    document.querySelector('.parent_comments'+post_id).insertAdjacentHTML('beforeend', view);
+                }
+            })
+            .catch(err=>{
+                if (err.response.status == 404) {
+                    document.getElementById('post_'+post_id).setAttribute('data-comments','false');
+                }
+            })
+    }
 
-for (let i = 0; i < comments_box.length; i++) {
-    comments_box[i].onscroll = function () {
-        if (comments_box[i].scrollHeight - comments_box[i].scrollTop == comments_box[i].offsetHeight) {
-            let comments_data=this.getAttribute('data-comments');
-            if (comments_data != 'false') {
-                let post_id = this.getAttribute('data-post_id'),
-                    com_id  = document.querySelector('.parent_comments'+post_id).lastElementChild.getAttribute('data-comment_id');
-                
-                loadComments(com_id,post_id);
+    for (let i = 0; i < comments_box.length; i++) {
+        comments_box[i].onscroll = function () {
+            if (comments_box[i].scrollHeight - comments_box[i].scrollTop == comments_box[i].offsetHeight) {
+                let comments_data=this.getAttribute('data-comments');
+                if (comments_data != 'false') {
+                    let post_id = this.getAttribute('data-post_id'),
+                        com_id  = document.querySelector('.parent_comments'+post_id).lastElementChild.getAttribute('data-comment_id');
+                    
+                    loadComments(com_id,post_id);
+                }
             }
         }
+        
     }
-    
-}
 
 }
 
@@ -90,8 +90,8 @@ loadCommentsOnScroll()
 
 
 //edit comment
-generalEventListener('click', '.fa-edit', e => {
-    let id           = e.target.classList[2],
+generalEventListener('click', '.edit_comment', e => {
+    let id           = e.target.getAttribute('data-comment_id'),
         comment      = document.querySelector('#comm'+id+' p span').textContent,
         update_btn   = document.getElementById('update_btn'),
         update_input = document.querySelector('#update_input');
@@ -345,11 +345,83 @@ add_btn.onclick=function(){
     axios.post("/user_post" ,formData)
         .then(res=> {
             if (res.status == 200) {
-                console.log(1)
+                let res_data    = res.data,
+                    success_msg = res_data.success,
+                    view        = res_data.view;
+
+                const success_ele = document.getElementById('add_post_msg');
+
+                success_ele.textContent=success_msg;
+                success_ele.style.display='';
+
+                document.querySelector('.parent').insertAdjacentHTML('afterbegin',view);
             }
         })
         .catch(err=>{
-            
+            let error=err.response;
+            if (error.status == 422) {
+                let err_msgs=error.data.errors;
+                for (const [key, value] of Object.entries(err_msgs)) {
+                    document.getElementById(key+'_err').textContent=value[0];
+                }
+            }
+        })
+}
+
+//edit post
+const text_ele = document.querySelector('.edit_text'),
+    btn_ele  = document.getElementById('edit_post_btn');
+generalEventListener('click', '.edit_post', e => {
+    let target    = e.target,
+        post_id   = target.getAttribute('data-post_id'),
+        post_text = document.querySelector('.text'+post_id).innerText ;
+
+        text_ele.value=post_text;
+
+        btn_ele.setAttribute('data-post_id',post_id);
+})
+
+btn_ele.onclick=function(e){
+    let post_id  = e.target.getAttribute('data-post_id'),
+        form     = document.getElementById('edit_post_form'),
+        formData = new FormData(form);
+
+    axios.post("/user_post/"+post_id ,formData)
+        .then(res=> {
+            if (res.status == 200) {
+                let res_data    = res.data,
+                    text        = text_ele.value;
+                    success_msg = res_data.success,
+                    post        = res_data.post;
+                    
+                const success_ele = document.getElementById('edit_post_msg');
+
+                success_ele.textContent=success_msg;
+                success_ele.style.display='';
+
+                document.querySelector('.text'+post_id).textContent=text;
+
+                if (post.photo) {
+                    document.querySelector('.photo'+post_id).src='/images/posts/'+post.photo;
+                }
+
+                if (post.file) {
+                    document.querySelector('.file'+post_id).src='/files/'+post.file;
+                }
+
+                if (post.video) {
+                    document.querySelector('.video'+post_id).src='/videos/'+post.video;
+                }
+            }
+        })
+        .catch(err=>{
+            let error=err.response;
+            if (error.status == 422) {
+                let err_msgs=error.data.errors;
+                for (const [key, value] of Object.entries(err_msgs)) {
+                    document.getElementById(key+'_edit_err').textContent=value[0];
+                }
+            }
         })
 }
 

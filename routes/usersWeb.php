@@ -41,6 +41,7 @@ Route::apiResource('users_chat',Users\ChatController::class);
 
 #######################################     posts     ######################################
 Route::any ('posts/index_posts'  , 'Users\PostsController@index_posts')->name('users_posts.index_posts');
+Route::post('user_post/{user_post}'  , 'Users\PostsController@update');
 Route::apiResource('user_post',Users\PostsController::class);
 
 #######################################     comments     ######################################

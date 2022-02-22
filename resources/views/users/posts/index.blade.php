@@ -115,7 +115,7 @@
                         <div class="form-group">
                             <label for="exampleInputname1">text </label>
                             <textarea name="text" class="form-control" cols="15" rows="5"></textarea>
-                            <small style="color:red" id="post_err">
+                            <small style="color:red" id="text_err">
 
                             </small>
                         </div>
@@ -154,10 +154,64 @@
         </div>
     </div>
 
-    <button class="btn btn-primary add_post" data-bs-target="#add_post_modal" 
-    data-bs-toggle="modal" style="margin-top: 15px;
-    margin-left: 277px;"
-    >add</button>
+    <!--       edit post        -->
+    <div class="modal fade" id="edit_post_modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="edit_post_modal"> edit post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="edit_post_form" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="alert alert-success text-center" id="edit_post_msg" style="display: none"></div>
+
+                        <div class="form-group">
+                            <label for="exampleInputname1">text </label>
+                            <textarea name="text" class="form-control edit_text" cols="15" rows="5"></textarea>
+                            <small style="color:red" id="text_edit_err">
+
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputname1">photo </label>
+                            <input type="file" name="photo" class="form-control">
+                            <small style="color:red" id="photo_edit_err">
+
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputname1">file </label>
+                            <input type="file" name="file" class="form-control">
+                            <small style="color:red" id="file_edit_err">
+
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputname1">video </label>
+                            <input type="file" name="video" class="form-control">
+                            <small style="color:red" id="video_edit_err">
+
+                            </small>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+                        <button type="button" id="edit_post_btn" class="btn btn-primary">update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary add_post" data-bs-target="#add_post_modal" data-bs-toggle="modal" style="margin-top: 15px;
+        margin-left: 277px;">add post</button>
     <!--      posts     -->
     <div class="parent">
         @include('users.posts.index_posts')

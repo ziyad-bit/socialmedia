@@ -51,7 +51,7 @@ class PostsController extends Controller
             $video=$this->uploadphoto($video,'images/videos');
         }
         
-        Posts::create([
+        $post=Posts::create([
             'user_id' => Auth::id(),
             'photo'   => $photo,
             'file'    => $file,
@@ -59,15 +59,42 @@ class PostsController extends Controller
             'text'    => $request->text,
         ]);
 
-        return response()->json(['success'=>'you created it successfully']);
+        $view=view('users.posts.add_post',compact('post'))->render();
+        return response()->json(['success'=>'you created it successfully','view'=>$view]);
     }
 
-    public function update(Request $request, $id)
+    public function update(PostsRequest $request,Posts $user_post)
     {
-        //
+        $this->authorize('update_or_delete',$user_post);
+
+        $photo=$user_post->photo;
+        if ($request->file('photo')) {
+            $photo=$request->file('photo');
+            $photo=$this->uploadphoto($photo,'images/posts');
+        }
+
+        $file=$user_post->file;
+        if ($request->file('file')) {
+            $file=$request->file('file');
+            $file=$this->uploadphoto($file,'images/files');
+        }
+
+        $video=$user_post->video;
+        if ($request->file('video')) {
+            $video=$request->file('video');
+            $video=$this->uploadphoto($video,'images/videos');
+        }
+        
+        $user_post->update([
+            'photo'   => $photo,
+            'file'    => $file,
+            'video'   => $video,
+            'text'    => $request->text,
+        ]);
+
+        return response()->json(['success'=>'you updated it successfully','post'=>$user_post]);
     }
 
-  
     public function destroy(Posts $user_post)
     {
         $this->authorize('update_or_delete',$user_post);

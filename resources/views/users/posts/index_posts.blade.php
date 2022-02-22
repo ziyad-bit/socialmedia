@@ -11,7 +11,8 @@
                     <small>{{ diff_date($post->created_at) }}</small>
 
                     @can('update_or_delete', $post)
-                        <i class="fas fa-edit edit_post" ></i>
+                        <i class="fas fa-edit edit_post"  data-bs-toggle="modal"
+                        data-bs-target="#edit_post_modal" data-post_id="{{$post->id}}"></i>
 
                         <i class="fas fa-trash delete_post" data-bs-toggle="modal"
                         data-bs-target="#delete_post_modal" data-post_id="{{$post->id}}"></i>
@@ -35,23 +36,23 @@
                     @endif
 
 
-                    <p>
+                    <p class="text{{$post->id}}">
                         {{ $post->text }}
                     </p>
 
                     @if ($post->file)
-                        <a href="{{ url('posts/download/' . $post->file) }}" class="btn btn-primary">
+                        <a href="{{ url('posts/download/' . $post->file) }}" class="btn btn-primary file{{$post->id}}">
                             <i class="fas fa-arrow-down"></i>{{ strstr($post->file, '-') }}
                         </a>
                         <embed src="{{ asset('files/' . $post->file) }}">
                     @endif
 
                     @if ($post->photo)
-                        <img src="{{ $post->photo }}" alt="loading" class="image" style="height: 400px">
+                        <img src="{{asset('images/posts/'.$post->photo)  }}" alt="loading" class="image photo{{$post->id}}" style="height: 400px">
                     @endif
 
                     @if ($post->video)
-                        <video src="{{ asset('videos/' . $post->video) }}" controls></video>
+                        <video class="video{{$post->id}}" src="{{ asset('videos/' . $post->video) }}" controls></video>
                     @endif
 
                     <small class="number_comments">
@@ -79,9 +80,9 @@
                 </a>
 
                 <!--      card bottom      -->
-                <div class="card-header card-bottom" data-post_id="{{ $post->id }}">
+                <div class="card-header card-bottom" data-post_id="{{ $post->id }}"  id="{{'post_'.$post->id}}" data-comments="true">
                     @if ($post->comments_count != 0)
-                        <small class="view_comments" data-view="false"  id="{{$post->id}}" data-comments="false" data-com_req="false">
+                        <small class="view_comments" data-view="false"  data-post_id="{{$post->id}}" data-com_req="false">
                             view
                             comments
                         </small>
