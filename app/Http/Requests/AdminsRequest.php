@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
-class MembersRequest extends FormRequest
+class AdminsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +28,7 @@ class MembersRequest extends FormRequest
             'name'     => 'required_without:id|string|max:50|min:3',
             'email'    => 'required_without:id|email|max:50|min:10|unique:admins,email,' . Auth::user()->id,
             'password' => 'required_without:id|string|max:50|min:8',
-            'photo'    => 'required_without:photo_id|image|mimes:jpg,gif,jpeg,png|max:14',
+            'photo'    => 'required_without:photo_id|image|mimes:jpg,gif,jpeg,png,webp|max:14',
         ];
     }
 

@@ -1,5 +1,5 @@
 <section class="d-flex justify-content-center post{{ $post->id }}" id="{{ $post->id }}">
-    <div class="card bg-light mb-3" style="max-width: 35rem;">
+    <div class="card bg-light mb-3" style="max-width:500px;">
 
         <!--      card top      -->
         <div class="card-header card-top">
@@ -13,6 +13,11 @@
             <i class="fas fa-trash delete_post" data-bs-toggle="modal" data-bs-target="#delete_post_modal"
                 data-post_id="{{ $post->id }}"></i>
 
+            @if ($share)
+                <span class="share_name" style="margin-left: 3px">shared this post</span>
+
+                <span class="share_name"> you </span>
+            @endif
             <p>
                 {{ $post->text }}
             </p>
@@ -25,7 +30,8 @@
             @endif
 
             @if ($post->photo)
-                <img src="{{asset('images/posts/'.$post->photo)}}" alt="loading" class="image" style="height: 400px">
+                <img src="{{ asset('images/posts/' . $post->photo) }}" alt="loading" class="image"
+                    >
             @endif
 
             @if ($post->video)
@@ -54,7 +60,7 @@
         <!--      card bottom      -->
         <div class="card-header card-bottom" data-post_id="{{ $post->id }}" id="{{ 'post_' . $post->id }}"
             data-comments="true">
-            
+
 
             <div class="parent_comments{{ $post->id }}">
 

@@ -21,6 +21,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('users_chat.index_friends')}}">Chat</a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('users.profile.index')}}">profile</a>
+                    </li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->

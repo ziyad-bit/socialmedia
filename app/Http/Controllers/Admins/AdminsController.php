@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admins;
 
-use Illuminate\Http\{Request,RedirectResponse};
-use App\Http\Controllers\Controller;
-use App\Http\Requests\MembersRequest;
 use App\Models\Admins;
 use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminsRequest;
+use App\Http\Requests\MembersRequest;
 use Illuminate\Support\Facades\{Auth,Hash};
+use Illuminate\Http\{Request,RedirectResponse};
 
 class AdminsController extends Controller
 {
@@ -58,7 +59,7 @@ class AdminsController extends Controller
     }
 
     ####################################      store      ################################
-    public function store(MembersRequest $request):RedirectResponse
+    public function store(AdminsRequest $request):RedirectResponse
     {
         Admins::create($request->except('password','photo_id') + [
                 'password'=>Hash::make($request->password)
@@ -76,7 +77,7 @@ class AdminsController extends Controller
     }
 
     ####################################      update      ################################
-    public function update(int $id,MembersRequest $request):RedirectResponse
+    public function update(int $id,AdminsRequest $request):RedirectResponse
     {
         $admin=Admins::find($id);
         $admin->update($request->except('password','photo_id') + [

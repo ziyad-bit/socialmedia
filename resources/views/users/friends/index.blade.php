@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('header')
-    <link rel="stylesheet" href="{{ asset('css/users/profile/requests.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/users/friends/requests.css') }}">
 @endsection
 
 @section('content')

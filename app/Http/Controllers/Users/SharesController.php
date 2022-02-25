@@ -4,14 +4,18 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShareRequest;
+use App\Models\Posts;
 use App\Models\Shares;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class SharesController extends Controller
 {
-    public function store(ShareRequest $request)
+    ##################################      store      ###############################
+    public function store(ShareRequest $request):JsonResponse
     {
-        $data=['post_id'=>$request->post_id,'user_id'=>Auth::id()];
+        $post_id=$request->post_id;
+        $data=['post_id'=>$post_id,'user_id'=>Auth::id()];
         
         $share=Shares::where($data)->first();
         if ($share) {
@@ -19,6 +23,11 @@ class SharesController extends Controller
         }
 
         Shares::create($data);
-        return response()->json(['success'=>'you shared this post successfully']);
+
+        $post=Posts::findOrFail($post_id);
+        $share=true;
+        $view=view('users.posts.add_post',compact('post','share'))->render();
+
+        return response()->json(['success'=>'you shared this post successfully','view'=>$view]);
     }
 }

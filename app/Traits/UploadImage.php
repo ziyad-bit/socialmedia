@@ -2,15 +2,19 @@
 
 namespace App\Traits;
 
-use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 trait UploadImage
 {
-    public function uploadphoto($file,string $path):string
+    public function uploadPhoto(object $file,string $path,int $width=null,int $height=null):string
     {
-        $fileName = $file-> hashName();
+        $img = Image::make($file)->resize($width, $height, function ($constraint) {
+            $constraint->aspectRatio();
+        });
         
-        $file->move($path , $fileName);
+        $fileName = $file->hashName();
+        $img->save(public_path($path.$fileName));
+
         return $fileName;
     }
 }

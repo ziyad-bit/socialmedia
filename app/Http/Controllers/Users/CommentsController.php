@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentRequest;
-use App\Models\Comments;
-use App\Models\Posts;
+use App\Models\{Posts,Comments};
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
-    public function store(CommentRequest $request)
+    #############################     store    #######################################
+    public function store(CommentRequest $request):JsonResponse
     {
         if ($request->post_id) {
             $comment = Comments::create($request->validated() + ['user_id' => Auth::id()]);
@@ -22,7 +23,8 @@ class CommentsController extends Controller
         return response()->json(['view' => $view]);
     }
 
-    public function show(int $post_id)
+    #############################     show     #######################################
+    public function show(int $post_id):JsonResponse
     {
         $comments = Posts::findOrFail($post_id)->comments;
 
@@ -30,7 +32,8 @@ class CommentsController extends Controller
         return response()->json(['view' => $view]);
     }
 
-    public function show_more(int $com_id, int $post_id)
+    #############################     show_more     #######################################
+    public function show_more(int $com_id, int $post_id):JsonResponse
     {
         $comments = Comments::with(['users' => fn($q) => $q->selection()])->selection()->where('post_id', $post_id)
             ->where('id', '<', $com_id)->orderByDesc('id')->limit(5)->get();
@@ -43,7 +46,8 @@ class CommentsController extends Controller
         return response()->json(['view' => $view]);
     }
 
-    public function update(CommentRequest $request, Comments $user_comment)
+    #############################     update     #######################################
+    public function update(CommentRequest $request, Comments $user_comment):JsonResponse
     {
         $this->authorize('update_or_delete', $user_comment);
         $user_comment->update($request->validated());
@@ -51,7 +55,8 @@ class CommentsController extends Controller
         return response()->json(['success_msg' => 'you updated it successfully']);
     }
 
-    public function destroy(Comments $user_comment)
+    #############################     destroy     #######################################
+    public function destroy(Comments $user_comment):JsonResponse
     {
         $this->authorize('update_or_delete', $user_comment);
         $user_comment->delete();

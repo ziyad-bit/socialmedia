@@ -28,9 +28,6 @@ Route::group(['prefix'=>'users_search','namespace'=>'Users'], function () {
     Route::get ('/show/recent' , 'SearchController@show_recent');
 });
 
-#######################################     users     ######################################
-Route::resource('users',Users\UsersController::class);
-
 #######################################     friends     ######################################
 Route::any ('friends/requests'  , 'Users\FriendsController@show_requests')->name('users_friends.show_requests');
 Route::apiResource('users_friends',Users\FriendsController::class);
@@ -53,3 +50,12 @@ Route::post ('users_likes/store'  , 'Users\LikesController@store');
 
 #######################################     shares     ######################################
 Route::post ('users_shares/store'  , 'Users\SharesController@store');
+
+#######################################     profile     ######################################
+
+
+Route::group(['prefix'=>'users/profile','namespace'=>'Users'], function () {
+    Route::any ('/index'       , 'ProfileController@index_profile')->name('users.profile.index');
+    Route::post('/update/photo', 'ProfileController@update_photo');
+    Route::post('/update'      , 'ProfileController@update_profile');
+});

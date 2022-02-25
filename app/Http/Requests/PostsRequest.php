@@ -24,7 +24,7 @@ class PostsRequest extends FormRequest
     public function rules()
     {
         return [
-            'text'     => 'required|string|min:4|max:500',
+            'text'     => 'required|string|min:2|max:500',
             'video'    => 'nullable|file|mimes:mp4,mov,flv,avi|max:1000000',
             'photo'    => 'nullable|image|mimes:gif,png,jpg|max:100000',
             'group_id' => 'nullable|numeric',

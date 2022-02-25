@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Users;
 
 use App\Models\Likes;
-use Illuminate\Http\Request;
 use App\Http\Requests\LikesRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class LikesController extends Controller
 {
-    public function store(LikesRequest $request)
+    public function store(LikesRequest $request):JsonResponse
     {
         $like_arr=['user_id'=>Auth::id(),'post_id'=>$request->post_id];
 
