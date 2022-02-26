@@ -27,10 +27,10 @@ class UsersRequest extends FormRequest
         return [
             'name'           => 'required_without:id|string|max:50|min:3',
             'email'          => 'required_without:id|email|max:50|min:10|unique:users,email,'.Auth::id(),
-            'old_password'   => 'current_password|required_without:id|string|max:50|min:8',
+            'old_password'   => 'current_password|string',
             'password'       => 'nullable|string|max:50|min:8',
-            'work'           => 'required_without:id|string|max:50|min:8',
-            'marital_status' => 'required_without:id|string|max:50|min:3',
+            'work'           => 'nullable|string|max:50|min:8',
+            'marital_status' => 'nullable|string|max:50|min:3',
             'photo'          => 'required_without:photo_id|image|mimes:jpg,gif,jpeg,png,webp|max:14',
         ];
     }

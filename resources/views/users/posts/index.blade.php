@@ -68,7 +68,7 @@
     <button class="btn btn-primary add_post" data-bs-target="#add_post_modal" data-bs-toggle="modal" style="margin-top: 15px;
         margin-left: 277px;">add post</button>
     <!--      posts     -->
-    <div class="parent">
+    <div class="parent_posts" data-page_code="{{ $page_code }}">
         @include('users.posts.index_posts')
     </div>
 @endsection

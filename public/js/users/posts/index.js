@@ -34,3 +34,31 @@ add_btn.onclick=function(){
         })
 }
 
+//infinite scroll for posts
+let posts_data=true;
+function loadPages(page) {
+    axios.post("?page="+page,{'agax':1})
+        .then(res=> {
+            if (res.status == 200) {
+                let view      = res.data.view;
+                document.querySelector('.parent_posts').insertAdjacentHTML('beforeend', view);
+
+                loadCommentsOnScroll()
+            }
+        })
+        .catch(err=>{
+            if (err.response.status == 404) {
+                posts_data=false;
+            }
+        })
+}
+
+let page=1;
+window.onscroll = function () {
+    if (window.scrollY + window.innerHeight-54 >= document.body.clientHeight) {
+        if (posts_data != false) {
+            page++;
+            loadPages(page);
+        }
+    }
+}

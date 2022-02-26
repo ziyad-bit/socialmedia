@@ -197,35 +197,6 @@ generalEventListener('keypress', '.comment_input', e => {
 })
 
 
-//infinite scroll for posts
-let posts_data=true;
-function loadPages(page) {
-    axios.post("?page="+page,{'agax':1})
-        .then(res=> {
-            if (res.status == 200) {
-                let view      = res.data.view;
-                document.querySelector('.parent').insertAdjacentHTML('beforeend', view);
-
-                loadCommentsOnScroll()
-            }
-        })
-        .catch(err=>{
-            if (err.response.status == 404) {
-                posts_data=false;
-            }
-        })
-}
-
-let page=1;
-window.onscroll = function () {
-    if (window.scrollY + window.innerHeight-54 >= document.body.clientHeight) {
-        if (posts_data != false) {
-            page++;
-            loadPages(page);
-        }
-    }
-}
-
 //like or unlike
 generalEventListener('click', '.like', e => {
     let target  = e.target,
@@ -276,7 +247,7 @@ generalEventListener('click', '#share_btn', e => {
                 share_num++;
                 share_ele.textContent=share_num;
 
-                document.querySelector('.parent').insertAdjacentHTML('afterbegin',view);
+                document.querySelector('.parent_posts').insertAdjacentHTML('afterbegin',view);
             }
         })
         .catch(err=>{

@@ -31,7 +31,7 @@
                             <input type="file" name="photo" class="form-control photo" aria-describedby="emailHelp">
 
                             <small style="color: red" id="photo_err">
-                                
+
                             </small>
 
                         </div>
@@ -44,7 +44,7 @@
                     <button type="submit" id="save_photo" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
-            
+
         </div>
     </div>
     </div>
@@ -66,78 +66,77 @@
                     <div class="alert alert-success text-center" id="success_profile" style="display: none">
 
                     </div>
-                    
-                       
-                            <form id="profile_form">
-                                <input type="hidden" name="photo_id" value="1">
 
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">name</label>
-                                    <input type="text" name="name" value="{{ Auth::user()->name }}"
-                                        class="form-control input" id="input_name" aria-describedby="emailHelp">
+                    <form id="profile_form">
+                        <input type="hidden" name="photo_id" value="1">
 
-                                    <small style="color: red" class="errors" id="name_err">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">name</label>
+                            <input type="text" name="name" value="{{ Auth::user()->name }}" class="form-control input"
+                                id="input_name" aria-describedby="emailHelp">
 
-                                    </small>
+                            <small style="color: red" class="errors" id="name_err">
 
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">email</label>
-                                    <input type="email" name="email" value="{{ Auth::user()->email }}"
-                                        class="form-control input" id="input_email">
+                            </small>
 
-                                    <small style="color: red" class="errors" id="email_err">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">email</label>
+                            <input type="email" name="email" value="{{ Auth::user()->email }}" class="form-control input"
+                                id="input_email">
 
-                                    </small>
+                            <small style="color: red" class="errors" id="email_err">
 
-                                </div>
+                            </small>
 
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">work</label>
-                                    <input type="text" name="work" value="{{ Auth::user()->work }}"
-                                        class="form-control input" id="input_work">
+                        </div>
 
-                                    <small style="color: red" class="errors" id="work_err">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">work</label>
+                            <input type="text" name="work" value="{{ Auth::user()->work }}" class="form-control input"
+                                id="input_work">
 
-                                    </small>
+                            <small style="color: red" class="errors" id="work_err">
 
-                                </div>
+                            </small>
 
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">marital status</label>
-                                    <input type="text" name="marital_status" value="{{ Auth::user()->marital_status }}"
-                                        class="form-control input" id="input_marital_status">
+                        </div>
 
-                                    <small style="color: red" class="errors" id="marital_status_err">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">marital status</label>
+                            <input type="text" name="marital_status" value="{{ Auth::user()->marital_status }}"
+                                class="form-control input" id="input_marital_status">
 
-                                    </small>
+                            <small style="color: red" class="errors" id="marital_status_err">
 
-                                </div>
+                            </small>
 
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">old password</label>
-                                    <input type="password" name="old_password" class="form-control input" id="input_old_password">
+                        </div>
 
-                                    <small style="color: red" class="errors" id="old_password_err">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">old password</label>
+                            <input type="password" name="old_password" class="form-control input" id="input_old_password">
 
-                                    </small>
+                            <small style="color: red" class="errors" id="old_password_err">
 
-                                </div>
+                            </small>
 
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">new password</label>
-                                    <input type="password" name="password" class="form-control input" id="input_password">
+                        </div>
 
-                                    <small style="color: red" class="errors" id="password_err">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">new password</label>
+                            <input type="password" name="password" class="form-control input" id="input_password">
 
-                                    </small>
+                            <small style="color: red" class="errors" id="password_err">
 
-                                </div>
+                            </small>
+
+                        </div>
 
 
-                            </form>
-                        
-                    
+                    </form>
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
@@ -183,30 +182,36 @@
                     <li class="list-group-item items_list">
                         <span class="created_at"> created at </span>:
                         <span>{{ Auth::user()->created_at }}</span>
-                        
+
                     </li>
 
                     <li class="list-group-item items_list">
                         <span class="email"> work </span>:
                         @if (Auth::user()->work)
-                        <span class="user_work">{{ Auth::user()->work }}</span>
-                            
+                            <span class="user_work">{{ Auth::user()->work }}</span>
+
                         @else
                             __
                         @endif
-                        
+
 
                     </li>
 
                     <li class="list-group-item items_list">
                         <span class="name_profile">status</span>:
-                        @if ( Auth::user()->marital_status)
-                        <span class="user_marital_status">{{ Auth::user()->marital_status }}</span>
-                        
+                        @if (Auth::user()->marital_status)
+                            <span class="user_marital_status">{{ Auth::user()->marital_status }}</span>
+
                         @else
                             __
                         @endif
-                        
+
+                    </li>
+
+                    <li class="list-group-item items_list">
+                        <span class="email">friends</span>:
+
+
                     </li>
                 </ul>
             </div>
@@ -215,7 +220,9 @@
 
     <hr style="margin-top: 100px">
     {{-- posts --}}
-    @include('users.posts.index_posts')
+    <div class="parent_posts" data-page_code="{{ $page_code }}">
+        @include('users.posts.index_posts')
+    </div>
 @endsection
 
 @section('script')

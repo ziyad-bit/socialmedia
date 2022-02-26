@@ -43,6 +43,11 @@ update_profile_ele.onclick=function(){
     let form=document.getElementById('profile_form'),
     formData=new FormData(form);
 
+    const errors_ele=document.getElementsByClassName('errors');
+    for (let i = 0; i < errors_ele.length; i++) {
+        errors_ele[i].style.display='none';
+    }
+
     axios.post("/users/profile/update" ,formData)
         .then(res=> {
             if (res.status == 200) {
@@ -53,8 +58,7 @@ update_profile_ele.onclick=function(){
                 for (const [key, value] of Object.entries(user)) {
                     document.querySelector('.user_'+key).textContent=value;
                 }
-
-                document.querySelector('.errors').style.display='';
+                
                 const success_ele=document.getElementById('success_profile');
 
                 success_ele.textContent=msg;
@@ -77,4 +81,29 @@ update_profile_ele.onclick=function(){
                 }
             }
         })
+}
+
+//load posts by infinite scrolling
+const parent_posts = document.querySelector('.parent_posts'); 
+
+function loadPages(page_code) {
+    axios.post("?cursor=" + page_code,{'agax':1})
+        .then(res=> {
+            if (res.status == 200) {
+                let view   = res.data.view,
+                    cursor = res.data.page_code;
+                console.log(cursor)
+                parent_posts.setAttribute('data-page_code',cursor);
+                parent_posts.insertAdjacentHTML('beforeend', view);
+            }
+        })
+}
+
+window.onscroll = function () {
+    if (window.scrollY + window.innerHeight-54 >= document.body.clientHeight) {
+        let page_code = parent_posts.getAttribute('data-page_code');
+        if (page_code) {
+            loadPages(page_code);
+        }
+    }
 }
