@@ -37,7 +37,7 @@ Route::any ('chat/index_friends'  , 'Users\ChatController@index_friends')->name(
 Route::apiResource('users_chat',Users\ChatController::class);
 
 #######################################     posts     ######################################
-Route::any ('posts/index_posts'  , 'Users\PostsController@index_posts')->name('users_posts.index_posts');
+Route::any ('posts/index_posts'      , 'Users\PostsController@index_posts')->name('users_posts.index_posts');
 Route::post('user_post/{user_post}'  , 'Users\PostsController@update');
 Route::apiResource('user_post',Users\PostsController::class);
 
@@ -52,10 +52,9 @@ Route::post ('users_likes/store'  , 'Users\LikesController@store');
 Route::post ('users_shares/store'  , 'Users\SharesController@store');
 
 #######################################     profile     ######################################
-
-
 Route::group(['prefix'=>'users/profile','namespace'=>'Users'], function () {
-    Route::any ('/index'       , 'ProfileController@index_profile')->name('users.profile.index');
+    Route::any ('/index'       , 'ProfileController@index')->name('users.profile.index');
     Route::post('/update/photo', 'ProfileController@update_photo');
-    Route::post('/update'      , 'ProfileController@update_profile');
+    Route::post('/update'      , 'ProfileController@update');
+    Route::any ('/show'        , 'ProfileController@show')->name('users.profile.show');
 });

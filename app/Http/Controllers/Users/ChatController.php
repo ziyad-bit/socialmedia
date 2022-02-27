@@ -17,7 +17,7 @@ class ChatController extends Controller
     #############################     index_friends     #######################################
     public function index_friends(Request $request):View|JsonResponse
     {
-        $friends_user = $this->getFriends()->selection()->paginate(4);
+        $friends_user = $this->getFriends()->paginate(4);
                             
         if ($request->has('agax')) {
             return response()->json(['friends_user' => $friends_user]);

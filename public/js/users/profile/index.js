@@ -92,7 +92,7 @@ function loadPages(page_code) {
             if (res.status == 200) {
                 let view   = res.data.view,
                     cursor = res.data.page_code;
-                console.log(cursor)
+                
                 parent_posts.setAttribute('data-page_code',cursor);
                 parent_posts.insertAdjacentHTML('beforeend', view);
             }

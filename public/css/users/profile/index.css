@@ -39,11 +39,15 @@
 }
 
 .edit_photo{
-    margin-right: 364px;
+    margin-right: 383px;
 }
 
 @media(max-width:768px){
     .edit_photo{
         margin-right: 100px;
     }
+}
+
+li .email a{
+    color:#27ae60 !important;
 }

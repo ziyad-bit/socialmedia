@@ -1,11 +1,11 @@
 .list_search{
     position: absolute;
-    top     : 44px;
-    right   : 261px;
+    top     : 50px;
+    right   : 274px;
     z-index : 6;
     width   : 200px;
 }
-.search-item{
+.search_item{
     background-color: rgb(166, 183, 196) ;
 }
 
@@ -13,7 +13,7 @@
     border: none;
 }
 
-.search-item:hover{
+.search_item:hover{
     cursor          : pointer;
     background-color: rgb(219, 215, 208);
 }

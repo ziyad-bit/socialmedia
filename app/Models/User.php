@@ -36,8 +36,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-        'email_verified_at',
-        'updated_at'
     ];
 
     /**
@@ -59,7 +57,7 @@ class User extends Authenticatable
     public function friends_add_auth()
     {
         return $this->belongsToMany(self::class,'friend_user','user_id','friend_id')
-            ->as('request')->withPivot('id');
+            ->as('request')->withPivot('status');
     }
 
     public function groups_joined()

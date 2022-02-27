@@ -1,7 +1,6 @@
 window.onload = function () {
     //load pages
-    const card_header = document.querySelector('.card-header'),
-        search_ele  = document.getElementById('search');
+    const search_ele  = document.getElementById('search');
 
     let search      = search_ele.value,
         data_status = 1;
@@ -49,8 +48,5 @@ window.onload = function () {
                 }
             })
     })
-
-    
-    
 }
 

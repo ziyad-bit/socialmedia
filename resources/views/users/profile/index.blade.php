@@ -147,10 +147,10 @@
     </div>
 
     <div class="d-flex justify-content-center" style="margin-top: 30px">
-        <button type="button" class="btn btn-info edit_photo" data-bs-toggle="modal" data-bs-target="#photoModal">
+        <button type="button" class="btn btn-primary edit_photo" data-bs-toggle="modal" data-bs-target="#photoModal">
             edit photo
         </button>
-        <button type="button" class="btn btn-info edit_profile" data-bs-toggle="modal" data-bs-target="#profileModal">
+        <button type="button" class="btn btn-primary edit_profile" data-bs-toggle="modal" data-bs-target="#profileModal">
             edit profile
         </button>
     </div>
@@ -161,7 +161,7 @@
     <div class="card mb-3 card_profile">
         <div class="row no-gutters">
             <div class="col-md-4">
-                <img src="{{ asset('/images/users/' . Auth::user()->photo) }}" style="height: 252px"
+                <img src="{{ asset('/images/users/' . Auth::user()->photo) }}" style="height: 292px;width: 199px"
                     class="card-img image-profile" alt="..." />
             </div>
             <div class="col-md-8">
@@ -209,9 +209,10 @@
                     </li>
 
                     <li class="list-group-item items_list">
-                        <span class="email">friends</span>:
-
-
+                        <span class="email"><a href="{{ route('users.profile.show') }}">friends</a></span>:
+                        <span class="user_marital_status">
+                            <a href="{{ route('users.profile.show') }}">{{ $friends_count }}</a>
+                            </span>
                     </li>
                 </ul>
             </div>
