@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Traits\GetPosts;
-use App\Traits\GetFriends;
+use App\Traits\{GetFriends,GetPosts,UploadImage};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UsersRequest;
-use App\Traits\UploadImage;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\{Hash,Auth};
 
 class ProfileController extends Controller
 {
     use GetPosts , GetFriends ,UploadImage;
 
+    ##################################     index      #################################
     public function index(Request $request)
     {
         $auth_id       = Auth::id();
@@ -39,6 +37,7 @@ class ProfileController extends Controller
         return view('users.profile.index',compact('posts','page_code','friends_count'));
     }
 
+    ##################################     show      #################################
     public function show(Request $request)
     {
         $friends=$this->getFriends()->simplePaginate(4);
@@ -50,6 +49,7 @@ class ProfileController extends Controller
         return view('users.profile.show',compact('friends'));
     }
 
+    ##################################     update      #################################
     public function update(UsersRequest $request)
     {
         $user=Auth::user();
@@ -65,7 +65,7 @@ class ProfileController extends Controller
         return response()->json(['success'=>'you updated it successfully','user'=>$user]);
     }
 
-
+    ##################################     update_photo      #################################
     public function update_photo(UsersRequest $request)
     {
         $user=Auth::user();
@@ -73,10 +73,5 @@ class ProfileController extends Controller
 
         $user->update(['photo'=>$photo]);
         return response()->json(['success'=>'you updated it successfully','photo'=>$photo]);
-    }
-
-    public function destroy($id)
-    {
-        //
     }
 }

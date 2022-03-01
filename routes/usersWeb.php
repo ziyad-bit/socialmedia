@@ -45,6 +45,10 @@ Route::apiResource('user_post',Users\PostsController::class);
 Route::get ('users_comments/show_more/{com_id}/{post_id}'  , 'Users\CommentsController@show_more');
 Route::apiResource('user_comment',Users\CommentsController::class);
 
+#######################################     groups     ######################################
+Route::any ('users_group/index_posts/{id}'      , 'Users\GroupsController@index_posts')->name('users_groups.index_posts');
+Route::apiResource('users_group',Users\GroupsController::class);
+
 #######################################     likes     ######################################
 Route::post ('users_likes/store'  , 'Users\LikesController@store');
 

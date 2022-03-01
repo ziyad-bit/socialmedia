@@ -43,7 +43,7 @@ class ChatController extends Controller
         $messages_user = Messages::with(['users' => fn ($q)=> $q->selection()])
             ->where  (fn ($q)=> $q->auth_receiver()->where('sender_id', $id))
             ->orWhere(fn ($q)=> $q->Where('receiver_id', $id)->auth_sender())
-            ->latest()->limit(6)->get();
+            ->orderBydesc('id')->limit(6)->get();
 
         if (count($messages_user) == 0) {
             return response()->json(['error' => 'no messages'], 404);
@@ -60,7 +60,7 @@ class ChatController extends Controller
         $messages_user = Messages::with(['users' => fn ($q)=> $q->selection()])
             ->where  (fn($q)=>$q->auth_receiver()->where('sender_id', $receiver_id)->where('id', '<', $first_msg_id))
             ->orWhere(fn($q)=>$q->Where('receiver_id', $receiver_id)->auth_sender()->where('id', '<', $first_msg_id))
-            ->latest()->limit(3)->get();
+            ->orderBydesc('id')->limit(3)->get();
 
         if (count($messages_user) == 0) {
             return response()->json(['error' => 'messages not found'], 404);

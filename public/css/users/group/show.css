@@ -1,0 +1,25 @@
+.group{
+    background-color: #1DABB8;
+    margin-top: 21px;
+}
+
+.group_photo{
+    max-height: 260px;
+    margin-top: 6px;
+}
+
+.group_name{
+    font-size: large;
+    font-weight: bold;
+    margin-top: 104px;
+    margin-left: 5px;
+}
+
+.group_description{
+    width: 350px;
+    margin-top: 134px;
+    position: relative;
+    right: 195px;
+    margin-left: 87px;
+    /* margin-right: 50px; */
+}

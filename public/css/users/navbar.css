@@ -1,7 +1,7 @@
 .list_search{
     position: absolute;
     top     : 50px;
-    right   : 274px;
+    right: 245px;
     z-index : 6;
     width   : 200px;
 }

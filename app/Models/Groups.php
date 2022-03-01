@@ -22,7 +22,7 @@ class Groups extends Model
     ];
     ################################    relations    #####################################
 
-    public function users_in_groups()
+    public function group_users()
     {
         return $this->belongsToMany("App\Models\User",'Group_users','group_id','user_id');
     }
@@ -40,7 +40,7 @@ class Groups extends Model
 
     public function scopeMin_selection($q)
     {
-        return $q->select('name','description','photo');
+        return $q->select('name','description','photo','id');
     }
 
     public function scopeDefaultLang($q)

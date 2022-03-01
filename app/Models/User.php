@@ -12,8 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-    use SearchableTrait;
+    use HasApiTokens, HasFactory, Notifiable,SearchableTrait;
 
         /**
      * The attributes that are mass assignable.
@@ -60,7 +59,7 @@ class User extends Authenticatable
             ->as('request')->withPivot('status');
     }
 
-    public function groups_joined()
+    public function group_joined()
     {
         return $this->belongsToMany("App\Models\Groups",'Group_users','user_id','group_id');
     }
