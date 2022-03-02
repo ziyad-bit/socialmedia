@@ -18,7 +18,7 @@ generalEventListener('click','.view_comments',e=>{
         com_req       = target.getAttribute('data-com_req');
 
     if (com_req == 'false') {
-        axios.get("/user_comment/" + id)
+        axios.get("/comment/" + id)
             .then(res=> {
                 if (res.status == 200) {
                     let view      = res.data.view;
@@ -55,7 +55,7 @@ function loadCommentsOnScroll(){
     comments_box=document.getElementsByClassName('card-bottom');
 
     function loadComments(com_id,post_id) {
-        axios.get("/users_comments/show_more/"+com_id+'/'+post_id)
+        axios.get("/comment/show_more/"+com_id+'/'+post_id)
             .then(res=> {
                 if (res.status == 200) {
                     let view      = res.data.view;
@@ -106,7 +106,7 @@ let update_btn         = document.getElementById('update_btn');
         let id            = this.getAttribute('data-comment_id'),
             comment       = document.getElementById('update_input').textContent;
 
-        axios.put("/user_comment/" + id,{'text':comment})
+        axios.put("/comment/" + id,{'text':comment})
             .then(res=> {
                 if (res.status == 200) {
                     let success_msg=res.data.success_msg,
@@ -144,7 +144,7 @@ generalEventListener('click', '#delete_btn', e => {
     let com_id  = target.getAttribute('data-comment_id'),
         post_id = target.getAttribute('data-post_id');
 
-    axios.delete("/user_comment/" + com_id)
+    axios.delete("/comment/" + com_id)
         .then(res=> {
             if (res.status == 200) {
                 document.getElementById('comm'+com_id).remove();
@@ -165,7 +165,7 @@ generalEventListener('keypress', '.comment_input', e => {
         formData = new FormData(form_ele);
     
     if (e.keyCode == 13) {
-        axios.post("/user_comment" ,formData)
+        axios.post("/comment" ,formData)
             .then(res=> {
                 if (res.status == 200) {
                     let view=res.data.view;
@@ -202,7 +202,7 @@ generalEventListener('click', '.like', e => {
     let target  = e.target,
         post_id = target.getAttribute('data-post_id');
     
-    axios.post("/users_likes/store" ,{'post_id':post_id})
+    axios.post("/like/store" ,{'post_id':post_id})
         .then(res=> {
             if (res.status == 200) {
                 const like_ele = document.querySelector('.like_num'+post_id);
@@ -237,7 +237,7 @@ generalEventListener('click', '#share_btn', e => {
     let target  = e.target,
         post_id = target.getAttribute('data-post_id');
     
-    axios.post("/users_shares/store" ,{'post_id':post_id})
+    axios.post("/share/store" ,{'post_id':post_id})
         .then(res=> {
             if (res.status == 200) {
                 const share_ele = document.querySelector('.share_num'+post_id);
@@ -281,7 +281,7 @@ generalEventListener('click', '#delete_post_btn', e => {
     let target  = e.target,
         post_id = target.getAttribute('data-post_id');
     
-    axios.delete("/user_post/"+post_id ,{'post_id':post_id})
+    axios.delete("/post/"+post_id ,{'post_id':post_id})
         .then(res=> {
             if (res.status == 200) {
                 let msg=res.data.success_msg;
@@ -332,7 +332,7 @@ btn_ele.onclick=function(e){
         form     = document.getElementById('edit_post_form'),
         formData = new FormData(form);
 
-    axios.post("/user_post/"+post_id ,formData)
+    axios.post("/post/"+post_id ,formData)
         .then(res=> {
             if (res.status == 200) {
                 let res_data    = res.data,

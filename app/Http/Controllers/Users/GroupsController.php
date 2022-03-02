@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Groups;
 use App\Http\Requests\GroupRequest;
 use App\Traits\GetFriends;
+use App\Traits\GetPageCode;
 use App\Traits\GetPosts;
 use Illuminate\Http\Request;
 
 class GroupsController extends Controller
 {
-    use GetPosts , GetFriends;
+    use GetPosts , GetFriends ,GetPageCode;
 
     public function index_posts(int $id,Request $request)
     {
@@ -20,12 +21,9 @@ class GroupsController extends Controller
         $friends_ids         = $this->getFriends()->pluck('id')->toArray();
         $posts               = $this->getPosts($friends_ids)->where('group_id',$id)
                 ->orderBydesc('id')->cursorPaginate(3);
-
-        $page_code='';
-        if ($posts->hasMorePages()) {
-            $page_code = $posts->nextCursor()->encode();
-        }
-
+        
+        $page_code = $this->getPageCode($posts);
+        
         if ($request->has('agax')) {
             $view = view('users.posts.index_posts', compact('posts','page_code'))->render();
             return response()->json(['view' => $view,'page_code'=>$page_code]);

@@ -10,12 +10,14 @@
 
             @if ($user->auth_add_friends->count() > 0)
                 @foreach ($user->auth_add_friends as $friend)
+                    {{---  0 =friend request   and   2 = ignored request --}}
                     @if ($friend->request->status == 0 || $friend->request->status == 2)
                         <button class="btn btn-primary" disabled="true">
                             awaiting approval 
                         </button>
                     @endif
 
+                    {{---  1 = friend --}}
                     @if ($friend->request->status == 1)
                         <a class="btn btn-success ">
                             message
@@ -61,7 +63,7 @@
             <img src="{{ asset('images/groups/' . $group->photo) }}" class="rounded-circle" style="width: 100px"
                 alt="loading">
             <span class="card-title">
-                <a href="{{ route('users_groups.index_posts',$group->id) }}"  >
+                <a href="{{ route('groups.posts.index',$group->id) }}"  >
                     {{ $group->name }}
                 </a>
                 

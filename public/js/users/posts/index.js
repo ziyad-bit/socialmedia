@@ -4,7 +4,7 @@ add_btn.onclick=function(){
     let form=document.getElementById('post_form'),
     formData=new FormData(form);
 
-    axios.post("/user_post" ,formData)
+    axios.post("/post" ,formData)
         .then(res=> {
             if (res.status == 200) {
                 let res_data    = res.data,

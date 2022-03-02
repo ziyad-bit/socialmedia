@@ -31,7 +31,7 @@ window.onload = function () {
     //approve friend request
     generalEventListener('click','.approve_btn',e=>{
         let friend_req_id=e.target.getAttribute('data-friend_req_id');
-        axios.put('/users_friends/'+friend_req_id)
+        axios.put('/friend/'+friend_req_id)
             .then(res=>{
                 if (res.status == 200) {
                     document.querySelector(`[data-friend_req="${friend_req_id}"]`)
@@ -43,7 +43,7 @@ window.onload = function () {
     //ignore friend request
     generalEventListener('click','.ignore_btn',e=>{
         let friend_req_id=e.target.getAttribute('data-friend_req_id');
-        axios.get('/users_friends/'+friend_req_id)
+        axios.get('/friend/'+friend_req_id)
             .then(res=>{
                 if (res.status == 200) {
                     document.querySelector(`[data-friend_req="${friend_req_id}"]`)

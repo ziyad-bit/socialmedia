@@ -47,19 +47,19 @@ class CommentsController extends Controller
     }
 
     #############################     update     #######################################
-    public function update(CommentRequest $request, Comments $user_comment):JsonResponse
+    public function update(CommentRequest $request, Comments $comment):JsonResponse
     {
-        $this->authorize('update_or_delete', $user_comment);
-        $user_comment->update($request->validated());
+        $this->authorize('update_or_delete', $comment);
+        $comment->update($request->validated());
 
         return response()->json(['success_msg' => 'you updated it successfully']);
     }
 
     #############################     destroy     #######################################
-    public function destroy(Comments $user_comment):JsonResponse
+    public function destroy(Comments $comment):JsonResponse
     {
-        $this->authorize('update_or_delete', $user_comment);
-        $user_comment->delete();
+        $this->authorize('update_or_delete', $comment);
+        $comment->delete();
 
         return response()->json(['success_msg' => 'you deleted it successfully']);
     }

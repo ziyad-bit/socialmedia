@@ -15,11 +15,11 @@
 
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('users_posts.index_posts')}}">Posts</a>
+                        <a class="nav-link" href="{{route('posts.index.all')}}">Posts</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('users_chat.index_friends')}}">Chat</a>
+                        <a class="nav-link" href="{{route('message.index.friends')}}">Chat</a>
                     </li>
 
                     <li class="nav-item">
@@ -43,7 +43,7 @@
                             </li>
                         @endif
                     @else
-                        <form method="POST" id="search_form" action="{{ route('users_search.index') }}"
+                        <form method="POST" id="search_form" action="{{ route('search.index') }}"
                             class="d-flex">
                             @csrf
 
@@ -64,7 +64,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('users_friends.show_requests') }}">
+                                <a class="dropdown-item" href="{{ route('friends.show.requests') }}">
                                     Requests
                                 </a>
 

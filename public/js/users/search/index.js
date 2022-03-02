@@ -38,7 +38,8 @@ window.onload = function () {
     //add friend
     generalEventListener('click','.add_btn',e=>{
         let friend_id=e.target.getAttribute('data-user_id');
-        axios.post('/users_friends',{'friend_id':friend_id})
+        
+        axios.post('/friend',{'friend_id':friend_id})
             .then(res=>{
                 if (res.status == 200) {
                     const add_btn=document.querySelector(`[data-user_id="${friend_id}"]`);

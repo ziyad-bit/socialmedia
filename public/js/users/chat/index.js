@@ -5,13 +5,13 @@ window.onload = function () {
     function loadOldMessages(){
         const chat_box=document.getElementsByClassName('card-body')
         for (let i = 0; i < chat_box.length; i++) {
-            chat_box[i].onscroll=function(e){
+            chat_box[i].onscroll=function(){
                 if (chat_box[i].scrollTop == 0) {
                     if (old_msg == 1) {
                         let first_msg_id = this.firstElementChild.id,
                             reveiver_id  = this.getAttribute('data-user_id');
     
-                        axios.put("/users_chat/" + reveiver_id,{'first_msg_id':first_msg_id})
+                        axios.put("/message/" + reveiver_id,{'first_msg_id':first_msg_id})
                             .then(res=> {
                                 if (res.status == 200) {
                                     let messages=res.data.messages;
@@ -121,7 +121,7 @@ window.onload = function () {
         let receiver_id = e.target.getAttribute('data-receiver_id'),
             message     = document.getElementById('msg' + receiver_id).value;
 
-        axios.post('/users_chat', { 'text': message, 'receiver_id': receiver_id })
+        axios.post('/message', { 'text': message, 'receiver_id': receiver_id })
             .then(res => {
                 if (res.status == 200) {
                     let Auth_name = document.getElementById('auth').value;
@@ -150,7 +150,7 @@ window.onload = function () {
 
         let data_status=data_status_ele.getAttribute('data-status');
         if (data_status == '0') {
-            axios.get("/users_chat/" + id)
+            axios.get("/message/" + id)
             .then(res=> {
                 if (res.status == 200) {
                     let messages=res.data.messages;

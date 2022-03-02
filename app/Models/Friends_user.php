@@ -12,4 +12,7 @@ class Friends_user extends Model
     protected $guarded=[];
     protected $table='friend_user';
 
+    public const friend_req   = 0;
+    public const friend       = 1;
+    public const ignored_user = 2;
 }

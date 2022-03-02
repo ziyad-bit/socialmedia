@@ -11,7 +11,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\{Request,JsonResponse};
 use Illuminate\Support\Facades\Auth;
 
-class ChatController extends Controller
+class MessageController extends Controller
 {
     use GetFriends;
     #############################     index_friends     #######################################

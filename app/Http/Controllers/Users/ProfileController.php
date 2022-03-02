@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Traits\{GetFriends,GetPosts,UploadImage};
+use App\Traits\{GetFriends, GetPageCode, GetPosts,UploadImage};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UsersRequest;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\{Hash,Auth};
 
 class ProfileController extends Controller
 {
-    use GetPosts , GetFriends ,UploadImage;
+    use GetPosts , GetFriends ,UploadImage , GetPageCode;
 
     ##################################     index      #################################
     public function index(Request $request)
@@ -23,12 +23,9 @@ class ProfileController extends Controller
         
         $posts=$this->getPosts($friends_ids)->where('user_id',$auth_id)->orderBydesc('id')
             ->cursorPaginate(3);
-
-        $page_code='';
-        if ($posts->hasMorePages()) {
-            $page_code = $posts->nextCursor()->encode();
-        }
-
+        
+        $page_code = $this->getPageCode($posts);
+        
         if ($request->has('agax')) {
             $view = view('users.posts.index_posts', compact('posts','page_code'))->render();
             return response()->json(['view' => $view,'page_code'=>$page_code]);

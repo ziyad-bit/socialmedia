@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShareRequest;
-use App\Models\Posts;
-use App\Models\Shares;
+use App\Models\{Posts,Shares};
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +18,7 @@ class SharesController extends Controller
         
         $share=Shares::where($data)->first();
         if ($share) {
-            return response()->json(['error'=>'you shared this post before'],404);
+            return response()->json(['error'=>'you shared this post before'],422);
         }
 
         Shares::create($data);

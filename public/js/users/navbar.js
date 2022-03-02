@@ -34,7 +34,7 @@ generalEventListener('click','.search_name',e=>{
 //show recent searches
 function show_recent_searches(){
     if (recent_req == 0) {
-        axios.get('/users_search/show/recent')
+        axios.get('/search/show/recent')
             .then(res=>{
                 if (res.status == 200) {
                     
@@ -77,7 +77,7 @@ function show_recent_searches(){
 search_ele.onkeyup = function () {
     let search = search_ele.value;
     if (search) {
-        axios.post('/users_search/show', { 'search': search })
+        axios.post('/search/show', { 'search': search })
             .then(res=> {
                 if (res.status == 200) {
                     if (search_req_num == 1) {

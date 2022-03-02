@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 define('pagination',4);
-
+/*
 ########################      admins login            ###############################
 Route::group(['prefix'=>'admins','namespace'=>'Admins'], function () {
     Route::get ('/login'       , 'AdminsController@getLogin');
@@ -33,3 +33,4 @@ Route::group(['prefix'=>LaravelLocalization::setLocale().'admins/groups','namesp
 });
 
 Route::resource(LaravelLocalization::setLocale().'/admins/groups', Admins\GroupsController::class);
+*/

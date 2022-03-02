@@ -18,7 +18,7 @@ class SearchController extends Controller
         $search=$request->search;
         
         $users = User::with(['auth_add_friends:id','friends_add_auth:id'])->selection()
-            ->notAuth()->search($search)->paginate(7);
+            ->notAuth()->search($search)->paginate(4);
 
         $groups = Groups::min_selection()->defaultLang()->search($search)->paginate(4);
         
@@ -54,7 +54,7 @@ class SearchController extends Controller
     public function show_recent():JsonResponse
     {
         $recent_searches=Searches::selection()->where('user_id',Auth::id())->limit(5)
-            ->latest()->get();
+            ->orderByDesc('id')->get();
 
         return response()->json(['recent_searches' => $recent_searches]);
     }

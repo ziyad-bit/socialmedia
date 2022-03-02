@@ -15,7 +15,7 @@ class PostsController extends Controller
     use GetFriends , Shared_posts_ids , UploadImage ,UploadFile , GetPosts;
 
     ##################################      index_posts      ###############################
-    public function index_posts(Request $request):View|JsonResponse
+    public function index_posts(Request $request)//:View|JsonResponse
     {
         $friends_ids     = $this->getFriends()->pluck('id')->toArray();
         array_unshift($friends_ids,Auth::id());
@@ -23,8 +23,8 @@ class PostsController extends Controller
         $shared_posts_id = $this->getSharedPostsIds($friends_ids);
 
         $posts=$this->getPosts($friends_ids)->whereIn('user_id',$friends_ids)
-            ->orWhereIn('id',$shared_posts_id)->latest()->paginate(3);
-
+            ->orWhereIn('id',$shared_posts_id)->orderBydesc('id')->paginate(3);
+        
         if ($posts->count() == 0) {
             return response()->json([],404);
         }
@@ -70,43 +70,43 @@ class PostsController extends Controller
     }
 
     ##################################      update      ###############################
-    public function update(PostsRequest $request,Posts $user_post):JsonResponse
+    public function update(PostsRequest $request,Posts $post):JsonResponse
     {
-        $this->authorize('update_or_delete',$user_post);
+        $this->authorize('update_or_delete',$post);
 
-        $photo=$user_post->photo;
+        $photo=$post->photo;
         if ($request->file('photo')) {
             $photo=$request->file('photo');
             $photo=$this->uploadPhoto($photo,'images/posts',560);
         }
 
-        $file=$user_post->file;
+        $file=$post->file;
         if ($request->file('file')) {
             $file=$request->file('file');
             $file=$this->uploadFile($file,'images/files');
         }
 
-        $video=$user_post->video;
+        $video=$post->video;
         if ($request->file('video')) {
             $video=$request->file('video');
             $video=$this->uploadFile($video,'images/videos');
         }
         
-        $user_post->update([
+        $post->update([
             'photo'   => $photo,
             'file'    => $file,
             'video'   => $video,
             'text'    => $request->text,
         ]);
 
-        return response()->json(['success'=>'you updated it successfully','post'=>$user_post]);
+        return response()->json(['success'=>'you updated it successfully','post'=>$post]);
     }
 
     ##################################      destroy      ###############################
-    public function destroy(Posts $user_post):JsonResponse
+    public function destroy(Posts $post):JsonResponse
     {
-        $this->authorize('update_or_delete',$user_post);
-        $user_post->delete();
+        $this->authorize('update_or_delete',$post);
+        $post->delete();
 
         return response()->json(['success_msg'=>'you deleted it successfully']);
     }

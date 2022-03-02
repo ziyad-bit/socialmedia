@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Classes\GetFriendReq;
 use App\Models\{Friends_user,User};
 use Illuminate\Http\{JsonResponse,Request};
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FriendRequest;
+use App\Traits\GetPageCode;
 use Illuminate\Support\Facades\Auth;
 
 class FriendsController extends Controller
 {
+    use GetPageCode;
     ##########################################    show_requests    #########################
     public function show_requests(Request $request):View|JsonResponse
     {
         $friend_reqs = User::with('friends_add_auth:id')
-            ->whereHas('friends_add_auth',fn($q)=>$q->where(['status'=>0,'friend_id'=>Auth::id()]))
+            ->whereHas('friends_add_auth',fn($q)=>$q->where(['status'=>Friends_user::friend_req,'friend_id'=>Auth::id()]))
             ->selection()->orderByDesc('id')->cursorPaginate(4);
         
-        $page_code='';
-        if ($friend_reqs->hasMorePages()) {
-            $page_code = $friend_reqs->nextCursor()->encode();
-        }
-
+        $page_code = $this->getPageCode($friend_reqs);
+        
         if ($request->has('agax')) {
             $view = view('users.friends.next_requests', compact('friend_reqs'))->render();
             return response()->json(['view' => $view,'page_code'=>$page_code]);
@@ -32,31 +32,36 @@ class FriendsController extends Controller
     }
 
     ##########################################    store    ###################################
-    public function store(FriendRequest $request):JsonResponse
+    public function store(FriendRequest $request)//:JsonResponse
     {
-        Friends_user::create($request->validated() + ['user_id' => Auth::id()]);
+        $friend_id = $request->friend_id;
+
+        $friend_req=GetFriendReq::get($friend_id);
+        if ($friend_req) {
+            return response()->json([],422);
+        }
+
+        Friends_user::create(['friend_id'=>$friend_id,'user_id' => Auth::id()]);
 
         return response()->json();
     }
 
     ##########################################    update    #################################
-    public function update(int $id):JsonResponse
+    public function update(Friends_user $friend):JsonResponse
     {
-        $friend_req=Friends_user::findOrfail($id);
-        $this->authorize('update_or_delete',$friend_req);
+        $this->authorize('update_or_delete',$friend);
         
-        $friend_req->update(['status'=>1]);
+        $friend->update(['status'=>Friends_user::friend]);
         return response()->json();
     }
 
     ##########################################    show    #################################
     //ignore friends request
-    public function show(int $id):JsonResponse
+    public function show(Friends_user $friend):JsonResponse
     {
-        $friend_req=Friends_user::findOrfail($id);
-        $this->authorize('update_or_delete',$friend_req);
+        $this->authorize('update_or_delete',$friend);
         
-        $friend_req->update(['status'=>2]);
+        $friend->update(['status'=>Friends_user::ignored_user]);
         return response()->json();
     }
 }

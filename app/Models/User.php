@@ -56,7 +56,7 @@ class User extends Authenticatable
     public function friends_add_auth()
     {
         return $this->belongsToMany(self::class,'friend_user','user_id','friend_id')
-            ->as('request')->withPivot('status');
+            ->as('request')->withPivot('status','id');
     }
 
     public function group_joined()
