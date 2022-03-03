@@ -1,3 +1,4 @@
+//infinite scrolling for posts
 const parent_posts = document.querySelector('.parent_posts'); 
 
 function loadPages(page_code) {
@@ -20,4 +21,18 @@ window.onscroll = function () {
             loadPages(page_code);
         }
     }
+}
+
+//join group
+const join_btn=document.querySelector('.join_btn');
+join_btn.onclick=function(){
+    let group_id=this.getAttribute('data-group_id');
+
+    axios.post("/group/users",{'group_id':group_id})
+    .then(res=> {
+        if (res.status == 200) {
+            this.disabled    = true;
+            this.textContent = "awaiting approval";
+        }
+    })
 }

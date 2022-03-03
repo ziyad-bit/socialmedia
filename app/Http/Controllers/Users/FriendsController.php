@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Classes\GetFriendReq;
+use App\Classes\FriendReq;
 use App\Models\{Friends_user,User};
 use Illuminate\Http\{JsonResponse,Request};
 use Illuminate\Contracts\View\View;
@@ -34,11 +34,11 @@ class FriendsController extends Controller
     ##########################################    store    ###################################
     public function store(FriendRequest $request)//:JsonResponse
     {
-        $friend_id = $request->friend_id;
+        $friend_id  = $request->friend_id;
+        $friend_req = FriendReq::get($friend_id);
 
-        $friend_req=GetFriendReq::get($friend_id);
         if ($friend_req) {
-            return response()->json([],422);
+            return response()->json([],400);
         }
 
         Friends_user::create(['friend_id'=>$friend_id,'user_id' => Auth::id()]);

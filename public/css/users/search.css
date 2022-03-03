@@ -6,7 +6,7 @@
 }
 
 .card-title{
-    font-size: large;
+    font-size  : large;
     font-weight: bold;
     margin-left: 5px;
 }
@@ -15,8 +15,16 @@
     padding-bottom: 0 !important;
 }
 
-.btn-primary,.btn-success{
-    float: right;
+.awaiting_btn,.message_btn,.join_btn{
+    float   : right;
     position: relative;
-    bottom: -26px;
+    bottom  : -26px;
+}
+
+div .list_search {
+    position: absolute;
+    top     : 50px;
+    right   : 245px;
+    z-index : 6;
+    width   : 200px;
 }

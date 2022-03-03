@@ -49,6 +49,10 @@ Route::apiResource('comment'                    , 'Users\CommentsController');
 Route::any ('group/posts/{id}'  , 'Users\GroupsController@index_posts')->name('groups.posts.index');
 Route::apiResource('group'      , 'Users\GroupsController');
 
+#######################################     groups users    ######################################
+//Route::any ('group/posts/{id}'  , 'Users\GroupsController@index_posts')->name('groups.posts.index');
+Route::apiResource('group/users'  , 'Users\GroupUsersController');
+
 #######################################     likes     ######################################
 Route::post ('like/store'  , 'Users\LikesController@store');
 

@@ -6,7 +6,7 @@ use App\Models\Friends_user;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
-class GetFriendReq
+class FriendReq
 {
     public static function get(int $friend_id):Builder
     {

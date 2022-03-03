@@ -13,4 +13,7 @@ class Roles extends Model
     protected $table='roles';
 
     public $timestamps=false;
+
+    public const member = 1;
+    public const admin  = 2;
 }

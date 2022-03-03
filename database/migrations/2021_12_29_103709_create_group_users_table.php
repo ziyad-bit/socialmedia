@@ -15,9 +15,10 @@ class CreateGroupUsersTable extends Migration
     {
         Schema::create('group_users', function (Blueprint $table) {
             $table->id();
+            $table->tinyInteger('status')->default(0);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('group_id')->constrained('groups')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('role_id')->constrained('roles')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

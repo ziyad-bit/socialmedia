@@ -13,4 +13,10 @@ class Group_users extends Model
     protected $table='group_users';
 
     public $timestamps=false;
+
+    //status
+    public const join_req     = 0;
+    public const approved_req = 1;
+    public const ignored_req  = 2;
+
 }

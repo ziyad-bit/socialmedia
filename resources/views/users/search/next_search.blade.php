@@ -12,14 +12,14 @@
                 @foreach ($user->auth_add_friends as $friend)
                     {{---  0 =friend request   and   2 = ignored request --}}
                     @if ($friend->request->status == 0 || $friend->request->status == 2)
-                        <button class="btn btn-primary" disabled="true">
+                        <button class="btn btn-primary awaiting_btn" disabled="true">
                             awaiting approval 
                         </button>
                     @endif
 
                     {{---  1 = friend --}}
                     @if ($friend->request->status == 1)
-                        <a class="btn btn-success ">
+                        <a class="btn btn-success message_btn">
                             message
                         </a>
                     @endif
@@ -29,13 +29,13 @@
             @if ($user->friends_add_auth->count() > 0)
                 @foreach ($user->friends_add_auth as $friend)
                     @if ($friend->request->status == 0 || $friend->request->status == 2)
-                        <button class="btn btn-primary" disabled="true">
+                        <button class="btn btn-primary awaiting_btn" disabled="true">
                             awaiting approval 
                         </button>
                     @endif
 
                     @if ($friend->request->status == 1)
-                        <a class="btn btn-success ">
+                        <a class="btn btn-success message_btn">
                             message
                         </a>
                     @endif
@@ -68,7 +68,7 @@
                 </a>
                 
             </span>
-            <a class="btn btn-primary">join</a>
+            <a class="btn btn-primary join_btn">join</a>
             <div class="card-text">
                 {{ $group->description }}
             </div>
