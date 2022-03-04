@@ -41,7 +41,7 @@ class Groups extends Model
 
     public function scopeMin_selection($q)
     {
-        return $q->select('name','description','photo','id');
+        return $q->select('name','description','photo','id','user_id');
     }
 
     public function scopeDefaultLang($q)

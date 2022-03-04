@@ -25,12 +25,12 @@ class PostsController extends Controller
         $posts=$this->getPosts($friends_ids)->whereIn('user_id',$friends_ids)
             ->orWhereIn('id',$shared_posts_id)->orderBydesc('id')->paginate(3);
         
-        if ($posts->count() == 0) {
-            return response()->json([],404);
-        }
-
         $page_code='';
         if ($request->has('agax')) {
+            if ($posts->count() == 0) {
+                return response()->json([],404);
+            }
+            
             $view=view('users.posts.index_posts',compact('posts'))->render();
             return response()->json(['view'=>$view]);
         }

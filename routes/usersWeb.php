@@ -51,7 +51,7 @@ Route::apiResource('group'      , 'Users\GroupsController');
 
 #######################################     groups users    ######################################
 //Route::any ('group/posts/{id}'  , 'Users\GroupsController@index_posts')->name('groups.posts.index');
-Route::apiResource('group/users'  , 'Users\GroupUsersController');
+Route::apiResource('group/users'  , 'Users\GroupUsersController')->parameter('users','group_req');
 
 #######################################     likes     ######################################
 Route::post ('like/store'  , 'Users\LikesController@store');

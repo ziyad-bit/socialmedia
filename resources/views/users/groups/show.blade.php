@@ -6,9 +6,11 @@
 @endsection
 
 @section('content')
+    <input type="hiddden" id="auth_id" value="{{Auth::id()}}">
     @include('users.posts.posts_modals')
 
     @foreach ($groups as $group)
+    <input type="hiddden" id="group_id" value="{{$group->user_id}}">
         <div class="d-flex justify-content-center group">
 
             <img src="{{ asset('images/groups/' . $group->photo) }}" alt="loading error"
@@ -31,17 +33,58 @@
                 @endif
             @endforeach
         @else
-            <button class="btn btn-primary join_btn" style="margin-top: 15px"
-                data-group_id="{{ $group->id }}">join</button>
+            @cannot('show', $group)
+                <button class="btn btn-primary join_btn" style="margin-top: 15px"
+                    data-group_id="{{ $group->id }}">join</button>
+            @endcannot
         @endif
     @endforeach
 
-
-
     <hr>
 
-    <div class="parent_posts" data-page_code="{{ $page_code }}">
-        @include('users.posts.index_posts')
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
+                role="tab">Posts</button>
+
+            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-members"
+                type="button" role="tab">Members</button>
+
+            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
+            type="button" role="tab">Admins</button>
+
+            @foreach ($groups as $group)
+                @can('show', $group)
+                    <button class="nav-link requests_tap" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
+                        type="button" role="tab" data-group_id="{{$group->id}}">Requests</button>
+                @endcan
+            @endforeach
+
+        </div>
+    </nav>
+
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="parent_posts" data-page_code="{{ $page_code }}">
+                @include('users.posts.index_posts')
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="nav-members" role="tabpanel">
+            members
+        </div>
+
+        <div class="tab-pane fade" id="nav-contact" role="tabpanel">
+            admins
+        </div>
+
+        @foreach ($groups as $group)
+            @can('show', $group)
+                <div class="tab-pane fade" id="nav_requests" role="tabpanel">
+                    
+                </div>
+            @endcan
+        @endforeach
     </div>
 @endsection
 

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class FriendReq
 {
-    public static function get(int $friend_id):Builder
+    public static function get(int $friend_id):Builder|null
     {
         $auth_id=Auth::id();
 

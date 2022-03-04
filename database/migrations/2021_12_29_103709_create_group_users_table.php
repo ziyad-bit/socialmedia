@@ -18,7 +18,7 @@ class CreateGroupUsersTable extends Migration
             $table->tinyInteger('status')->default(0);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('group_id')->constrained('groups')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('role_id')->default(1)->constrained('roles')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('role_id')->default(null)->constrained('roles')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

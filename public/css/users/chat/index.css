@@ -16,3 +16,11 @@
 .nav-pill{
     border: 1px !important;
 }
+
+div .list_search {
+    position: absolute;
+    top     : 50px;
+    right   : 245px;
+    z-index : 6;
+    width   : 200px;
+}
