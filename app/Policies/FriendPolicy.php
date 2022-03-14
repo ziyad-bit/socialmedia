@@ -15,4 +15,5 @@ class FriendPolicy
     {
         return $user->id === $friend->friend_id ? Response::allow() : Response::deny('something went wrong');
     }
+
 }

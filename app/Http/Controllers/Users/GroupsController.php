@@ -28,6 +28,7 @@ class GroupsController extends Controller
         $page_code = $this->getPageCode($posts);
 
         if ($request->has('agax')) {
+            
             $view = view('users.posts.index_posts', compact('posts', 'page_code'))->render();
             return response()->json(['view' => $view, 'page_code' => $page_code]);
         }

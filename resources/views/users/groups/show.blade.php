@@ -6,11 +6,13 @@
 @endsection
 
 @section('content')
-    <input type="hiddden" id="auth_id" value="{{Auth::id()}}">
+    <input type="hidden" id="auth_id" value="{{ Auth::id() }}">
     @include('users.posts.posts_modals')
 
     @foreach ($groups as $group)
-    <input type="hiddden" id="group_id" value="{{$group->user_id}}">
+        <input type="hidden" id="group_id" value="{{ $group->id }}">
+        <input type="hidden" id="group_owner" value="{{ $group->user_id }}">
+
         <div class="d-flex justify-content-center group">
 
             <img src="{{ asset('images/groups/' . $group->photo) }}" alt="loading error"
@@ -24,19 +26,19 @@
 
         @if ($group->group_users->count() > 0)
             @foreach ($group->group_users as $user)
-                @if ($user->request->status == 1)
-                    <button class="btn btn-danger join_btn" style="margin-top: 15px"
+                @if ($user->request->status == 1 || $user->request->status == 3)
+                    <button class="btn btn-danger left_btn" style="margin-top: 15px"
                         data-group_id="{{ $group->id }}">left</button>
-                @else
-                    <button class="btn btn-primary join_btn" style="margin-top: 15px" data-group_id="{{ $group->id }}"
+                @endif
+
+                @if ($user->request->status == 0 || $user->request->status == 2)
+                    <button class="btn btn-primary " style="margin-top: 15px" data-group_id="{{ $group->id }}"
                         disabled="true">awaiting approval</button>
                 @endif
             @endforeach
         @else
-            @cannot('show', $group)
-                <button class="btn btn-primary join_btn" style="margin-top: 15px"
-                    data-group_id="{{ $group->id }}">join</button>
-            @endcannot
+            <button class="btn btn-primary join_btn" style="margin-top: 15px"
+                data-group_id="{{ $group->id }}">join</button>
         @endif
     @endforeach
 
@@ -44,19 +46,20 @@
 
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
+            <button class="nav-link active" id="nav-posts-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
                 role="tab">Posts</button>
 
-            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-members"
+            <button class="nav-link" id="nav-members-tab" data-bs-toggle="tab" data-bs-target="#nav-members"
                 type="button" role="tab">Members</button>
 
-            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
-            type="button" role="tab">Admins</button>
+            <button class="nav-link" id="nav-admins-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
+                type="button" role="tab">Admins</button>
 
             @foreach ($groups as $group)
                 @can('show', $group)
-                    <button class="nav-link requests_tap" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
-                        type="button" role="tab" data-group_id="{{$group->id}}">Requests</button>
+                    <button class="nav-link requests_tap" id="nav_requests-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav_requests" type="button" role="tab"
+                        data-group_id="{{ $group->id }}">Requests</button>
                 @endcan
             @endforeach
 
@@ -81,7 +84,11 @@
         @foreach ($groups as $group)
             @can('show', $group)
                 <div class="tab-pane fade" id="nav_requests" role="tabpanel">
-                    
+                    <div class="d-flex justify-content-center" >
+                        <div class="card text-dark bg-light mb-3 parent_requests" data-page_code="" style="width: 50rem;">
+                            <div class="card-header" >Requests</div>
+                        </div>
+                    </div>
                 </div>
             @endcan
         @endforeach

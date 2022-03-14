@@ -24,3 +24,18 @@
     /* margin-right: 50px; */
 }
 
+.rounded-circle{
+    margin-left: 10px;
+}
+
+.btn_approve,.btn_ignore{
+    float: right;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+.parent_requests{
+    max-height: 250px;
+    overflow-y: scroll;
+}

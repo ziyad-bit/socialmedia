@@ -5,7 +5,7 @@
                 alt="loading">
 
             <span class="card-title">
-                {{ $user->name }}
+                {{ $user->name .$user->id}}
             </span>
 
             @if ($user->auth_add_friends->count() > 0)

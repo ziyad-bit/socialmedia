@@ -32,16 +32,12 @@ class FriendsController extends Controller
     }
 
     ##########################################    store    ###################################
-    public function store(FriendRequest $request)//:JsonResponse
+    public function store(FriendRequest $request):JsonResponse
     {
-        $friend_id  = $request->friend_id;
-        $friend_req = FriendReq::get($friend_id);
+        $friend  = User::findOrFail($request->friend_id);
+        $this->authorize('store',$friend);
 
-        if ($friend_req) {
-            return response()->json([],400);
-        }
-
-        Friends_user::create(['friend_id'=>$friend_id,'user_id' => Auth::id()]);
+        Friends_user::create($request->validated()+['user_id' => Auth::id()]);
 
         return response()->json();
     }
