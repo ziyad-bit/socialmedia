@@ -14,6 +14,7 @@ class Roles extends Model
 
     public $timestamps=false;
 
-    public const member = 1;
-    public const admin  = 2;
+    public const group_member = 1;
+    public const group_admin  = 2;
+    public const group_owner  = 3;
 }

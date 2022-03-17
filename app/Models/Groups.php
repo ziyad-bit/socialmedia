@@ -25,7 +25,7 @@ class Groups extends Model
     public function group_users()
     {
         return $this->belongsToMany("App\Models\User",'Group_users','group_id','user_id')
-        ->select('user_id')->as('request')->withPivot('status','id');
+        ->select('user_id')->as('request')->withPivot('status','id','role_id');
     }
 
     public function users()

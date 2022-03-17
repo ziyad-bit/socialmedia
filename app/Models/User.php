@@ -62,7 +62,7 @@ class User extends Authenticatable
     public function group_joined()
     {
         return $this->belongsToMany("App\Models\Groups",'Group_users','user_id','group_id')
-        ->withPivot('status','id');
+        ->as('request')->withPivot('status','id');
     }
 
     public function searches()

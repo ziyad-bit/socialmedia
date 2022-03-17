@@ -39,7 +39,7 @@ let group_id    = document.getElementById('group_id').value,
 if (group_owner != auth_id) {
     const join_btn = document.querySelector('.join_btn');
     join_btn.onclick = function () {
-        axios.post("/group/users", { 'group_id': group_id })
+        axios.post("/group-users", { 'group_id': group_id })
             .then(res => {
                 if (res.status == 200) {
                     this.disabled = true;
@@ -51,10 +51,13 @@ if (group_owner != auth_id) {
 
 //show requests
 const parent_requests=document.querySelector('.parent_requests');
-let reqs_page_code=parent_requests.getAttribute('data-page_code');
+if (parent_requests) {
+    var reqs_page_code=parent_requests.getAttribute('data-page_code');
+}
+let group_req_id=document.getElementById('group_req_id').value;
 
-function getRequests(reqs_page_code,group_id) {
-    axios.get("/group/users/" + group_id +'?cursor='+reqs_page_code)
+function getRequests(reqs_page_code,group_req_id) {
+    axios.get("/group-users/" + group_req_id +'?cursor='+reqs_page_code)
         .then(res => {
             if (res.status == 200) {
                 let view           = res.data.view;
@@ -68,21 +71,48 @@ function getRequests(reqs_page_code,group_id) {
 
 const request_tap = document.querySelector('.requests_tap');
 let reqs_click=false;
-request_tap.onclick = function () {
-    reqs_status  = true;
-    posts_status = false;
-
-    if (reqs_click == false) {
-        getRequests(reqs_page_code , group_id)
+if (request_tap) {
+    request_tap.onclick = function () {
+        reqs_status  = true;
+        posts_status = false;
+    
+        if (reqs_click == false) {
+            getRequests(reqs_page_code , group_req_id)
+        }
+        reqs_click=true;
     }
-    reqs_click=true;
 }
 
-parent_requests.onscroll = function () {
-    if (parent_requests.scrollHeight - parent_requests.scrollTop == parent_requests.offsetHeight) {
-        let reqs_page_code=parent_requests.getAttribute('data-page_code');
-        if (reqs_page_code && reqs_status == true) {
-            getRequests(reqs_page_code ,group_id);
+//load requests on scroll
+if (parent_requests) {
+    parent_requests.onscroll = function () {
+        if (parent_requests.scrollHeight - parent_requests.scrollTop == parent_requests.offsetHeight) {
+            let reqs_page_code=parent_requests.getAttribute('data-page_code');
+            if (reqs_page_code && reqs_status == true) {
+                getRequests(reqs_page_code ,group_req_id);
+            }
         }
     }
 }
+
+//approve request
+generalEventListener('click','.btn_approve',e=>{
+    let group_req_id=e.target.getAttribute('data-group_req_id');
+    axios.put('/group-users/'+group_req_id)
+        .then(res=>{
+            if (res.status == 200) {
+                let success_msg=res.data.success;
+                
+                const success_msg_ele=document.querySelector('.success_msg');
+                success_msg_ele.textContent=success_msg;
+                success_msg_ele.style.display='';
+
+                setTimeout(() => {
+                    success_msg_ele.style.display='none';
+                }, 3000);
+
+                document.querySelector('.group_user'+group_req_id).remove();
+            }
+        })
+})
+

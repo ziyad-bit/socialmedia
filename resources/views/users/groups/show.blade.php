@@ -6,6 +6,16 @@
 @endsection
 
 @section('content')
+    @if (Session::has('error'))
+        <div class="alert alert-danger text-center">{{ Session::get('error') }}</div>
+    @endif
+
+    @if (Session::has('success'))
+        <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
+    @endif
+
+    
+
     <input type="hidden" id="auth_id" value="{{ Auth::id() }}">
     @include('users.posts.posts_modals')
 
@@ -24,17 +34,21 @@
 
         </div>
 
+
         @if ($group->group_users->count() > 0)
             @foreach ($group->group_users as $user)
-                @if ($user->request->status == 1 || $user->request->status == 3)
-                    <button class="btn btn-danger left_btn" style="margin-top: 15px"
-                        data-group_id="{{ $group->id }}">left</button>
-                @endif
+                @can('destroy', $group)
+                    <form action="{{ route('group-users.destroy', $user->request->id) }}" method="POST">
+                        @csrf
+                        @method('delete')
 
-                @if ($user->request->status == 0 || $user->request->status == 2)
+                        <button class="btn btn-danger left_btn" style="margin-top: 15px"
+                            data-group_id="{{ $group->id }}">left</button>
+                    </form>
+                @else
                     <button class="btn btn-primary " style="margin-top: 15px" data-group_id="{{ $group->id }}"
                         disabled="true">awaiting approval</button>
-                @endif
+                @endcan
             @endforeach
         @else
             <button class="btn btn-primary join_btn" style="margin-top: 15px"
@@ -56,11 +70,17 @@
                 type="button" role="tab">Admins</button>
 
             @foreach ($groups as $group)
-                @can('show', $group)
-                    <button class="nav-link requests_tap" id="nav_requests-tab" data-bs-toggle="tab"
-                        data-bs-target="#nav_requests" type="button" role="tab"
-                        data-group_id="{{ $group->id }}">Requests</button>
-                @endcan
+                @if ($group->group_users->count() > 0)
+                    @foreach ($group->group_users as $group_req)
+                        <input type="hidden" value="{{ $group_req->request->id }}" id="group_req_id">
+
+                        @can('show_requests', $group)
+                            <button class="nav-link requests_tap" id="nav_requests-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav_requests" type="button" role="tab"
+                                data-group_id="{{ $group->id }}">Requests</button>
+                        @endcan
+                    @endforeach
+                @endif
             @endforeach
 
         </div>
@@ -82,15 +102,20 @@
         </div>
 
         @foreach ($groups as $group)
-            @can('show', $group)
-                <div class="tab-pane fade" id="nav_requests" role="tabpanel">
-                    <div class="d-flex justify-content-center" >
-                        <div class="card text-dark bg-light mb-3 parent_requests" data-page_code="" style="width: 50rem;">
-                            <div class="card-header" >Requests</div>
+            @if ($group->group_users->count() > 0)
+                @can('show_requests', $group)
+                    <div class="tab-pane fade" id="nav_requests" role="tabpanel">
+                        <div class="alert alert-success text-center success_msg" style="display: none"></div>
+                        <div class="d-flex justify-content-center">
+                            
+
+                            <div class="card text-dark bg-light mb-3 parent_requests" data-page_code="" style="width: 50rem;">
+                                <div class="card-header">Requests</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endcan
+                @endcan
+            @endif
         @endforeach
     </div>
 @endsection

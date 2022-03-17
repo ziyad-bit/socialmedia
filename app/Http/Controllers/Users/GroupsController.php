@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\GroupRequest;
+use App\Models\User;
 use App\Models\Groups;
+use App\Traits\GetPosts;
 use App\Traits\GetFriends;
 use App\Traits\GetPageCode;
-use App\Traits\GetPosts;
 use Illuminate\Http\Request;
+use App\Http\Requests\GroupRequest;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class GroupsController extends Controller
