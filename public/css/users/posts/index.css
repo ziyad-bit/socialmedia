@@ -119,6 +119,7 @@
 .card-bottom .img_input {
     position: relative;
     top: 10px;
+    left: -10px;
 }
 .card-bottom p {
     position: relative;

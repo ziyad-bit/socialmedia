@@ -14,7 +14,7 @@
         <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
     @endif
 
-    
+
 
     <input type="hidden" id="auth_id" value="{{ Auth::id() }}">
     @include('users.posts.posts_modals')
@@ -35,25 +35,30 @@
         </div>
 
 
-        @if ($group->group_users->count() > 0)
+        @cannot('store_requests', $group)
             @foreach ($group->group_users as $user)
-                @can('destroy', $group)
+                @can('owner_admin_member', [App\Models\Group_users::class, $user->request])
+                    <input type="hidden" id="group_req_id" value="{{ $user->request->id }}">
                     <form action="{{ route('group-users.destroy', $user->request->id) }}" method="POST">
                         @csrf
                         @method('delete')
 
-                        <button class="btn btn-danger left_btn" style="margin-top: 15px"
-                            data-group_id="{{ $group->id }}">left</button>
+                        <button class="btn btn-danger left_btn" onclick="return confirm('Are you sure ?')" style="margin-top: 15px"
+                            data-group_id="{{ $group->id }}">
+                            leave
+                        </button>
                     </form>
                 @else
-                    <button class="btn btn-primary " style="margin-top: 15px" data-group_id="{{ $group->id }}"
-                        disabled="true">awaiting approval</button>
+                    <button class="btn btn-primary " style="margin-top: 15px" disabled="true">
+                        awaiting approval
+                    </button>
                 @endcan
             @endforeach
         @else
-            <button class="btn btn-primary join_btn" style="margin-top: 15px"
-                data-group_id="{{ $group->id }}">join</button>
-        @endif
+            <button class="btn btn-primary join_btn" style="margin-top: 15px" data-group_id="{{ $group->id }}">
+                join
+            </button>
+        @endcannot
     @endforeach
 
     <hr>
@@ -63,7 +68,7 @@
             <button class="nav-link active" id="nav-posts-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
                 role="tab">Posts</button>
 
-            <button class="nav-link" id="nav-members-tab" data-bs-toggle="tab" data-bs-target="#nav-members"
+            <button class="nav-link members_tab" id="nav-members-tab" data-bs-toggle="tab" data-bs-target="#nav-members"
                 type="button" role="tab">Members</button>
 
             <button class="nav-link" id="nav-admins-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
@@ -71,10 +76,10 @@
 
             @foreach ($groups as $group)
                 @if ($group->group_users->count() > 0)
-                    @foreach ($group->group_users as $group_req)
-                        <input type="hidden" value="{{ $group_req->request->id }}" id="group_req_id">
+                    @foreach ($group->group_users as $user)
+                        <input type="hidden" value="{{ $user->request->id }}" id="user_id">
 
-                        @can('show_requests', $group)
+                        @can('owner_admin', [App\Models\Group_users::class, $user->request])
                             <button class="nav-link requests_tap" id="nav_requests-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav_requests" type="button" role="tab"
                                 data-group_id="{{ $group->id }}">Requests</button>
@@ -89,12 +94,30 @@
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
             <div class="parent_posts" data-page_code="{{ $page_code }}">
-                @include('users.posts.index_posts')
+                @foreach ($groups as $group)
+                    @if ($group->group_users->count() > 0)
+                        @foreach ($group->group_users as $user)
+                            <input type="hidden" id="punish" value="{{$user->request->punish}}">
+                            @can('not_punished', [App\Models\Group_users::class, $user->request])
+                                @include('users.posts.index_posts')
+                            @else
+                                <h3>you are punished so you can't see any post</h3>
+                            @endcan
+                        @endforeach
+                    @endif
+                @endforeach
             </div>
         </div>
 
-        <div class="tab-pane fade" id="nav-members" role="tabpanel">
-            members
+        <div class="tab-pane fade " id="nav-members" data-page_code="" role="tabpanel">
+            <div class="alert alert-success text-center members_success_msg" style="display: none"></div>
+            <div class="d-flex justify-content-center">
+
+                <div class="card text-dark bg-light mb-3 parent_members" data-page_code="" style="width: 50rem;">
+                    <div class="card-header">Members</div>
+                </div>
+            </div>
+
         </div>
 
         <div class="tab-pane fade" id="nav-contact" role="tabpanel">
@@ -103,18 +126,20 @@
 
         @foreach ($groups as $group)
             @if ($group->group_users->count() > 0)
-                @can('show_requests', $group)
-                    <div class="tab-pane fade" id="nav_requests" role="tabpanel">
-                        <div class="alert alert-success text-center success_msg" style="display: none"></div>
-                        <div class="d-flex justify-content-center">
-                            
+                @foreach ($group->group_users as $user)
+                    @can('owner_admin', [App\Models\Group_users::class, $user->request])
+                        <div class="tab-pane fade tab_requests" id="nav_requests" role="tabpanel">
+                            <div class="alert alert-success text-center success_msg" style="display: none"></div>
+                            <div class="d-flex justify-content-center">
 
-                            <div class="card text-dark bg-light mb-3 parent_requests" data-page_code="" style="width: 50rem;">
-                                <div class="card-header">Requests</div>
+                                <div class="card text-dark bg-light mb-3 parent_requests" data-page_code=""
+                                    style="width: 50rem;">
+                                    <div class="card-header">Requests</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endcan
+                    @endcan
+                @endforeach
             @endif
         @endforeach
     </div>

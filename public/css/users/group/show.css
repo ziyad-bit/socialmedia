@@ -28,14 +28,24 @@
     margin-left: 10px;
 }
 
-.btn_approve,.btn_ignore{
+.btn_approve,.btn_ignore,.btn_add_admin,.btn_delete,.btn_punish{
     float: right;
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 20px;
 }
 
+
 .parent_requests{
-    max-height: 250px;
+    max-height: 227px;
     overflow-y: scroll;
+    position: relative;
+    top: -8px;
+}
+
+.parent_members{
+    max-height: 227px;
+    overflow-y: scroll;
+    position: relative;
+    top: -8px;
 }
