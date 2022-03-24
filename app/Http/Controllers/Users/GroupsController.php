@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Users;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Groups;
 use App\Traits\GetPosts;
 use App\Traits\GetFriends;
+use App\Models\Group_users;
 use App\Traits\GetPageCode;
 use Illuminate\Http\Request;
 use App\Http\Requests\GroupRequest;
@@ -29,7 +31,6 @@ class GroupsController extends Controller
         $page_code = $this->getPageCode($posts);
 
         if ($request->has('agax')) {
-            
             $view = view('users.posts.index_posts', compact('posts', 'page_code'))->render();
             return response()->json(['view' => $view, 'page_code' => $page_code]);
         }

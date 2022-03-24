@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-define('pagination',4);
+//define('pagination',4);
 /*
 ########################      admins login            ###############################
 Route::group(['prefix'=>'admins','namespace'=>'Admins'], function () {

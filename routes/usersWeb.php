@@ -50,9 +50,11 @@ Route::any ('group/posts/{id}'  , 'Users\GroupsController@index_posts')->name('g
 Route::apiResource('group'      , 'Users\GroupsController');
 
 #######################################     groups users    ######################################
-Route::get ('group-users/get/{group_user}'     , 'Users\GroupUsersController@show');
 Route::put ('group-users/punish/{group_user}'  , 'Users\GroupUsersController@punish');
 Route::apiResource('group-users'               , 'Users\GroupUsersController')->parameter('users','group_user');
+
+#######################################     groups admins    ######################################R
+Route::apiResource('group-admins'               , 'Users\GroupAdminsController')->parameter('group-admins','group_admin');
 
 #######################################     groups reqs    ######################################
 Route::put ('group/reqs/ignore/{group_req}'    , 'Users\GroupReqsController@ignore');

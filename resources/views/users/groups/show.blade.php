@@ -71,7 +71,7 @@
             <button class="nav-link members_tab" id="nav-members-tab" data-bs-toggle="tab" data-bs-target="#nav-members"
                 type="button" role="tab">Members</button>
 
-            <button class="nav-link" id="nav-admins-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
+            <button class="nav-link admins_tab" id="nav-admins-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
                 type="button" role="tab">Admins</button>
 
             @foreach ($groups as $group)
@@ -121,7 +121,13 @@
         </div>
 
         <div class="tab-pane fade" id="nav-contact" role="tabpanel">
-            admins
+            <div class="alert alert-success text-center admins_success_msg" style="display: none"></div>
+            <div class="d-flex justify-content-center">
+
+                <div class="card text-dark bg-light mb-3 parent_admins" data-page_code="" style="width: 50rem;">
+                    <div class="card-header">Admins</div>
+                </div>
+            </div>
         </div>
 
         @foreach ($groups as $group)

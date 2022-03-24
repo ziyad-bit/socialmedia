@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Users;
 
 use App\Traits\GetPageCode;
-use App\Classes\GetGroupAuth;
-use App\classes\GetGroupAdmin;
+use App\Classes\{GetGroupAdmin,GetGroupAuth};
 use App\Events\UpdateGroupOwner;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -39,7 +38,7 @@ class GroupReqsController extends Controller
 
         $page_code = $this->getPageCode($group_reqs);
 
-        $view = view('users.groups.next_requests', compact('group_reqs'))->render();
+        $view = view('users.groups.index_requests', compact('group_reqs'))->render();
         return response()->json(['view' => $view, 'page_code' => $page_code]);
     }
 

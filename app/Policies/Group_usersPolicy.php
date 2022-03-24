@@ -15,6 +15,12 @@ class Group_usersPolicy
 {
     use HandlesAuthorization;
 
+    public function owner(User $user , object $group_user):Response
+    {
+        $group_auth=GetGroupAuth::getGroupAuth($group_user);
+        return  $group_auth->role_id === Roles::group_owner  ? Response::allow() : Response::deny('something went wrong');
+    }
+
     public function owner_admin(User $user , object $group_user):Response
     {
         $group_auth=GetGroupAuth::getGroupAuth($group_user);

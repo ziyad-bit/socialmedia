@@ -2,6 +2,7 @@
 let posts_status   = true,
     reqs_status    = false,
     members_status = false,
+    admins_status  = false;
 
 group_req_id   = document.getElementById('group_req_id').value;
 
@@ -35,6 +36,7 @@ document.getElementById('nav-posts-tab').onclick = function () {
     posts_status   = true;
     reqs_status    = false;
     members_status = false;
+    admins_status  = false;
 }
 
 //join group
@@ -86,6 +88,7 @@ if (parent_requests) {
             reqs_status    = true;
             posts_status   = false;
             members_status = false;
+            admins_status  = false;
 
             if (reqs_click == false) {
                 getRequests(reqs_page_code, group_req_id)
@@ -155,7 +158,7 @@ const parent_members    = document.querySelector('.parent_members');
 let   members_page_code = parent_members.getAttribute('data-page_code');
 
 function getMembers(members_page_code, group_req_id) {
-    axios.get("/group-users/get/" + group_req_id + '?cursor=' + members_page_code)
+    axios.get("/group-users/" + group_req_id + '?cursor=' + members_page_code)
         .then(res => {
             if (res.status == 200) {
                 let view              = res.data.view;
@@ -177,18 +180,20 @@ const members_tab   = document.querySelector('.members_tab');
 let   members_click = false;
 
 members_tab.onclick = function () {
+    console.log(1)
     members_status = true;
     reqs_status    = false;
     posts_status   = false;
+    admins_status  = false;
 
     if (members_click == false) {
-        getMembers(members_page_code, group_req_id)
+        getMembers(members_page_code, group_req_id);
     }
     members_click = true;
 }
 
 
-//load requests on scroll
+//load members on scroll
 parent_members.onscroll = function () {
     if (parent_members.scrollHeight - parent_members.scrollTop == parent_members.offsetHeight) {
         let members_page_code = parent_members.getAttribute('data-page_code');
@@ -261,6 +266,101 @@ generalEventListener('click', '.btn_punish', e => {
 
                 e.target.textContent='punished';
                 e.target.disabled=true;
+            }
+        })
+})
+
+
+//show admins
+const parent_admins    = document.querySelector('.parent_admins');
+let   admins_page_code = parent_admins.getAttribute('data-page_code');
+
+function getAdmins(admins_page_code, group_req_id) {
+    axios.get("/group-admins/" + group_req_id + '?cursor=' + admins_page_code)
+        .then(res => {
+            if (res.status == 200) {
+                let view         = res.data.view;
+                admins_page_code = res.data.page_code;
+
+                    if (view == '') {
+                        parent_admins.insertAdjacentHTML('beforeend', 
+                            '<h3 style="margin-left:5px">No admins</h3>');
+                    }
+
+                    parent_admins.insertAdjacentHTML('beforeend', view);
+                    parent_admins.setAttribute('data-page_code', admins_page_code);
+            }
+        })
+}
+
+const admins_tab   = document.querySelector('.admins_tab');
+let   admins_tab_click = false;
+
+admins_tab.onclick = function () {
+    members_status = false;
+    reqs_status    = false;
+    posts_status   = false;
+    admins_status  = true;
+
+    if (admins_tab_click == false) {
+        getAdmins(members_page_code, group_req_id)
+    }
+    admins_tab_click = true;
+}
+
+
+//load admins on scroll
+parent_admins.onscroll = function () {
+    if (parent_admins.scrollHeight - parent_admins.scrollTop == parent_admins.offsetHeight) {
+        let members_page_code = parent_admins.getAttribute('data-page_code');
+
+        if (members_page_code && admins_status == true) {
+            getAdmins(members_page_code, group_req_id);
+        }
+    }
+}
+
+
+//remove admin
+generalEventListener('click', '.btn_remove_admin', e => {
+    let group_req_id = e.target.getAttribute('data-group_req_id');
+    axios.put('/group-admins/' + group_req_id)
+        .then(res => {
+            if (res.status == 200) {
+                let success_msg = res.data.success;
+
+                const success_msg_ele = document.querySelector('.admins_success_msg');
+
+                success_msg_ele.textContent   = success_msg;
+                success_msg_ele.style.display = '';
+
+                setTimeout(() => {
+                    success_msg_ele.style.display = 'none';
+                }, 3000);
+
+                document.querySelector('.group_user' + group_req_id).remove();
+            }
+        })
+})
+
+//delete admin from group
+generalEventListener('click', '.btn_delete_from_group', e => {
+    let group_req_id = e.target.getAttribute('data-group_req_id');
+    axios.delete('/group-admins/' + group_req_id)
+        .then(res => {
+            if (res.status == 200) {
+                let success_msg = res.data.success;
+
+                const success_msg_ele = document.querySelector('.admins_success_msg');
+
+                success_msg_ele.textContent   = success_msg;
+                success_msg_ele.style.display = '';
+
+                setTimeout(() => {
+                    success_msg_ele.style.display = 'none';
+                }, 3000);
+
+                document.querySelector('.group_user' + group_req_id).remove();
             }
         })
 })
