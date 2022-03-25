@@ -14,7 +14,7 @@ class GroupsPolicy
 {
     use HandlesAuthorization;
 
-    public function store_requests(User $user , Groups $group):Response
+    public function any_with_no_request(User $user , Groups $group):Response
     {
         $group_req=GetGroupReq::getGroupReq($group);
 

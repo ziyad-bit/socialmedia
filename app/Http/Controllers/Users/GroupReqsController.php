@@ -20,7 +20,7 @@ class GroupReqsController extends Controller
     public function store(GroupUsersRequest $request):JsonResponse
     {
         $group = Groups::findOrFail($request->group_id);
-        $this->authorize('store_requests', $group);
+        $this->authorize('any_with_no_request', $group);
 
         Group_users::create($request->validated() + ['user_id' => Auth::id()]);
 
@@ -43,10 +43,9 @@ class GroupReqsController extends Controller
     }
 
     ##################################     approve     ########################################
-    public function update( Group_users $group_req):JsonResponse
+    public function update(Group_users $group_req):JsonResponse
     {
-        $group_auth=GetGroupAuth::getGroupAuth($group_req);
-        $this->authorize('owner_admin',[Group_users::class,$group_auth]);
+        $this->authorize('owner_admin',[Group_users::class,$group_req]);
 
         $group_req->update(['role_id'=>Roles::group_member,'status'=>Group_users::approved_req]);
 
@@ -54,10 +53,9 @@ class GroupReqsController extends Controller
     }
 
     ##################################     ignore    ########################################
-    public function ignore( Group_users $group_req):JsonResponse
+    public function ignore(Group_users $group_req):JsonResponse
     {
-        $group_auth=GetGroupAuth::getGroupAuth($group_req);
-        $this->authorize('owner_admin',[Group_users::class,$group_auth]);
+        $this->authorize('owner_admin',[Group_users::class,$group_req]);
 
         $group_req->update(['status'=>Group_users::ignored_req]);
 
