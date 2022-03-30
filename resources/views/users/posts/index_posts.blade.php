@@ -1,4 +1,4 @@
-
+@isset($posts)
     @if ($posts->count() > 0)
         @foreach ($posts as $post)
             <section class="d-flex justify-content-center post{{ $post->id }}" id="{{ $post->id }}">
@@ -6,8 +6,7 @@
 
                     <!--      card top      -->
                     <div class="card-header card-top">
-                        <img src="{{ asset('images/users/' . $post->users->photo) }}" alt="loading"
-                            class="rounded-circle">
+                        <img src="{{ asset('images/users/' . $post->users->photo) }}" alt="loading" class="rounded-circle">
                         <span> {{ $post->users->name }}</span>
                         <!-- diff_date is autoloaded from app\helper\general -->
                         <small>{{ diff_date($post->created_at) }}</small>
@@ -64,7 +63,6 @@
                                 <span style="font-weight: bold"><span
                                         class="com_num{{ $post->id }}">{{ $post->comments_count }}</span>
                                     comments</span>
-
                             @else
                                 <span style="font-weight: bold"><span class="com_num{{ $post->id }}"> 0 </span>
                                     comments</span>
@@ -96,8 +94,8 @@
                                 <i class="fas fa-thumbs-up like like_icon" data-post_id="{{ $post->id }}">like</i>
                             @endif
 
-                            <i class="fas fa-share share share_icon" data-bs-toggle="modal"
-                                data-bs-target="#share_modal" data-post_id="{{ $post->id }}">share</i>
+                            <i class="fas fa-share share share_icon" data-bs-toggle="modal" data-bs-target="#share_modal"
+                                data-post_id="{{ $post->id }}">share</i>
 
                             <i class="fas fa-comment comment_icon" id="{{ $post->id }}">Comment</i>
                         </div>
@@ -122,8 +120,8 @@
 
                             <img src="{{ asset('images/users/' . Auth::user()->photo) }}" alt="loading"
                                 class="rounded-circle img_input">
-                            <textarea name="text" data-post_id="{{ $post->id }}" id="{{ 'input' . $post->id }}"
-                                cols="20" rows="2" class="form-control comment_input"></textarea>
+                            <textarea name="text" data-post_id="{{ $post->id }}" id="{{ 'input' . $post->id }}" cols="20" rows="2"
+                                class="form-control comment_input"></textarea>
                             <input type="hidden" name="post_id" value="{{ $post->id }}">
                             <small style="color: red; display:none" id="comment_err"></small>
                         </form>
@@ -132,6 +130,6 @@
 
             </section>
         @endforeach
-
     @endif
 
+@endisset

@@ -9,7 +9,7 @@
                     {{ $group_admin->name }}
                 </span>
                 
-                @can('owner', [App\Models\Group_users::class, $group_req->request])
+                @can('owner', $group_auth)
                     <button class="btn btn-danger btn_delete_from_group" data-group_req_id="{{ $group_req->request->id }}">
                         delete from group
                     </button>

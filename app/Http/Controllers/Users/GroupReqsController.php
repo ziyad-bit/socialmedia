@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Users;
 
 use App\Traits\GetPageCode;
-use App\Classes\{GetGroupAdmin,GetGroupAuth};
+use App\Classes\{GetGroupAdmin};
 use App\Events\UpdateGroupOwner;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -11,18 +11,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\GroupUsersRequest;
 use App\Models\{User,Roles,Group_users , Groups};
+use App\Traits\GetGroupAuth ;
 
 class GroupReqsController extends Controller
 {
-    use GetPageCode;
+    use GetPageCode ,GetGroupAuth;
 
     ##################################     join    ########################################
     public function store(GroupUsersRequest $request):JsonResponse
     {
-        $group = Groups::findOrFail($request->group_id);
-        $this->authorize('any_with_no_request', $group);
-
-        Group_users::create($request->validated() + ['user_id' => Auth::id()]);
+        Group_users::firstOrCreate($request->validated() + ['user_id' => Auth::id()]);
 
         return response()->json(['success' => 'you sent request successfully']);
     }
@@ -30,7 +28,8 @@ class GroupReqsController extends Controller
     ##################################      show      ########################################
     public function show(Group_users $group_req):JsonResponse
     {
-        $this->authorize('owner_admin', [Group_users::class,$group_req]);
+        $group_auth = $this->getGroupAuth($group_req->group_id);
+        $this->authorize('owner_admin', $group_auth);
 
         $group_reqs = User::selection()->with('group_joined:id')
             ->whereHas('group_joined', fn($q) => $q->where(['group_id' => $group_req->group_id ,'group_users.status' => Group_users::join_req] ))
@@ -45,7 +44,8 @@ class GroupReqsController extends Controller
     ##################################     approve     ########################################
     public function update(Group_users $group_req):JsonResponse
     {
-        $this->authorize('owner_admin',[Group_users::class,$group_req]);
+        $group_auth = $this->getGroupAuth($group_req->group_id);
+        $this->authorize('owner_admin',$group_auth);
 
         $group_req->update(['role_id'=>Roles::group_member,'status'=>Group_users::approved_req]);
 
@@ -55,7 +55,8 @@ class GroupReqsController extends Controller
     ##################################     ignore    ########################################
     public function ignore(Group_users $group_req):JsonResponse
     {
-        $this->authorize('owner_admin',[Group_users::class,$group_req]);
+        $group_auth = $this->getGroupAuth($group_req->group_id);
+        $this->authorize('owner_admin',$group_auth);
 
         $group_req->update(['status'=>Group_users::ignored_req]);
 
@@ -65,7 +66,8 @@ class GroupReqsController extends Controller
     ##################################     leave     ########################################
     public function destroy(Group_users $group_req):RedirectResponse
     {
-        $this->authorize('owner_admin_member',[Group_users::class,$group_req]);
+        $group_auth = $this->getGroupAuth($group_req->group_id);
+        $this->authorize('owner_admin_member',$group_auth);
 
         $group_admin = GetGroupAdmin::getGroupAdmin($group_req);
         if ($group_req->role_id == Roles::group_owner) {

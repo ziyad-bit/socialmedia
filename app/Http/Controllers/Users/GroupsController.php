@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Classes\GetGroupAuth;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Groups;
@@ -18,24 +19,30 @@ class GroupsController extends Controller
 {
     use GetPosts, GetFriends, GetPageCode;
 
-    public function index_posts(int $id, Request $request)
+    public function index_posts(Request $request,Groups $group)
     {
-        $groups  = Groups::min_selection()->withCount('group_users')
-                ->with(['group_users'=>fn($q)=>$q->where('user_id',Auth::id())])
-                ->where('id',$id)->get();
+        $group_users_count = $group->group_users->count();
+        $group_auth        = GetGroupAuth::getGroupAuth($group->id);
 
-        $friends_ids = $this->getFriends()->pluck('id')->toArray();
-        $posts       = $this->getPosts($friends_ids)->where('group_id', $id)->orderBydesc('id')
-                        ->cursorPaginate(3);
+        $posts     = null;
+        $page_code = null;
 
-        $page_code = $this->getPageCode($posts);
-
-        if ($request->has('agax')) {
-            $view = view('users.posts.index_posts', compact('posts', 'page_code'))->render();
-            return response()->json(['view' => $view, 'page_code' => $page_code]);
+        if ($group_auth) {
+            if ($group_auth->role_id != null || $group_auth->punish == Group_users::punished) {
+                $friends_ids = $this->getFriends()->pluck('id')->toArray();
+                $posts       = $this->getPosts($friends_ids)->where('group_id', $group->id)
+                    ->orderBydesc('id')->cursorPaginate(3);
+        
+                $page_code = $this->getPageCode($posts);
+        
+                if ($request->has('agax')) {
+                    $view = view('users.posts.index_posts', compact('posts', 'page_code'))->render();
+                    return response()->json(['view' => $view, 'page_code' => $page_code]);
+                }
+            }
         }
 
-        return view('users.groups.show', compact('posts', 'groups', 'page_code'));
+        return view('users.groups.show', compact('posts', 'group','group_users_count','group_auth', 'page_code'));
     }
 
     public function store(GroupRequest $request)

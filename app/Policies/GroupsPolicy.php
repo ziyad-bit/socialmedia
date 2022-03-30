@@ -14,11 +14,6 @@ class GroupsPolicy
 {
     use HandlesAuthorization;
 
-    public function any_with_no_request(User $user , Groups $group):Response
-    {
-        $group_req=GetGroupReq::getGroupReq($group);
-
-        return  !$group_req ? Response::allow() : Response::deny('something went wrong');
-    }
+   
 
 }

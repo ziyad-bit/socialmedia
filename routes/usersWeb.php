@@ -46,12 +46,12 @@ Route::get ('comments/show/{com_id}/{post_id}'  , 'Users\CommentsController@show
 Route::apiResource('comment'                    , 'Users\CommentsController');
 
 #######################################     groups     ######################################
-Route::any ('group/posts/{id}'  , 'Users\GroupsController@index_posts')->name('groups.posts.index');
+Route::any ('group/posts/{group}'  , 'Users\GroupsController@index_posts')->name('groups.posts.index');
 Route::apiResource('group'      , 'Users\GroupsController');
 
 #######################################     groups users    ######################################
 Route::put ('group-users/punish/{group_user}'  , 'Users\GroupUsersController@punish');
-Route::apiResource('group-users'               , 'Users\GroupUsersController')->parameter('users','group_user');
+Route::apiResource('group-users'               , 'Users\GroupUsersController')->parameter('group-users','group_user');
 
 #######################################     groups admins    ######################################R
 Route::apiResource('group-admins'               , 'Users\GroupAdminsController')->parameter('group-admins','group_admin');

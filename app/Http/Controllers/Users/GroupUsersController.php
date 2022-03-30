@@ -4,38 +4,36 @@ namespace App\Http\Controllers\Users;
 
 use App\Models\User;
 use App\Models\Roles;
-use App\Models\Groups;
 use App\Models\Group_users;
 use App\Traits\GetPageCode;
-use Illuminate\Http\Request;
-use App\Classes\GetGroupAuth;
-use App\classes\GetGroupAdmin;
-use App\Events\UpdateGroupOwner;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\GroupUsersRequest;
+use App\Traits\GetGroupAuth;
 
 class GroupUsersController extends Controller
 {
-    use GetPageCode;
+    use GetPageCode , GetGroupAuth;
 
     ###########################################    show members   ########################
     public function show(Group_users $group_user)
     {
+        $group_auth = $this->getGroupAuth($group_user->group_id);
+        $this->authorize('owner_admin_member',$group_auth);
+
         $group_users = User::selection()->with('group_joined:id')
             ->whereHas('group_joined', fn($q) => $q->where(['role_id'=>Roles::group_member,'group_id'=>$group_user->group_id]))
             ->cursorPaginate(2);
 
-        $page_code = $this->getPageCode($group_users);
+        $page_code  = $this->getPageCode($group_users);
 
-        $view = view('users.groups.index_members', compact('group_users'))->render();
+        $view = view('users.groups.index_members', compact('group_users','group_auth'))->render();
         return response()->json(['view' => $view, 'page_code' => $page_code]);
     }
 
     ###########################################    add admin   ########################
     public function update(Group_users $group_user)
     {
-        $this->authorize('owner_admin',[Group_users::class,$group_user]);
+        $group_auth=$this->getGroupAuth($group_user->group_id);
+        $this->authorize('owner_admin',$group_auth);
 
         $group_user->update(['role_id'=>Roles::group_admin]);
 
@@ -45,7 +43,8 @@ class GroupUsersController extends Controller
     ###########################################    punish members   ########################
     public function punish(Group_users $group_user)
     {
-        $this->authorize('owner_admin',[Group_users::class,$group_user]);
+        $group_auth=$this->getGroupAuth($group_user->group_id);
+        $this->authorize('owner_admin',$group_auth);
 
         $group_user->update(['punish'=>Group_users::punished]);
 
@@ -55,7 +54,7 @@ class GroupUsersController extends Controller
     ###########################################    delete members   ########################
     public function destroy(Group_users $group_user)
     {
-        $this->authorize('owner_admin',[Group_users::class,$group_user]);
+        $this->authorize('owner_admin',$group_user);
 
         $group_user->delete();
 
