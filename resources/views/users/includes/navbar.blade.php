@@ -15,15 +15,19 @@
 
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
+                        <a class="nav-link" href="{{route('users.profile.index')}}">Profile</a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link" href="{{route('posts.index.all')}}">Posts</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('message.index.friends')}}">Chat</a>
+                        <a class="nav-link" href="{{route('groups.index_groups')}}">Groups</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('users.profile.index')}}">profile</a>
+                        <a class="nav-link" href="{{route('message.index.friends')}}">Chat</a>
                     </li>
                 </ul>
 

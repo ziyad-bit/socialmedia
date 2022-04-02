@@ -47,7 +47,9 @@ Route::apiResource('comment'                    , 'Users\CommentsController');
 
 #######################################     groups     ######################################
 Route::any ('group/posts/{group}'  , 'Users\GroupsController@index_posts')->name('groups.posts.index');
-Route::apiResource('group'      , 'Users\GroupsController');
+Route::any ('group/index-groups'   , 'Users\GroupsController@index_groups')->name('groups.index_groups');
+Route::post('group/update/{group}'         , 'Users\GroupsController@update');
+Route::Resource('group'            , 'Users\GroupsController');
 
 #######################################     groups users    ######################################
 Route::put ('group-users/punish/{group_user}'  , 'Users\GroupUsersController@punish');

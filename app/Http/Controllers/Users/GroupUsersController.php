@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Models\User;
-use App\Models\Roles;
-use App\Models\Group_users;
-use App\Traits\GetPageCode;
+use App\Models\{Group_users,User,Roles};
+use App\Traits\{GetPageCode,GetGroupAuth};
 use App\Http\Controllers\Controller;
-use App\Traits\GetGroupAuth;
+use Illuminate\Http\JsonResponse;
 
 class GroupUsersController extends Controller
 {
     use GetPageCode , GetGroupAuth;
 
     ###########################################    show members   ########################
-    public function show(Group_users $group_user)
+    public function show(Group_users $group_user):JsonResponse
     {
         $group_auth = $this->getGroupAuth($group_user->group_id);
         $this->authorize('owner_admin_member',$group_auth);
@@ -30,7 +28,7 @@ class GroupUsersController extends Controller
     }
 
     ###########################################    add admin   ########################
-    public function update(Group_users $group_user)
+    public function update(Group_users $group_user):JsonResponse
     {
         $group_auth=$this->getGroupAuth($group_user->group_id);
         $this->authorize('owner_admin',$group_auth);
@@ -41,7 +39,7 @@ class GroupUsersController extends Controller
     }
 
     ###########################################    punish members   ########################
-    public function punish(Group_users $group_user)
+    public function punish(Group_users $group_user):JsonResponse
     {
         $group_auth=$this->getGroupAuth($group_user->group_id);
         $this->authorize('owner_admin',$group_auth);
@@ -52,7 +50,7 @@ class GroupUsersController extends Controller
     }
 
     ###########################################    delete members   ########################
-    public function destroy(Group_users $group_user)
+    public function destroy(Group_users $group_user):JsonResponse
     {
         $this->authorize('owner_admin',$group_user);
 

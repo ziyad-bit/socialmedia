@@ -25,21 +25,20 @@ class GroupRequest extends FormRequest
     public function rules()
     {
         return [
-            'group.*.name'        => 'nullable|string|min:3|max:30',
-            'group.*.description' => 'nullable|string|min:10|max:250',
-            'photo'               => 'required_without:photo_id|image|mimes:jpg,gif,jpeg,png|max:14',
-            'status'              => 'required_without:photo_id',
+            'name'        => 'required|string|min:3|max:30',
+            'description' => 'required|string|min:10|max:250',
+            'photo'       => 'required_without:photo_id|image|mimes:jpg,gif,jpeg,png|max:14',
         ];
     }
 
     public function messages()
     {
         return [
-            'group.*.name.min'        => 'you should enter at least 3 characters',
-            'group.*.name.max'        => "you shouldn't enter more than 30 characters",
-            'group.*.description.min' => 'you should enter at least 10 characters',
-            'group.*.description.max' => "you shouldn't enter more than 250 characters",
-            'required_without'        => "this field shouldn't be empty",
+            'name.min'         => 'you should enter at least 3 characters',
+            'name.max'         => "you shouldn't enter more than 30 characters",
+            'description.min'  => 'you should enter at least 10 characters',
+            'description.max'  => "you shouldn't enter more than 250 characters",
+            'required_without' => "this field shouldn't be empty",
         ];
     }
 

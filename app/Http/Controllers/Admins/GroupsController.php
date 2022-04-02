@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Events\StoreGroup;
 use App\Models\{Languages,Groups};
 use Illuminate\Support\Facades\{Auth,DB};
 use App\Http\Requests\GroupRequest;
@@ -22,7 +23,7 @@ class GroupsController extends Controller
     ####################################      index      ################################
     public function index():View
     {
-        $groups=Groups::selection()->defaultLang()->cursorPaginate(pagination);
+        $groups=Groups::selection()->defaultLang()->cursorPaginate(5);
         return view('admins.groups.index',compact('groups'));
     }
 
@@ -37,52 +38,7 @@ class GroupsController extends Controller
     public function store(GroupRequest $request):RedirectResponse
     {
         try{
-            $group=collect($request->group);
-
-            $defualt_group = $this->get_data_in_default_lang($group);
-            $photo_name    = $this->uploadphoto($request , 'images/groups');
-
-            DB::beginTransaction();
-
-            if (isset($defualt_group['name']) && isset($defualt_group['description'] ) ) {
-                $defualt_group_id=Groups::insertGetId([
-                    'trans_lang'  => $defualt_group['abbr'],
-                    'name'        => $defualt_group['name'],
-                    'description' => $defualt_group['description'],
-                    'photo'       => $photo_name,
-                    'status'      => $request->status,
-                    'admin_id'    => Auth::id(),
-                    'created_at'  => now(),
-                ]);
-            }else{
-                return redirect()->back()->with('error','you should fill input in '.default_lang().'(default language)');
-            }
-    
-            $othergroups=$this->get_data_in_Other_langs($group);
-    
-            if($othergroups){
-                $othergroups_arr=[];
-                foreach($othergroups as $othergroup){
-                    if (isset($othergroup['name'])) {
-                        $othergroups_arr[]=[
-                            'trans_lang'  => $othergroup['abbr'],
-                            'trans_of'    => $defualt_group_id,
-                            'name'        => $othergroup['name'],
-                            'description' => $othergroup['description'],
-                            'photo'       => $photo_name,
-                            'status'      => $request->status,
-                            'admin_id'    => Auth::id(),
-                            'created_at'  => now(),
-                        ];
-                    }
-                }
-                
-                if ($othergroups_arr != []) {
-                    Groups::insert($othergroups_arr);
-                }
-            }
-
-            DB::commit();
+            event(new StoreGroup($request));
             return redirect()->back()->with(['success'=>__('messages.you created group successfully')]);
 
         }catch(\Exception){

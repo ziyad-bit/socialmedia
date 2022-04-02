@@ -47,13 +47,67 @@ let group_id    = document.getElementById('group_id').value;
 
 const join_btn = document.querySelector('.join_btn');
 if (join_btn) {
-    const join_btn = document.querySelector('.join_btn');
     join_btn.onclick = function () {
         axios.post("/group/reqs", { 'group_id': group_id })
             .then(res => {
                 if (res.status == 200) {
                     this.disabled = true;
                     this.textContent = "awaiting approval";
+                }
+            })
+    }
+}
+
+
+//update group
+const group_name_ele        = document.querySelector('.group_name'),
+    group_description_ele   = document.querySelector('.group_description');
+
+document.querySelector('.btn_edit').onclick=function(){
+    let group_name        = group_name_ele.innerText,
+        group_description = group_description_ele.innerText;
+
+    document.querySelector('.input_name').value        = group_name;
+    document.querySelector('.input_description').value = group_description;
+}
+
+const update_btn_group = document.querySelector('#update_group_btn');
+if (update_btn_group) {
+    update_btn_group.onclick = function () {
+        let form     = document.getElementById('edit_group_form'),
+            formData = new FormData(form);
+
+        let errors=document.getElementsByClassName('errors');
+        for (let i = 0; i < errors.length; i++) {
+            errors[i].style.display='none';
+        }
+
+        axios.post("/group/update/"+group_id, formData)
+            .then(res => {
+                if (res.status == 200) {
+                    let res_data    = res.data,
+                        success_msg = res_data.success,
+                        group       = res_data.group;
+
+                    const success_ele = document.getElementById('update_group_msg');
+
+                    success_ele.textContent=success_msg;
+                    success_ele.style.display='';
+
+                    group_description_ele.textContent = group.description;
+                    group_name_ele.textContent        = group.name;
+                }
+            })
+            .catch(err=>{
+                let error=err.response;
+                if (error.status == 422) {
+                    let err_msgs=error.data.errors;
+                    for (const [key, value] of Object.entries(err_msgs)) {
+                        let error_ele=document.getElementById(key+'_update_err');
+                        
+                        error_ele.textContent=value[0];
+                        error_ele.style.display='';
+                    }
                 }
             })
     }
