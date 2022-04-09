@@ -2,45 +2,45 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Models\Groups;
-use App\Traits\GetPosts;
-use App\Models\Languages;
-use App\Events\StoreGroup;
-use App\Traits\GetFriends;
-use App\Models\Group_users;
-use App\Traits\GetPageCode;
+use App\Classes\Friends\FriendsIds;
+use App\Models\{Group_users,Groups};
+use App\Traits\{UploadImage,GetPageCode};
 use Illuminate\Http\Request;
-use App\Classes\GetGroupAuth;
+use App\Classes\Group\GetGroupAuth;
+use App\Classes\Posts\GroupPage;
+use App\Classes\Posts\PostsAbstractFactory;
 use App\Events\StoreGroupOwner;
 use App\Http\Requests\GroupRequest;
 use App\Http\Controllers\Controller;
 use App\Traits\GetGroupAuth as TraitsGetGroupAuth;
-use App\Traits\GetLanguages;
-use App\Traits\UploadImage;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\{RedirectResponse,JsonResponse};
 use Illuminate\Support\Facades\Auth;
 
 class GroupsController extends Controller
 {
-    use GetPosts, GetFriends, GetPageCode,GetLanguages,UploadImage,TraitsGetGroupAuth;
+    use GetPageCode,UploadImage,TraitsGetGroupAuth;
 
     #################################    index_posts   ###################################
-    public function index_posts(Request $request, Groups $group)
+    public function index_posts(Request $request, Groups $group):View|JsonResponse
     {
-        $group_users_count = $group->group_users->count();
-        $group_auth = GetGroupAuth::getGroupAuth($group->id);
+        $group_users_count = Groups::whereHas('group_users',fn($q)=>$q->where('role_id','!=',null))->count();
+        $group_auth        = GetGroupAuth::getGroupAuth($group->id);
 
-        $posts = null;
+        $posts     = null;
         $page_code = null;
-
+        
         if ($group_auth) {
             if ($group_auth->role_id != null || $group_auth->punish == Group_users::punished) {
-                $friends_ids = $this->getFriends()->pluck('id')->toArray();
-                $posts = $this->getPosts($friends_ids)->where('group_id', $group->id)
-                    ->orderBydesc('id')->cursorPaginate(3);
+                $friends     = new FriendsIds();
+                $friends_ids = $friends->fetchIds();
+                
+                $posts_factory = new PostsAbstractFactory();
+                $posts         = $posts_factory->groupPage()->fetchPosts($friends_ids,$group->id)->cursorPaginate(3);
 
                 $page_code = $this->getPageCode($posts);
 
-                if ($request->has('agax')) {
+                if ($request->ajax()) {
                     $view = view('users.posts.index_posts', compact('posts', 'page_code'))->render();
                     return response()->json(['view' => $view, 'page_code' => $page_code]);
                 }
@@ -51,14 +51,14 @@ class GroupsController extends Controller
     }
 
     #################################    index_groups   ###################################
-    public function index_groups(Request $request)
+    public function index_groups(Request $request):View|JsonResponse
     {
         $groups_joined = Groups::selection()->whereHas('group_users', fn($q) => $q->where("user_id", Auth::id()))
             ->cursorPaginate(10);
 
         $page_code = $this->getPageCode($groups_joined);
 
-        if ($request->has('agax')) {
+        if ($request->ajax()) {
             $view = view('users.posts.index_posts', compact('posts', 'page_code'))->render();
             return response()->json(['view' => $view, 'page_code' => $page_code]);
         }
@@ -67,13 +67,13 @@ class GroupsController extends Controller
     }
 
     #################################      create    ###################################
-    public function create()
+    public function create():View
     {
         return view('users.groups.create');
     }
 
     #################################    store   ###################################
-    public function store(GroupRequest $request)
+    public function store(GroupRequest $request):RedirectResponse
     {
         try{
             $photo_name=$this->uploadPhoto($request->file('photo'),'images/groups/',300);
@@ -87,12 +87,8 @@ class GroupsController extends Controller
         }
     }
 
-    public function show(int $id)
-    {
-
-    }
-
-    public function update(GroupRequest $request, Groups $group)
+    #################################     update    ###################################
+    public function update(GroupRequest $request, Groups $group):JsonResponse
     {
         $group_auth=$this->getGroupAuth($group->id);
         $this->authorize('owner',$group_auth);
@@ -106,11 +102,16 @@ class GroupsController extends Controller
 
         $group->update($request->except(['photo','photo_id'])+['photo'=>$photo_name]);
 
-        return response()->json(['success'=>'you updated it successfully','group'=>$group]);
+        return response()->json(['success'=>'you updated it successfully']);
     }
 
-    public function destroy(Groups $group)
+    #################################     delete    ###################################
+    public function destroy(Groups $group):RedirectResponse
     {
-        //
+        $group_auth=$this->getGroupAuth($group->id);
+        $this->authorize('owner',$group_auth);
+
+        $group->delete();
+        return redirect()->route('groups.index_groups')->with(['success'=>'you deleted it successfully']);
     }
 }

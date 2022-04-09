@@ -3,7 +3,7 @@ const parent_friends = document.querySelector('.parent_friends');
 let friends_data=true;
 
 function loadPages(page) {
-    axios.post("?page=" + page,{'agax':1})
+    axios.post("?page=" + page)
         .then(res=> {
             if (res.status == 200) {
                 let friends   = res.data.friends.data,

@@ -41,12 +41,7 @@ class Groups extends Model
     ################################    scope    #####################################
     public function scopeSelection($q)
     {
-        return $q->select('name','description','photo','created_at','id','trans_of','trans_lang');
-    }
-
-    public function scopeMin_selection($q)
-    {
-        return $q->select('name','description','photo','id','user_id');
+        return $q->select('name','description','photo','created_at','id');
     }
 
     public function scopeDefaultLang($q)

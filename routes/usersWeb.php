@@ -32,7 +32,7 @@ Route::group(['prefix'=>'search','namespace'=>'Users'], function () {
 Route::any ('friends/requests'  , 'Users\FriendsController@show_requests')->name('friends.show.requests');
 Route::apiResource('friend'     , 'Users\FriendsController');
 
-#######################################     chat     ######################################
+#######################################     Message     ######################################
 Route::any ('message/index'         , 'Users\MessageController@index_friends')->name('message.index.friends');
 Route::apiResource('message'        , 'Users\MessageController');
 
@@ -48,7 +48,7 @@ Route::apiResource('comment'                    , 'Users\CommentsController');
 #######################################     groups     ######################################
 Route::any ('group/posts/{group}'  , 'Users\GroupsController@index_posts')->name('groups.posts.index');
 Route::any ('group/index-groups'   , 'Users\GroupsController@index_groups')->name('groups.index_groups');
-Route::post('group/update/{group}'         , 'Users\GroupsController@update');
+Route::post('group/update/{group}' , 'Users\GroupsController@update');
 Route::Resource('group'            , 'Users\GroupsController');
 
 #######################################     groups users    ######################################

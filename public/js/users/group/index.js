@@ -8,7 +8,7 @@ let posts_status   = true,
 const parent_posts = document.querySelector('.parent_posts');
 
 function loadPages(page_code) {
-    axios.post("?cursor=" + page_code, { 'agax': 1 })
+    axios.post("?cursor=" + page_code)
         .then(res => {
             if (res.status == 200) {
                 let view   = res.data.view,
@@ -61,14 +61,16 @@ if (join_btn) {
 
 //update group
 const group_name_ele        = document.querySelector('.group_name'),
-    group_description_ele   = document.querySelector('.group_description');
+    group_description_ele   = document.querySelector('.group_description'),
+    group_name_input        = document.querySelector('.input_name'),
+    group_description_input = document.querySelector('.input_description');
 
 document.querySelector('.btn_edit').onclick=function(){
     let group_name        = group_name_ele.innerText,
         group_description = group_description_ele.innerText;
 
-    document.querySelector('.input_name').value        = group_name;
-    document.querySelector('.input_description').value = group_description;
+        group_name_input.value        = group_name;
+        group_description_input.value = group_description;
 }
 
 const update_btn_group = document.querySelector('#update_group_btn');
@@ -86,16 +88,18 @@ if (update_btn_group) {
             .then(res => {
                 if (res.status == 200) {
                     let res_data    = res.data,
-                        success_msg = res_data.success,
-                        group       = res_data.group;
+                        success_msg = res_data.success;
 
                     const success_ele = document.getElementById('update_group_msg');
 
                     success_ele.textContent=success_msg;
                     success_ele.style.display='';
 
-                    group_description_ele.textContent = group.description;
-                    group_name_ele.textContent        = group.name;
+                    let name        = group_name_input.value,
+                        description = group_description_input.value;
+
+                    group_description_ele.textContent = description;
+                    group_name_ele.textContent        = name;
                 }
             })
             .catch(err=>{

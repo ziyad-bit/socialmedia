@@ -9,7 +9,7 @@
         <div class="alert alert-danger text-center">{{ Session::get('error') }}</div>
     @endif
 
-    @if ($users->count() == 0 && $groups->count() == 0)
+    @if ($users->count() == 0 && $friends->count() == 0 && $groups->count() == 0 && $groups_joined->count()==0)
         <h3 class="text-center">no matched results</h3>
     @else
         <div class="d-flex justify-content-center" style="margin-top: 30px">

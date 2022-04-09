@@ -88,12 +88,32 @@ search_ele.onkeyup = function () {
 
                     search_req_num=1;
 
+                    let friends = res.data.friends;
+                    for (let i = 0; i < friends.length; i++) {
+                        list_group.insertAdjacentHTML('beforeend',
+                            `<li class="list-group-item search_item" >
+                                <img src="/images/users/${friends[i].photo}" class="rounded-circle search_image">
+                                <span class="search_name">${friends[i].name}</span> 
+                            </li>`
+                        );
+                    }
+
                     let users = res.data.users;
                     for (let i = 0; i < users.length; i++) {
                         list_group.insertAdjacentHTML('beforeend',
                             `<li class="list-group-item search_item" >
                                 <img src="/images/users/${users[i].photo}" class="rounded-circle search_image">
                                 <span class="search_name">${users[i].name}</span> 
+                            </li>`
+                        );
+                    }
+
+                    let groups_joined = res.data.groups_joined;
+                    for (let i = 0; i < groups.length; i++) {
+                        list_group.insertAdjacentHTML('beforeend',
+                            `<li class="list-group-item search_item" >
+                                <img src="/images/groups/${groups_joined[i].photo}" class="rounded-circle search_image">
+                                <span class="search_name">${groups_joined[i].name}</span> 
                             </li>`
                         );
                     }

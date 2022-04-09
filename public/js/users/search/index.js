@@ -6,7 +6,7 @@ window.onload = function () {
         data_status = 1;
 
     function loadPages(page) {
-        axios.post("?page=" + page, { 'search': search, 'agax': 1 })
+        axios.post("?page=" + page, { 'search': search })
             .then(res=> {
                 if (res.status == 200) {
                     let view      = res.data.view;
@@ -37,17 +37,34 @@ window.onload = function () {
 
     //add friend
     generalEventListener('click','.add_btn',e=>{
-        let friend_id=e.target.getAttribute('data-user_id');
+        let target    = e.target,
+            friend_id = target.getAttribute('data-user_id');
         
         axios.post('/friend',{'friend_id':friend_id})
             .then(res=>{
                 if (res.status == 200) {
-                    const add_btn=document.querySelector(`[data-user_id="${friend_id}"]`);
-                    
-                    add_btn.disabled    = true;
-                    add_btn.textContent = "awaiting approval";
+                    target.disabled    = true;
+                    target.textContent = "awaiting approval";
                 }
             })
     })
+
+
+    //join group
+    generalEventListener('click','.join_btn',e=>{
+        let target   = e.target,
+            group_id = target.getAttribute('data-group_id');
+        
+        axios.post("/group/reqs",{'group_id':group_id})
+            .then(res=>{
+                if (res.status == 200) {
+                    target.disabled    = true;
+                    target.textContent = "awaiting approval";
+                }
+            })
+    })
+
 }
+
+
 

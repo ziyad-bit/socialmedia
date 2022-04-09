@@ -112,4 +112,8 @@ class User extends Authenticatable
         return $q->where(['status' => 1, 'user_id' => Auth::id()]);
     }
 
+    public function scopeAuthUser($q)
+    {
+        return $q->where('user_id',Auth::id());
+    }
 }

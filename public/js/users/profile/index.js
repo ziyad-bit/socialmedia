@@ -87,7 +87,7 @@ update_profile_ele.onclick=function(){
 const parent_posts = document.querySelector('.parent_posts'); 
 
 function loadPages(page_code) {
-    axios.post("?cursor=" + page_code,{'agax':1})
+    axios.post("?cursor=" + page_code)
         .then(res=> {
             if (res.status == 200) {
                 let view   = res.data.view,
@@ -100,7 +100,7 @@ function loadPages(page_code) {
 }
 
 window.onscroll = function () {
-    if (window.scrollY + window.innerHeight-54 >= document.body.clientHeight) {
+    if (window.scrollY + window.innerHeight-70 >= document.body.clientHeight) {
         let page_code = parent_posts.getAttribute('data-page_code');
         if (page_code) {
             loadPages(page_code);

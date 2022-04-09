@@ -23,7 +23,7 @@ class FriendsController extends Controller
         
         $page_code = $this->getPageCode($friend_reqs);
         
-        if ($request->has('agax')) {
+        if ($request->ajax()) {
             $view = view('users.friends.next_requests', compact('friend_reqs'))->render();
             return response()->json(['view' => $view,'page_code'=>$page_code]);
         }

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Classes\Friends\FriendsIds;
+use App\Classes\Posts\PostsAbstractFactory;
+use App\Classes\Posts\PostsPage;
 use App\Models\Posts;
-use App\Traits\{Shared_posts_ids,GetFriends, GetPosts, UploadFile, UploadImage};
+use App\Traits\{Shared_posts_ids, GetPageCode, UploadFile, UploadImage};
 use Illuminate\Http\{JsonResponse,Request};
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostsRequest;
@@ -12,30 +15,26 @@ use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
-    use GetFriends , Shared_posts_ids , UploadImage ,UploadFile , GetPosts;
+    use  Shared_posts_ids , UploadImage ,UploadFile , GetPageCode;
 
     ##################################      index_posts      ###############################
-    public function index_posts(Request $request)//:View|JsonResponse
+    public function index_posts(Request $request):View|JsonResponse
     {
-        $friends_ids     = $this->getFriends()->pluck('id')->toArray();
+        $friends     = new FriendsIds();
+        $friends_ids = $friends->fetchIds();
         array_unshift($friends_ids,Auth::id());
 
         $shared_posts_id = $this->getSharedPostsIds($friends_ids);
 
-        $posts=$this->getPosts($friends_ids)->whereIn('user_id',$friends_ids)
-            ->orWhereIn('id',$shared_posts_id)->orderBydesc('id')->paginate(3);
+        $posts_factory = new PostsAbstractFactory;
+        $posts         = $posts_factory->postsPage()->fetchPosts($friends_ids,null,$shared_posts_id)->simplePaginate(3);
         
-        $page_code='';
-        if ($request->has('agax')) {
-            if ($posts->count() == 0) {
-                return response()->json([],404);
-            }
-            
+        if ($request->ajax()) {
             $view=view('users.posts.index_posts',compact('posts'))->render();
             return response()->json(['view'=>$view]);
         }
         
-        return view('users.posts.index',compact('posts','page_code'));
+        return view('users.posts.index',compact('posts'));
     }
 
     ##################################      store      ##################################

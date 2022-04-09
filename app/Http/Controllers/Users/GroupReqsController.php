@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Traits\{GetGroupAuth,GetPageCode};
-use App\Classes\{GetGroupAdmin};
 use App\Events\UpdateGroupOwner;
-use Illuminate\Http\{RedirectResponse,JsonResponse};
+use App\Classes\Group\GetGroupAdmin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\GroupUsersRequest;
 use App\Models\{User,Roles,Group_users};
+use App\Traits\{GetGroupAuth,GetPageCode};
+use Illuminate\Http\{RedirectResponse,JsonResponse};
 
 class GroupReqsController extends Controller
 {

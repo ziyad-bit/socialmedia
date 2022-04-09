@@ -52,7 +52,8 @@ class GroupUsersController extends Controller
     ###########################################    delete members   ########################
     public function destroy(Group_users $group_user):JsonResponse
     {
-        $this->authorize('owner_admin',$group_user);
+        $group_auth=$this->getGroupAuth($group_user->group_id);
+        $this->authorize('owner_admin',$group_auth);
 
         $group_user->delete();
 

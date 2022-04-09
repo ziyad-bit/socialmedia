@@ -15,54 +15,55 @@
         <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
     @endif
 
-     <!--       edit post        -->
- <div class="modal fade" id="group_update" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="edit_group_modal"> edit group</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+    <!--       edit post        -->
+    <div class="modal fade" id="group_update" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="edit_group_modal"> edit group</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="edit_group_form" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="alert alert-success text-center" id="update_group_msg" style="display: none"></div>
+                        <input type="hidden" name="photo_id" value="1">
+
+                        <div class="form-group">
+                            <label for="exampleInputname1">name </label>
+                            <input name="name" class="form-control input_name" type="text" />
+                            <small style="color:red" class="errors" id="name_update_err" style="display: none">
+
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputname1">description </label>
+                            <textarea name="description" class="form-control input_description" cols="15" rows="5"></textarea>
+                            <small style="color:red" class="errors" id="description_update_err"
+                                style="display: none">
+
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputname1">photo </label>
+                            <input type="file" name="photo" class="form-control">
+                            <small style="color:red" class="errors" id="photo_update_err" style="display: none">
+
+                            </small>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+                        <button type="button" id="update_group_btn" class="btn btn-primary">update</button>
+                    </div>
+                </form>
             </div>
-            <form id="edit_group_form" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <div class="alert alert-success text-center" id="update_group_msg" style="display: none"></div>
-                    <input type="hidden" name="photo_id" value="1">
-
-                    <div class="form-group">
-                        <label for="exampleInputname1">name </label>
-                        <input name="name" class="form-control input_name" type="text"/>
-                        <small style="color:red" class="errors" id="name_update_err" style="display: none">
-
-                        </small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="exampleInputname1">description </label>
-                        <textarea name="description" class="form-control input_description" cols="15" rows="5"></textarea>
-                        <small style="color:red" class="errors" id="description_update_err" style="display: none">
-
-                        </small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="exampleInputname1">photo </label>
-                        <input type="file" name="photo" class="form-control">
-                        <small style="color:red" class="errors" id="photo_update_err" style="display: none">
-
-                        </small>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
-                    <button type="button" id="update_group_btn" class="btn btn-primary">update</button>
-                </div>
-            </form>
         </div>
     </div>
-</div>
 
 
     <input type="hidden" id="auth_id" value="{{ Auth::id() }}">
@@ -76,7 +77,8 @@
 
         <img src="{{ asset('images/groups/' . $group->photo) }}" alt="loading error" class="rounded-circle group_photo">
 
-        <span class="group_name">{{ $group->name }} </span><span class="members_count">({{ $group_users_count . ' Members' }})</span>
+        <span class="group_name">{{ $group->name }} </span><span
+            class="members_count">({{ $group_users_count . ' Members' }})</span>
 
         <div class="group_description">{{ $group->description }}</div>
 
@@ -86,12 +88,12 @@
     @if ($group_auth)
         @can('owner_admin_member', $group_auth)
             <input type="hidden" id="group_req_id" value="{{ $group_auth->id }}">
-            <form action="{{ route('group-users.destroy', $group_auth->id) }}" method="POST">
+            <form action="{{ route('group-users.destroy', $group_auth->id) }}" method="POST" style="display: inline-block">
                 @csrf
                 @method('delete')
 
-                <button class="btn btn-danger left_btn" onclick="return confirm('Are you sure ?')" style="margin-top: 15px"
-                    data-group_id="{{ $group->id }}">
+                <button class="btn btn-danger left_btn" onclick="return confirm('Are you sure ?')"
+                    style="margin-top: 15px;display: inline-block" data-group_id="{{ $group->id }}">
                     leave
                 </button>
             </form>
@@ -107,9 +109,18 @@
     @endif
 
     @can('owner', $group_auth)
-        <button class="btn btn-primary btn_edit" style="margin-top: 15px" 
-        data-bs-toggle="modal" data-bs-target="#group_update">
+        <form action="{{ route('group.destroy', $group->id) }}" method="POST" style="display: inline-block">
+            @csrf
+            @method('delete')
 
+            <button class="btn btn-danger left_btn" onclick="return confirm('Are you sure ?')"
+                style="margin-top: 15px;display: inline-block" data-group_id="{{ $group->id }}">
+                delete
+            </button>
+        </form>
+
+        <button class="btn btn-primary btn_edit" style="margin-top: 15px;display: inline-block" data-bs-toggle="modal"
+            data-bs-target="#group_update">
             update
         </button>
     @endcan

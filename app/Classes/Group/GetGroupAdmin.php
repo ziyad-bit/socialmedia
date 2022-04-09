@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Classes;
+namespace App\Classes\Group;
 
 use App\Models\Roles;
 use App\Models\Group_users;
