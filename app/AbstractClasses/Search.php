@@ -4,7 +4,6 @@ namespace App\AbstractClasses;
 
 use App\Models\{Groups,User};
 use App\Traits\GetFriends;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 
 abstract class Search 

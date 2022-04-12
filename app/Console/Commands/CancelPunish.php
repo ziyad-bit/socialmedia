@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Jobs\CancelPunishJob;
-use App\Models\Group_users;
 use Illuminate\Console\Command;
 
 class CancelPunish extends Command

@@ -2,11 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Group_users;
-use App\Models\Roles;
-
-use App\Models\User;
-
+use App\Models\{User,Roles,Group_users};
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -33,7 +29,7 @@ class Group_usersPolicy
         return $group_auth->user_id == $user->id && $group_auth->role_id !== null ? Response::allow() : Response::deny('something went wrong');
     }
 
-    ###############################      not_punished    ##########################################
+    ###############################      auth_not_punished    ##########################################
     public function auth_not_punished(User $user, Group_users $group_auth): Response
     {
         return $group_auth->user_id == $user->id && $group_auth->punish !== Group_users::punished ? Response::allow() : Response::deny('something went wrong');
@@ -44,5 +40,4 @@ class Group_usersPolicy
     {
         return $group_user->punish !== Group_users::punished ? Response::allow() : Response::deny('something went wrong');
     }
-
 }

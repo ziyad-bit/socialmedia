@@ -6,8 +6,8 @@ use App\Interfaces\Search\CreateSearch;
 
 class PaginateSearchFactory implements  CreateSearch
 {
-    public string $search;
-    public int $items_num;
+    private string $search;
+    private int $items_num;
 
     public function __construct(string $search , int $items_num)
     {

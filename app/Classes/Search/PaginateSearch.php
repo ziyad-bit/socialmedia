@@ -7,8 +7,8 @@ use Illuminate\Pagination\Paginator;
 
 class PaginateSearch extends Search
 {
-    public string $search;
-    public int $items_num;
+    private string $search;
+    private int $items_num;
 
     public function __construct(string $search , int $items_num)
     {

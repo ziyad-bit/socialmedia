@@ -5,6 +5,7 @@ const search_ele   = document.getElementById('search'),
 let recent_req     = 0,
     search_req_num = 0;
 
+//add event listener
 function generalEventListener(type, selector, callback) {
     document.addEventListener(type, e => {
         if (e.target.matches(selector)) {
@@ -13,12 +14,33 @@ function generalEventListener(type, selector, callback) {
     });
 }
 
+//debounce
+function debounce(cb,delay) {
+    let timeout;
+
+    return (...args)=>{
+        clearTimeout(timeout);
+
+        timeout=setTimeout(() => {
+                cb(...args);
+            }, delay);
+    }
+}
+
+//hide search results on document click
+document.onclick=function(){
+    if(window.event.target.id != 'search'){
+        for (let i = 0; i < list_ele.length; i++) {
+            list_ele[i].style.display = 'none';
+        }
+    }
+}
+
 //submit search form on click
 function submit_search(e){
-    let text=e.target.textContent;
-    let pure_text=text.replace(/ /g, "");
-
-    search_ele.value=pure_text;
+    let text=e.target.innerText;
+    
+    search_ele.value=text;
 
     document.getElementById('search_form').submit();
 }
@@ -37,7 +59,7 @@ function show_recent_searches(){
         axios.get('/search/show/recent')
             .then(res=>{
                 if (res.status == 200) {
-                    
+
                     if (search_req_num == 1) {
                         for (let i = 0; i < list_ele.length; i++) {
                             list_ele[i].style.display = 'none';
@@ -74,9 +96,26 @@ function show_recent_searches(){
 }
 
 //show matched search results
-search_ele.onkeyup = function () {
+let search_words=[];
+
+function showMatchedSearch() {
     let search = search_ele.value;
     if (search) {
+        if (search_words.includes(search)) {
+            for (let i = 0; i < list_ele.length; i++) {
+                list_ele[i].style.display = 'none';
+            }
+
+            let search_key_ele=document.getElementsByClassName(`${search}`);
+            for (let i = 0; i < search_key_ele.length; i++) {
+                search_key_ele[i].style.display='';
+            }
+
+            return
+        }
+
+        search_words.unshift(search);
+
         axios.post('/search/show', { 'search': search })
             .then(res=> {
                 if (res.status == 200) {
@@ -91,8 +130,8 @@ search_ele.onkeyup = function () {
                     let friends = res.data.friends;
                     for (let i = 0; i < friends.length; i++) {
                         list_group.insertAdjacentHTML('beforeend',
-                            `<li class="list-group-item search_item" >
-                                <img src="/images/users/${friends[i].photo}" class="rounded-circle search_image">
+                            `<li class="list-group-item search_item ${search}" >
+                                <img src="/images/users/${friends[i].photo}" class="rounded-circle search_image ">
                                 <span class="search_name">${friends[i].name}</span> 
                             </li>`
                         );
@@ -101,7 +140,7 @@ search_ele.onkeyup = function () {
                     let users = res.data.users;
                     for (let i = 0; i < users.length; i++) {
                         list_group.insertAdjacentHTML('beforeend',
-                            `<li class="list-group-item search_item" >
+                            `<li class="list-group-item search_item ${search}" >
                                 <img src="/images/users/${users[i].photo}" class="rounded-circle search_image">
                                 <span class="search_name">${users[i].name}</span> 
                             </li>`
@@ -109,9 +148,9 @@ search_ele.onkeyup = function () {
                     }
 
                     let groups_joined = res.data.groups_joined;
-                    for (let i = 0; i < groups.length; i++) {
+                    for (let i = 0; i < groups_joined.length; i++) {
                         list_group.insertAdjacentHTML('beforeend',
-                            `<li class="list-group-item search_item" >
+                            `<li class="list-group-item search_item ${search}" >
                                 <img src="/images/groups/${groups_joined[i].photo}" class="rounded-circle search_image">
                                 <span class="search_name">${groups_joined[i].name}</span> 
                             </li>`
@@ -121,7 +160,7 @@ search_ele.onkeyup = function () {
                     let groups = res.data.groups;
                     for (let i = 0; i < groups.length; i++) {
                         list_group.insertAdjacentHTML('beforeend',
-                            `<li class="list-group-item search_item" >
+                            `<li class="list-group-item search_item ${search}" >
                                 <img src="/images/groups/${groups[i].photo}" class="rounded-circle search_image">
                                 <span class="search_name">${groups[i].name}</span> 
                             </li>`
@@ -133,8 +172,12 @@ search_ele.onkeyup = function () {
     }else{
         show_recent_searches();
     }
-};
+}
 
+search_ele.addEventListener('keyup',debounce(()=>{
+        showMatchedSearch()
+    },1000)
+)
 
 //show recent searches
 search_ele.onfocus=function(){
