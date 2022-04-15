@@ -8,17 +8,17 @@
     <div class="d-flex justify-content-center" style="margin-top: 30px">
         <div class="card text-dark bg-light mb-3 parent_friends"  style="width: 50rem;">
             <div class="card-header" data-status="1">friends</div>
-            @foreach ($friends as $friend)
+            @foreach ($mutual_friends as $mutual_friend)
                 <div class="card-body">
-                    <img src="{{ asset('images/users/' . $friend->photo) }}" class="rounded-circle" style="width: 100px"
+                    <img src="{{ asset('images/users/' . $mutual_friend->photo) }}" class="rounded-circle" style="width: 100px"
                         alt="loading">
                     <span class="card-title">
-                        {{ $friend->name }}
+                        {{ $mutual_friend->name }}
                     </span>
                     <a class="btn btn-success message_btn" href="{{route('message.index.friends')}}">message</a>
                     <div class="card-text" style="position: relative;
                     top: 5px;">
-                        {{ $friend->work }}
+                        {{ $mutual_friend->work }}
                     </div>
                 </div>
                 <hr>

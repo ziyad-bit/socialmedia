@@ -21,18 +21,17 @@
 
                         @if ($post->shares->count() > 0)
                             <span class="share_name" style="margin-left: 3px">shared this post</span>
-                            @foreach ($post->shares->take(2) as $share)
+                            @foreach ($post->shares as $share)
                                 @if ($share->users->id != Auth::id())
                                     <span class="share_name"> ,
                                         {{ Illuminate\Support\Str::limit($share->users->name, 6, '...') }}</span>
+
+                                @else
+                                <span class="share_name"> you </span>
                                 @endif
                             @endforeach
 
-                            @foreach ($post->shares as $share)
-                                @if ($share->users->id == Auth::id())
-                                    <span class="share_name"> you </span>
-                                @endif
-                            @endforeach
+                            
                         @endif
 
 

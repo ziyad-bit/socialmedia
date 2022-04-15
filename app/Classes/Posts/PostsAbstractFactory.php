@@ -4,7 +4,7 @@ namespace App\Classes\Posts;
 
 use App\Classes\Posts\GroupPage;
 use App\Classes\Posts\PostsPage;
-use App\Classes\Posts\ProfilePage;
+use App\Classes\Posts\UsersProfilePage;
 
 class PostsAbstractFactory 
 {
@@ -18,8 +18,8 @@ class PostsAbstractFactory
         return new PostsPage();
     }
 
-    public function profilePage():ProfilePage
+    public function usersProfilePage():UsersProfilePage
     {
-        return new ProfilePage();
+        return new UsersProfilePage();
     }
 }

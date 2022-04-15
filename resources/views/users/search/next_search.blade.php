@@ -5,7 +5,7 @@
                 alt="loading">
 
             <span class="card-title">
-                {{ $friend->name }}
+                <a href="{{route('users.index',$friend->name)}}">{{$friend->name}}</a>
             </span>
 
             @if ($friend->auth_add_friends->count() > 0)
@@ -58,7 +58,7 @@
                 alt="loading">
 
             <span class="card-title">
-                {{ $user->name }}
+                <a href="{{route('users.index',$user->name)}}">{{$user->name}}</a>
             </span>
 
             <button class="btn btn-primary add_btn" data-friend_id="{{ $user->id }}">

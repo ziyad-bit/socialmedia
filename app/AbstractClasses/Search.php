@@ -13,7 +13,10 @@ abstract class Search
     #########################################     friends     #############################
     public function friends(string $search):Builder
     {
-        return $this->getFriends()->with(['auth_add_friends:id', 'friends_add_auth:id'])
+        return  User::selection()
+            ->whereHas('auth_add_friends', fn($q) => $q->authUser())
+            ->orWhereHas('friends_add_auth', fn($q) => $q->authFriend())
+            ->with(['auth_add_friends:id', 'friends_add_auth:id'])
             ->search($search);
     }
 
@@ -21,9 +24,9 @@ abstract class Search
     public function users(string $search):Builder
     {
         return User::selection()
-            ->whereDoesntHave('auth_add_friends', fn($q) => $q->auth_add_friends())
-            ->orwhereDoesntHave('friends_add_auth', fn($q) => $q->friends_add_auth())
-            ->search($search);
+            ->whereDoesntHave('auth_add_friends', fn($q) => $q->authUser())
+            ->WhereDoesntHave('friends_add_auth', fn($q) => $q->authFriend())
+            ->notAuth()->search($search);
     }
 
     #########################################     groupsJoined     #############################

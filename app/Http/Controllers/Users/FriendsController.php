@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Classes\FriendReq;
 use App\Models\{Friends_user,User};
 use Illuminate\Http\{JsonResponse,Request};
 use Illuminate\Contracts\View\View;

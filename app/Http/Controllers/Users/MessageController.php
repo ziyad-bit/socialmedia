@@ -19,7 +19,7 @@ class MessageController extends Controller
     public function index_friends(Request $request):View|JsonResponse
     {
         $friends      = new Friends();
-        $friends_user = $friends->fetch();
+        $friends_user = $friends->fetch(Auth::id());
                             
         if ($request->has('agax')) {
             return response()->json(['friends_user' => $friends_user]);

@@ -70,8 +70,10 @@ Route::post ('share/store'  , 'Users\SharesController@store');
 
 #######################################     profile     ######################################
 Route::group(['prefix'=>'profile','namespace'=>'Users'], function () {
-    Route::any ('/index'       , 'ProfileController@index')->name('users.profile.index');
-    Route::post('/update/photo', 'ProfileController@update_photo');
-    Route::post('/update'      , 'ProfileController@update');
-    Route::any ('/show'        , 'ProfileController@show')->name('users.profile.show');
+    Route::any ('/index/auth'           , 'ProfileController@index')->name('users.profile.index');
+    Route::post('/update/photo'         , 'ProfileController@update_photo');
+    Route::post('/update'               , 'ProfileController@update');
+    Route::any ('/show'                 , 'ProfileController@show')->name('users.profile.show');
+    Route::any ('/index/other/{name}'   , 'ProfileController@index_profile')->name('users.index');
+    Route::any ('/index/friends/{name}' , 'ProfileController@show_friends')->name('users.friends.index');
 });

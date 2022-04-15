@@ -15,7 +15,7 @@ function generalEventListener(type, selector, callback) {
 }
 
 //debounce
-function debounce(cb,delay) {
+function debounce(cb,delay=1000) {
     let timeout;
 
     return (...args)=>{

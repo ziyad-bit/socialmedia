@@ -116,4 +116,9 @@ class User extends Authenticatable
     {
         return $q->where('user_id',Auth::id());
     }
+
+    public function scopeAuthFriend($q)
+    {
+        return $q->where('friend_id',Auth::id());
+    }
 }

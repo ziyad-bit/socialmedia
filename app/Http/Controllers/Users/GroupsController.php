@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Classes\Friends\FriendsIds;
-use App\Models\{Group_users,Groups};
-use App\Traits\{UploadImage,GetPageCode};
 use Illuminate\Http\Request;
-use App\Classes\Group\GetGroupAuth;
-use App\Classes\Posts\GroupPage;
-use App\Classes\Posts\PostsAbstractFactory;
 use App\Events\StoreGroupOwner;
+use App\Classes\Friends\Friends;
+use App\Classes\Group\GetGroupAuth;
 use App\Http\Requests\GroupRequest;
-use App\Http\Controllers\Controller;
-use App\Traits\GetGroupAuth as TraitsGetGroupAuth;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\{RedirectResponse,JsonResponse};
+use App\Http\Controllers\Controller;
+use App\Models\{Group_users,Groups};
 use Illuminate\Support\Facades\Auth;
+use App\Traits\{UploadImage,GetPageCode};
+use App\Classes\Posts\PostsAbstractFactory;
+use App\Traits\GetGroupAuth as TraitsGetGroupAuth;
+use Illuminate\Http\{RedirectResponse,JsonResponse};
 
 class GroupsController extends Controller
 {
@@ -32,16 +31,20 @@ class GroupsController extends Controller
         
         if ($group_auth) {
             if ($group_auth->role_id != null || $group_auth->punish == Group_users::punished) {
-                $friends     = new FriendsIds();
-                $friends_ids = $friends->fetchIds();
+                $friends     = new Friends();
+                $friends_ids = $friends->fetchIds(Auth::id());
                 
                 $posts_factory = new PostsAbstractFactory();
-                $posts         = $posts_factory->groupPage()->fetchPosts($friends_ids,$group->id)->cursorPaginate(3);
+                $posts         = $posts_factory->groupPage()->fetchPosts(3,$friends_ids,$group->id);
 
                 $page_code = $this->getPageCode($posts);
+                $posts     = $posts->map(function($posts){
+                        $posts->shares = $posts->shares->take(3);
+                        return $posts;
+                    });
 
                 if ($request->ajax()) {
-                    $view = view('users.posts.index_posts', compact('posts', 'page_code'))->render();
+                    $view = view('users.posts.index_posts', compact('posts'))->render();
                     return response()->json(['view' => $view, 'page_code' => $page_code]);
                 }
             }
