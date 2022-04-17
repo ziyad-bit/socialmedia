@@ -17,6 +17,11 @@ class ProfileController extends Controller
 {
     use GetFriends ,UploadImage , GetPageCode;
 
+    public function __construct()
+    {
+        $this->middleware(userMiddleware());
+    }
+
     ##################################     index auth profile    #################################
     public function index(Request $request):View|JsonResponse
     {
@@ -51,7 +56,8 @@ class ProfileController extends Controller
         $friends = $friends->fetch(Auth::id());
 
         if ($request->ajax()) {
-            return response()->json(['friends' => $friends]);
+            $view=view('users.profile.show',compact('friends'))->render();
+            return response()->json(['view' => $view]);
         }
 
         return view('users.profile.show',compact('friends'));
@@ -91,7 +97,8 @@ class ProfileController extends Controller
         $page_code = $this->getPageCode($mutual_friends);
 
         if ($request->ajax()) {
-            return response()->json(['mutual_friends' => $mutual_friends,'page_code'=>$page_code]);
+            $view = view('users.profile.show_mutual_friends',compact('mutual_friends'))->render();
+            return response()->json(['view' => $view,'page_code'=>$page_code]);
         }
 
         return view('users.profile.show_mutual_friends',compact('mutual_friends','page_code'));

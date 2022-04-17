@@ -20,6 +20,11 @@ function adminMiddleware():array
     return [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth:admins' ];
 }
 
+function userMiddleware():array
+{
+    return [ 'auth' ,'online_users'];
+}
+
 
 ###########################         date        ##########################################
 function diff_date($date){

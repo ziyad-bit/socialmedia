@@ -2,9 +2,8 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -18,18 +17,21 @@ class MessageSend implements ShouldBroadcast
     public int    $receiver_id;
     public int    $sender_id;
     public string $user_name;
+    public string $user_photo;
+
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(array $data,string $name)
+    public function __construct(array $data,User $user)
     {
         $this->text        = $data['text'];
         $this->sender_id   = $data['sender_id'];
         $this->receiver_id = $data['receiver_id'];
-        $this->user_name   = $name;
+        $this->user_name   = $user->name;
+        $this->user_photo  = $user->photo;
     }
 
 

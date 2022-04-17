@@ -94,7 +94,7 @@ class User extends Authenticatable
     #############################       scopes        ########################################
     public function scopeSelection($q)
     {
-        return $q->select('name','work','photo','id');
+        return $q->select('name','work','photo','id','online');
     }
 
     public function scopeNotAuth($q)

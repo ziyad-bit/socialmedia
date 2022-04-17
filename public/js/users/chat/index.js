@@ -1,6 +1,7 @@
 window.onload = function () {
     const users_box = document.getElementById('list-tab');
     let old_msg=1;
+
     //load old messages
     function loadOldMessages(){
         const chat_box=document.getElementsByClassName('card-body')
@@ -19,8 +20,9 @@ window.onload = function () {
                                     for (let i = 0; i < messages.length; i++) {
                                         this.insertAdjacentHTML('afterbegin',
                                         `
-                                            <h3 id="${messages[i].id}">${messages[i].users.name}</h3>
-                                            <p > ${messages[i].text} </p>
+                                        <img id="${messages[i].id}" class="rounded-circle image" src="/images/users/${messages[i].users.photo}" alt="loading">
+                                            <span class="user_name">${messages[i].users.name}</span>
+                                            <p class="user_message"> ${messages[i].text} </p>
                                         `);
                                     }
 
@@ -48,8 +50,8 @@ window.onload = function () {
         axios.post("?page=" + page, { 'agax': 1 })
             .then(res => {
                 if (res.status == 200) {
-                    let users     = res.data.friends_user.data;
-                    let next_page = res.data.friends_user.next_page_url;
+                    let users     = res.data.auth_friends.data;
+                    let next_page = res.data.auth_friends.next_page_url;
 
                     if (next_page == null) {
                         next_friends_page=0;
@@ -105,10 +107,7 @@ window.onload = function () {
 
     let page = 1;
     users_box.onscroll = function () {
-        let height_subScroll = users_box.scrollHeight - users_box.scrollTop;
-        let box_height       = users_box.offsetHeight;
-
-        if (box_height == height_subScroll ) {
+        if (users_box.offsetHeight == users_box.scrollHeight - users_box.scrollTop ) {
             if (next_friends_page == 1) {
                 page++;
                 loadPages(page);
@@ -124,14 +123,16 @@ window.onload = function () {
         axios.post('/message', { 'text': message, 'receiver_id': receiver_id })
             .then(res => {
                 if (res.status == 200) {
-                    let Auth_name = document.getElementById('auth').value;
+                    let auth_name  = document.getElementById('auth_name').value,
+                        auth_photo = document.getElementById('auth_photo').value;
                     const box=document.getElementById('box'+receiver_id);
 
                     document.getElementById('msg'+receiver_id).value='';
                     box.insertAdjacentHTML('beforeend',
                             `
-                                <h3>${Auth_name}</h3>
-                                <p>${message}</p>
+                            <img class="rounded-circle image" src="/images/users/${auth_photo}" alt="loading">
+                                <span class="user_name">${auth_name}</span>
+                                <p class="user_message">${message}</p>
                                 `
                         )
                     
@@ -158,8 +159,9 @@ window.onload = function () {
                     for (let i = 0; i < messages.length; i++) {
                         box.insertAdjacentHTML('afterbegin',
                         `
-                            <h3 id="${messages[i].id}">${messages[i].users.name}</h3>
-                            <p > ${messages[i].text} </p>
+                        <img id="${messages[i].id}" class="rounded-circle image" src="/images/users/${messages[i].users.photo}" alt="loading">
+                            <span class="user_name">${messages[i].users.name}</span>
+                            <p class="user_message"> ${messages[i].text} </p>
                         `);
                     }
         
@@ -206,16 +208,18 @@ window.onload = function () {
     
 
 
-    //subscribe channel and listen to event
+    //subscribe chat channel and listen to event
     let auth_id=document.getElementById('auth_id').value;
     Echo.private(`chat.${auth_id}`)
         .listen('MessageSend', (e) => {
+            console.log(e)
             const box=document.getElementById('box' + e.sender_id);
 
             box.insertAdjacentHTML('beforeend',
                     `
-                    <h3>${e.user_name}</h3>
-                    <p>${e.text}</p>
+                    <img  class="rounded-circle image" src="/images/users/${e.user_photo}" alt="loading">
+                    <span class="user_name">${e.user_name}</span>
+                    <p class="user_message">${e.text}</p>
                     `
             )
 

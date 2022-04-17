@@ -7,25 +7,33 @@ use App\Events\MessageSend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MessageRequest;
 use App\Models\Messages;
+use App\Models\User;
 use App\Traits\GetFriends;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\{Request,JsonResponse};
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class MessageController extends Controller
 {
     use GetFriends;
+
+    public function __construct()
+    {
+        $this->middleware(userMiddleware());
+    }
+
     #############################     index_friends     #######################################
     public function index_friends(Request $request):View|JsonResponse
     {
         $friends      = new Friends();
-        $friends_user = $friends->fetch(Auth::id());
-                            
-        if ($request->has('agax')) {
-            return response()->json(['friends_user' => $friends_user]);
+        $auth_friends = $friends->getFriendsByOnlineOrder(5);
+
+        if ($request->ajax()) {
+            return response()->json(['auth_friends' => $auth_friends]);
         }
 
-        return view('users.chat.index', compact('friends_user'));
+        return view('users.chat.index', compact('auth_friends'));
     }
 
     #############################     store     #######################################
@@ -34,7 +42,7 @@ class MessageController extends Controller
         $data=$request->validated()+['sender_id'=>Auth::id()];
         Messages::create($data);
 
-        event(new MessageSend($data , Auth::user()->name));
+        event(new MessageSend($data , Auth::user()));
 
         return response()->json();
     }
