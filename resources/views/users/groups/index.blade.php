@@ -26,13 +26,13 @@
                 <tr>
                     <th scope="row">{{ $i + 1 }}</th>
 
-                    <td> <a href="{{ route('groups.posts.index', $group->id) }}">
+                    <td> <a href="{{ route('groups.posts.index', $group->id) }}" >
                             <img src="{{ asset('images/groups/' . $group->photo) }}" alt="">
                         </a>
                     </td>
 
                     <td>
-                        <a href="{{ route('groups.posts.index', $group->id) }}">
+                        <a href="{{ route('groups.posts.index', $group->id) }}" style="text-decoration: none">
                             {{ $group->name }}
                         </a>
                     </td>

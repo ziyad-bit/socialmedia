@@ -11,7 +11,7 @@ function loadOldMessages(){
                     let first_msg_id = this.firstElementChild.id,
                         reveiver_id  = this.getAttribute('data-user_id');
 
-                    axios.put("/message/" + reveiver_id,{'first_msg_id':first_msg_id})
+                    axios.put('/'+lang+"/message/" + reveiver_id,{'first_msg_id':first_msg_id})
                         .then(res=> {
                             if (res.status == 200) {
                                 let messages=res.data.messages;
@@ -119,7 +119,7 @@ generalEventListener('click', '.send_btn', e => {
     let receiver_id = e.target.getAttribute('data-receiver_id'),
         message     = document.getElementById('msg' + receiver_id).value;
 
-    axios.post('/message', { 'text': message, 'receiver_id': receiver_id })
+    axios.post('/'+lang+'/message', { 'text': message, 'receiver_id': receiver_id })
         .then(res => {
             if (res.status == 200) {
                 let auth_name  = document.getElementById('auth_name').value,
@@ -150,7 +150,7 @@ function getNewMessages(id){
 
     let data_status=data_status_ele.getAttribute('data-status');
     if (data_status == '0') {
-        axios.get("/message/" + id)
+        axios.get('/'+lang+"/message/" + id)
         .then(res=> {
             if (res.status == 200) {
                 let messages=res.data.messages;

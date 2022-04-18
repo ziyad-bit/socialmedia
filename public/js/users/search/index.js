@@ -37,7 +37,7 @@ generalEventListener('click','.add_btn',e=>{
     let target    = e.target,
         friend_id = target.getAttribute('data-user_id');
     
-    axios.post('/friend',{'friend_id':friend_id})
+    axios.post('/'+lang+'/friend',{'friend_id':friend_id})
         .then(res=>{
             if (res.status == 200) {
                 target.disabled    = true;
@@ -52,7 +52,7 @@ generalEventListener('click','.join_btn',e=>{
     let target   = e.target,
         group_id = target.getAttribute('data-group_id');
     
-    axios.post("/group/reqs",{'group_id':group_id})
+    axios.post('/'+lang+"/group/reqs",{'group_id':group_id})
         .then(res=>{
             if (res.status == 200) {
                 target.disabled    = true;

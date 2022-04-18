@@ -19,7 +19,7 @@ window.onload=()=>{
             com_req       = target.getAttribute('data-com_req');
 
         if (com_req == 'false') {
-            axios.get("/comment/" + id)
+            axios.get('/'+lang+"/comment/" + id)
                 .then(res=> {
                     if (res.status == 200) {
                         let view      = res.data.view;
@@ -56,7 +56,7 @@ window.onload=()=>{
         comments_box=document.getElementsByClassName('card-bottom');
 
         function loadComments(com_id,post_id) {
-            axios.get("/comment/show_more/"+com_id+'/'+post_id)
+            axios.get('/'+lang+"/comment/show_more/"+com_id+'/'+post_id)
                 .then(res=> {
                     if (res.status == 200) {
                         let view      = res.data.view;
@@ -111,7 +111,7 @@ window.onload=()=>{
                 post_id = this.getAttribute('data-post_id'),
                 comment = document.getElementById('update_input').textContent;
 
-            axios.put("/comment/" + com_id,{'text':comment,'post_id':post_id})
+            axios.put('/'+lang+"/comment/" + com_id,{'text':comment,'post_id':post_id})
                 .then(res=> {
                     if (res.status == 200) {
                         let success_msg = res.data.success_msg,
@@ -149,7 +149,7 @@ window.onload=()=>{
         let com_id  = target.getAttribute('data-comment_id'),
             post_id = target.getAttribute('data-post_id');
 
-        axios.delete("/comment/" + com_id)
+        axios.delete('/'+lang+"/comment/" + com_id)
             .then(res=> {
                 if (res.status == 200) {
                     document.getElementById('comm'+com_id).remove();
@@ -170,7 +170,7 @@ window.onload=()=>{
             formData = new FormData(form_ele);
         
         if (e.keyCode == 13) {
-            axios.post("/comment" ,formData)
+            axios.post('/'+lang+"/comment" ,formData)
                 .then(res=> {
                     if (res.status == 200) {
                         let view=res.data.view;
@@ -207,7 +207,7 @@ window.onload=()=>{
         let target  = e.target,
             post_id = target.getAttribute('data-post_id');
         
-        axios.post("/like/store" ,{'post_id':post_id})
+        axios.post('/'+lang+"/like/store" ,{'post_id':post_id})
             .then(res=> {
                 if (res.status == 200) {
                     const like_ele = document.querySelector('.like_num'+post_id);
@@ -242,7 +242,7 @@ window.onload=()=>{
         let target  = e.target,
             post_id = target.getAttribute('data-post_id');
         
-        axios.post("/share/store" ,{'post_id':post_id})
+        axios.post('/'+lang+"/share/store" ,{'post_id':post_id})
             .then(res=> {
                 if (res.status == 200) {
                     const share_ele = document.querySelector('.share_num'+post_id);
@@ -286,7 +286,7 @@ window.onload=()=>{
         let target  = e.target,
             post_id = target.getAttribute('data-post_id');
         
-        axios.delete("/post/"+post_id ,{'post_id':post_id})
+        axios.delete('/'+lang+"/post/"+post_id ,{'post_id':post_id})
             .then(res=> {
                 if (res.status == 200) {
                     let msg=res.data.success_msg;
@@ -337,7 +337,7 @@ window.onload=()=>{
             form     = document.getElementById('edit_post_form'),
             formData = new FormData(form);
 
-        axios.post("/post/"+post_id ,formData)
+        axios.post('/'+lang+"/post/"+post_id ,formData)
             .then(res=> {
                 if (res.status == 200) {
                     let res_data    = res.data,

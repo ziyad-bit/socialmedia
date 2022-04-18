@@ -5,6 +5,8 @@ const search_ele   = document.getElementById('search'),
 let recent_req     = 0,
     search_req_num = 0;
 
+let lang=document.getElementById('lang').value;
+console.log(lang);
 //add event listener
 function generalEventListener(type, selector, callback) {
     document.addEventListener(type, e => {
@@ -56,7 +58,7 @@ generalEventListener('click','.search_name',e=>{
 //show recent searches
 function show_recent_searches(){
     if (recent_req == 0) {
-        axios.get('/search/show/recent')
+        axios.get('/'+lang+'/search/show/recent')
             .then(res=>{
                 if (res.status == 200) {
 
@@ -116,7 +118,7 @@ function showMatchedSearch() {
 
         search_words.unshift(search);
 
-        axios.post('/search/show', { 'search': search })
+        axios.post('/'+lang+'/search/show', { 'search': search })
             .then(res=> {
                 if (res.status == 200) {
                     if (search_req_num == 1) {

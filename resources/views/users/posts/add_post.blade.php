@@ -8,7 +8,8 @@
             <!-- diff_date is autoloaded from app\helper\general -->
             <small>{{ diff_date($post->created_at) }}</small>
 
-            <i class="fas fa-edit edit_post"></i>
+            <i class="fas fa-edit edit_post" data-bs-toggle="modal" data-bs-target="#edit_post_modal"
+            data-post_id="{{ $post->id }}"></i>
 
             <i class="fas fa-trash delete_post" data-bs-toggle="modal" data-bs-target="#delete_post_modal"
                 data-post_id="{{ $post->id }}"></i>
@@ -18,7 +19,7 @@
 
                 <span class="share_name"> you </span>
             @endif
-            <p>
+            <p class="text{{ $post->id }}">
                 {{ $post->text }}
             </p>
 
