@@ -9,11 +9,11 @@
             </span>
 
             <button class="btn btn-primary" data-friend_req_id="{{ $friend_req->id }}">
-                approve
+                {{ __('titles.approve') }}
             </button>
 
             <button class="btn btn-danger add_btn" data-friend_req_id="{{ $friend_req->id }}">
-                ignore
+                {{ __('titles.ignore') }}
             </button>
 
 

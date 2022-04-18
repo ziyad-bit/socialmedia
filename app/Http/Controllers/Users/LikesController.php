@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class LikesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(userMiddleware());
+    }
+    
     public function store(LikesRequest $request):JsonResponse
     {
         $like_arr=['user_id'=>Auth::id(),'post_id'=>$request->post_id];

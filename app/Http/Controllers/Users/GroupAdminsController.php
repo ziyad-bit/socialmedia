@@ -10,6 +10,12 @@ use Illuminate\Http\JsonResponse;
 class GroupAdminsController extends Controller
 {
     use GetPageCode ,GetGroupAuth;
+
+    public function __construct()
+    {
+        $this->middleware(userMiddleware());
+    }
+    
     ###########################################      show        ########################
     public function show(Group_users $group_admin):JsonResponse
     {
@@ -34,7 +40,7 @@ class GroupAdminsController extends Controller
 
         $group_admin->update(['role_id' => Roles::group_member]);
 
-        return response()->json(['success' => 'you removed this admin successfully']);
+        return response()->json(['success' => __('messages.you removed admin successfully')]);
     }
 
     ###########################################    delete    #############################
@@ -45,6 +51,6 @@ class GroupAdminsController extends Controller
 
         $group_admin->delete();
 
-        return response()->json(['success' => 'you deleted admin successfully']);
+        return response()->json(['success' => __('messages.you deleted it successfully')]);
     }
 }

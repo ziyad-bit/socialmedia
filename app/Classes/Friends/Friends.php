@@ -13,9 +13,9 @@ class Friends
     use GetFriends;
 
     ###############################      fetch     #####################################
-    public function fetch(int $user_id):Paginator
+    public function fetch(int $user_id,int $items_num):Paginator
     {
-        return $this->getFriends($user_id)->simplePaginate(7);
+        return $this->getFriends($user_id)->simplePaginate($items_num);
     }
 
     ###############################      fetch ids    #####################################
@@ -49,7 +49,7 @@ class Friends
     }
 
     ###############################     get Friends By Online Order    ###################################
-    public function getFriendsByOnlineOrder(int $item_num):Paginator
+    public function getByOnlineOrder(int $item_num):Paginator
     {
         $friends_ids=$this->fetchIds(Auth::id());
 

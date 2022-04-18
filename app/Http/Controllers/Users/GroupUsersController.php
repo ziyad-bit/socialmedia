@@ -11,6 +11,11 @@ class GroupUsersController extends Controller
 {
     use GetPageCode , GetGroupAuth;
 
+    public function __construct()
+    {
+        $this->middleware(userMiddleware());
+    }
+    
     ###########################################    show members   ########################
     public function show(Group_users $group_user):JsonResponse
     {
@@ -35,7 +40,7 @@ class GroupUsersController extends Controller
 
         $group_user->update(['role_id'=>Roles::group_admin]);
 
-        return response()->json(['success'=>'you add admin successfully']);
+        return response()->json(['success'=>__('messages.you did it successfully')]);
     }
 
     ###########################################    punish members   ########################
@@ -46,7 +51,7 @@ class GroupUsersController extends Controller
 
         $group_user->update(['punish'=>Group_users::punished]);
 
-        return response()->json(['success'=>'you punished user successfully']);
+        return response()->json(['success'=>__('messages.you did it successfully')]);
     }
 
     ###########################################    delete members   ########################
@@ -57,6 +62,6 @@ class GroupUsersController extends Controller
 
         $group_user->delete();
 
-        return response()->json(['success'=>'you deleted user successfully']);
+        return response()->json(['success'=>__('messages.you deleted it successfully')]);
     }
 }

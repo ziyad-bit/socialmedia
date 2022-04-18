@@ -15,12 +15,17 @@ class GroupReqsController extends Controller
 {
     use GetPageCode ,GetGroupAuth;
 
+    public function __construct()
+    {
+        $this->middleware(userMiddleware());
+    }
+    
     ##################################     join    ########################################
     public function store(GroupUsersRequest $request):JsonResponse
     {
         Group_users::firstOrCreate($request->validated() + ['user_id' => Auth::id()]);
 
-        return response()->json(['success' => 'you sent request successfully']);
+        return response()->json(['success' => __('messages.you send it successfully')]);
     }
 
     ##################################      show      ########################################
@@ -34,8 +39,8 @@ class GroupReqsController extends Controller
             ->cursorPaginate(3);
 
         $page_code = $this->getPageCode($group_reqs);
-
-        $view = view('users.groups.index_requests', compact('group_reqs'))->render();
+        
+        $view = view('', compact('group_reqs'))->render();
         return response()->json(['view' => $view, 'page_code' => $page_code]);
     }
 
@@ -44,10 +49,10 @@ class GroupReqsController extends Controller
     {
         $group_auth = $this->getGroupAuth($group_req->group_id);
         $this->authorize('owner_admin',$group_auth);
-
+        
         $group_req->update(['role_id'=>Roles::group_member,'status'=>Group_users::approved_req]);
 
-        return response()->json(['success'=>'you approved request successfully']);
+        return response()->json(['success'=>__('messages.you approve it successfully')]);
     }
 
     ##################################     ignore    ########################################
@@ -58,7 +63,7 @@ class GroupReqsController extends Controller
 
         $group_req->update(['status'=>Group_users::ignored_req]);
 
-        return response()->json(['success'=>'you ignored request successfully']);
+        return response()->json(['success'=>__('messages.you ignore it successfully')]);
     }
 
     ##################################     leave     ########################################
@@ -78,6 +83,6 @@ class GroupReqsController extends Controller
 
         $group_req->delete();
 
-        return redirect()->back()->with('success', 'you left group successfully');
+        return redirect()->back()->with('success', __('messages.you left it successfully'));
     }
 }

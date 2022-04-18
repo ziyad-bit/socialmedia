@@ -29,7 +29,8 @@ Route::group(['prefix'=>'search','namespace'=>'Users'], function () {
 });
 
 #######################################     friends     ######################################
-Route::any ('friends/requests'  , 'Users\FriendsController@show_requests')->name('friends.show.requests');
+Route::any ('friends/requests'                  , 'Users\FriendsController@show_requests')->name('friends.show.requests');
+Route::put ('friends/requests/ignore/{friend}'  , 'Users\FriendsController@ignore');
 Route::apiResource('friend'     , 'Users\FriendsController');
 
 #######################################     Message     ######################################
@@ -46,27 +47,30 @@ Route::get ('comments/show/{com_id}/{post_id}'  , 'Users\CommentsController@show
 Route::apiResource('comment'                    , 'Users\CommentsController');
 
 #######################################     groups     ######################################
-Route::any ('group/posts/{group}'  , 'Users\GroupsController@index_posts')->name('groups.posts.index');
-Route::any ('group/index-groups'   , 'Users\GroupsController@index_groups')->name('groups.index_groups');
-Route::post('group/update/{group}' , 'Users\GroupsController@update');
-Route::Resource('group'            , 'Users\GroupsController');
+Route::group(['prefix'=>'group','namespace'=>'Users'], function () {
+    Route::any ('posts/{group}'  , 'GroupsController@index_posts')->name('groups.posts.index');
+    Route::any ('index-groups'   , 'GroupsController@index_groups')->name('groups.index_groups');
+    Route::post('update/{group}' , 'GroupsController@update');
+});
+
+Route::Resource('/group'            , 'Users\GroupsController');
 
 #######################################     groups users    ######################################
-Route::put ('group-users/punish/{group_user}'  , 'Users\GroupUsersController@punish');
-Route::apiResource('group-users'               , 'Users\GroupUsersController')->parameter('group-users','group_user');
+Route::put ('/group-users/punish/{group_user}'  , 'Users\GroupUsersController@punish');
+Route::apiResource('/group-users'               , 'Users\GroupUsersController')->parameter('group-users','group_user');
 
 #######################################     groups admins    ######################################R
-Route::apiResource('group-admins'               , 'Users\GroupAdminsController')->parameter('group-admins','group_admin');
+Route::apiResource('/group-admins'               , 'Users\GroupAdminsController')->parameter('group-admins','group_admin');
 
 #######################################     groups reqs    ######################################
-Route::put ('group/reqs/ignore/{group_req}'    , 'Users\GroupReqsController@ignore');
-Route::apiResource('group/reqs'                , 'Users\GroupReqsController')->parameter('reqs','group_req');
+Route::put ('/group/reqs/ignore/{group_req}'    , 'Users\GroupReqsController@ignore');
+Route::apiResource('/group/reqs'                , 'Users\GroupReqsController')->parameter('reqs','group_req');
 
 #######################################     likes     ######################################
-Route::post ('like/store'  , 'Users\LikesController@store');
+Route::post ('/like/store'  , 'Users\LikesController@store');
 
 #######################################     shares     ######################################
-Route::post ('share/store'  , 'Users\SharesController@store');
+Route::post ('/share/store'  , 'Users\SharesController@store');
 
 #######################################     profile     ######################################
 Route::group(['prefix'=>'profile','namespace'=>'Users'], function () {

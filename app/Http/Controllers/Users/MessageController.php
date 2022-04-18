@@ -7,17 +7,12 @@ use App\Events\MessageSend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MessageRequest;
 use App\Models\Messages;
-use App\Models\User;
-use App\Traits\GetFriends;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\{Request,JsonResponse};
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 
 class MessageController extends Controller
 {
-    use GetFriends;
-
     public function __construct()
     {
         $this->middleware(userMiddleware());
@@ -27,7 +22,7 @@ class MessageController extends Controller
     public function index_friends(Request $request):View|JsonResponse
     {
         $friends      = new Friends();
-        $auth_friends = $friends->getFriendsByOnlineOrder(5);
+        $auth_friends = $friends->getByOnlineOrder(5);
 
         if ($request->ajax()) {
             return response()->json(['auth_friends' => $auth_friends]);
@@ -70,7 +65,7 @@ class MessageController extends Controller
         $messages_user = Messages::with(['users' => fn ($q)=> $q->selection()])
             ->where  (fn($q)=>$q->auth_receiver()->where('sender_id', $receiver_id)->where('id', '<', $first_msg_id))
             ->orWhere(fn($q)=>$q->Where('receiver_id', $receiver_id)->auth_sender()->where('id', '<', $first_msg_id))
-            ->orderBydesc('id')->limit(3)->get();
+            ->orderBydesc('id')->limit(6)->get();
 
         if (count($messages_user) == 0) {
             return response()->json(['error' => 'messages not found'], 404);

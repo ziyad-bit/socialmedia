@@ -20,6 +20,11 @@ class GroupsController extends Controller
 {
     use GetPageCode,UploadImage,TraitsGetGroupAuth;
 
+    public function __construct()
+    {
+        $this->middleware(userMiddleware());
+    }
+    
     #################################    index_posts   ###################################
     public function index_posts(Request $request, Groups $group):View|JsonResponse
     {
@@ -105,7 +110,7 @@ class GroupsController extends Controller
 
         $group->update($request->except(['photo','photo_id'])+['photo'=>$photo_name]);
 
-        return response()->json(['success'=>'you updated it successfully']);
+        return response()->json(['success'=>__('messages.you updated it successfully')]);
     }
 
     #################################     delete    ###################################
@@ -115,6 +120,6 @@ class GroupsController extends Controller
         $this->authorize('owner',$group_auth);
 
         $group->delete();
-        return redirect()->route('groups.index_groups')->with(['success'=>'you deleted it successfully']);
+        return redirect()->route('groups.index_groups')->with(['success'=>__('messages.you deleted it successfully')]);
     }
 }

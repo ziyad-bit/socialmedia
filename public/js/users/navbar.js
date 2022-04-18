@@ -1,6 +1,6 @@
 const search_ele   = document.getElementById('search'),
-        list_ele   = document.getElementsByClassName('search_item'),
-        list_group = document.querySelector('.list_search');
+    list_ele   = document.getElementsByClassName('search_item'),
+    list_group = document.querySelector('.list_search');
 
 let recent_req     = 0,
     search_req_num = 0;
@@ -186,4 +186,3 @@ search_ele.onfocus=function(){
         show_recent_searches();
     }
 }
-

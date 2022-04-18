@@ -1,8 +1,22 @@
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ __('titles.languages') }}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                    <a rel="alternate" hreflang="{{ $localeCode }}" class="dropdown-item"
+                        href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                        {{ $properties['native'] }}
+                    </a>
+                @endforeach
+            </div>
+        </div>
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
+                Social Media
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -15,19 +29,19 @@
 
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('users.profile.index')}}">Profile</a>
+                        <a class="nav-link" href="{{route('users.profile.index')}}">{{__('titles.profile')}}</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('posts.index.all')}}">Posts</a>
+                        <a class="nav-link" href="{{route('posts.index.all')}}">{{ __('titles.posts') }}</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('groups.index_groups')}}">Groups</a>
+                        <a class="nav-link" href="{{route('groups.index_groups')}}">{{ __('titles.groups') }}</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('message.index.friends')}}">Chat</a>
+                        <a class="nav-link" href="{{route('message.index.friends')}}">{{ __('titles.chat') }}</a>
                     </li>
                 </ul>
 
@@ -69,7 +83,7 @@
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('friends.show.requests') }}">
-                                    Requests
+                                    {{ __('titles.Requests') }}
                                 </a>
 
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();

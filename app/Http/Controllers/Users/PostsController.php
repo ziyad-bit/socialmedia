@@ -14,6 +14,11 @@ use Illuminate\Http\{JsonResponse,Request};
 
 class PostsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(userMiddleware());
+    }
+    
     ##################################       index      ###############################
     public function index_posts(Request $request):View|JsonResponse
     {
@@ -54,7 +59,7 @@ class PostsController extends Controller
         $share='';
 
         $view=view('users.posts.add_post',compact('post','share'))->render();
-        return response()->json(['success'=>'you created it successfully','view'=>$view]);
+        return response()->json(['success'=>__('messages.you created it successfully'),'view'=>$view]);
     }
 
     ##################################      update      ###############################
@@ -72,7 +77,7 @@ class PostsController extends Controller
             'text'    => $request->text,
         ]);
 
-        return response()->json(['success'=>'you updated it successfully','post'=>$post]);
+        return response()->json(['success'=>__('messages.you updated it successfully'),'post'=>$post]);
     }
 
     ##################################      destroy      ###############################
@@ -81,6 +86,6 @@ class PostsController extends Controller
         $this->authorize('update_or_delete',$post);
         $post->delete();
 
-        return response()->json(['success_msg'=>'you deleted it successfully']);
+        return response()->json(['success_msg'=>__('messages.you deleted it successfully')]);
     }
 }

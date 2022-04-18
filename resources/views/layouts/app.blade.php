@@ -3,7 +3,7 @@
 
 @include('users.includes.header')
 
-<body>
+<body class="{{in_array(default_Lang(),lang_rtl()) ? 'rtl' : null}}">
     @include('users.includes.navbar')
 
     <main class="container">

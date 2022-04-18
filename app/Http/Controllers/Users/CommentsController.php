@@ -10,14 +10,15 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(userMiddleware());
+    }
+    
     #############################     store    #######################################
     public function store(CommentRequest $request):JsonResponse
     {
-        if ($request->post_id) {
-            $comment = Comments::create($request->validated() + ['user_id' => Auth::id()]);
-        } else {
-            return response()->json([], 500);
-        }
+        $comment = Comments::create($request->validated() + ['user_id' => Auth::id()]);
 
         $view = view('users.posts.add_comments', compact('comment'))->render();
         return response()->json(['view' => $view]);
@@ -35,7 +36,7 @@ class CommentsController extends Controller
     #############################     show_more     #######################################
     public function show_more(int $com_id, int $post_id):JsonResponse
     {
-        $comments = Comments::with(['users' => fn($q) => $q->selection()])->selection()->where('post_id', $post_id)
+        $comments = Comments::selection()->with(['users' => fn($q) => $q->selection()])->where('post_id', $post_id)
             ->where('id', '<', $com_id)->orderByDesc('id')->limit(5)->get();
 
         if ($comments->count() == 0) {
@@ -50,9 +51,9 @@ class CommentsController extends Controller
     public function update(CommentRequest $request, Comments $comment):JsonResponse
     {
         $this->authorize('update_or_delete', $comment);
-        $comment->update($request->validated());
+        $comment->update($request->except('post_id'));
 
-        return response()->json(['success_msg' => 'you updated it successfully']);
+        return response()->json(['success_msg' => __('messages.you updated it successfully')]);
     }
 
     #############################     destroy     #######################################
@@ -61,6 +62,6 @@ class CommentsController extends Controller
         $this->authorize('update_or_delete', $comment);
         $comment->delete();
 
-        return response()->json(['success_msg' => 'you deleted it successfully']);
+        return response()->json(['success_msg' => __('messages.you deleted it successfully')]);
     }
 }

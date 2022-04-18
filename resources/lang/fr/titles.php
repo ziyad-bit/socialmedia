@@ -25,5 +25,12 @@ return[
     'groups'       => 'groupes',
     'add group'    => 'ajouter groupe',
     'logout'       => 'logoute',
-    'add language' => 'ajouter langue'
+    'add language' => 'ajouter langue',
+    'profile'      => ' profile',
+    'posts'        => 'postes',
+    'groups'       => 'groupes',
+    'chat'         => 'chate',
+    'Requests'     => 'Requeste',
+    'approve'      => 'approv',
+    'ignore'       => 'ignor',
 ];

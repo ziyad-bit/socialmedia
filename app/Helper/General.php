@@ -1,17 +1,23 @@
 <?php
 
 use App\Models\Languages;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 ###############################     languages      ####################################
 function default_lang():string
 {
     return config('app.locale');
-};
+}
 
 function lang_rtl():array
 {
     return Languages::where('direction','rtl')->pluck('abbr')->toArray();
-};
+}
+
+function getLang()
+{
+    return LaravelLocalization::setLocale();
+}
 
 ###############################     middlewares      ####################################
 
@@ -22,7 +28,7 @@ function adminMiddleware():array
 
 function userMiddleware():array
 {
-    return [ 'auth' ,'online_users'];
+    return [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth' ,'online_users'];
 }
 
 

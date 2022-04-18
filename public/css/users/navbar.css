@@ -21,3 +21,7 @@
 .search_image{
     width: 30px;
 }
+
+.rtl{
+    direction: rtl;
+}

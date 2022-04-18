@@ -15,7 +15,7 @@
                     data-comment_id="{{ $comment->id }}" data-post_id="{{ $comment->post_id }}"></i>
 
                 <i data-bs-toggle="modal" data-bs-target="#edit_modal" class="fas fa-edit edit_comment"
-                    data-comment_id="{{ $comment->id }}"></i>
+                    data-comment_id="{{ $comment->id }}" data-post_id="{{ $comment->post_id }}"></i>
             @endcan
         </p>
     </div>

@@ -13,12 +13,18 @@ use Illuminate\Support\Facades\Auth;
 class FriendsController extends Controller
 {
     use GetPageCode;
+
+    public function __construct()
+    {
+        $this->middleware(userMiddleware());
+    }
+    
     ##########################################    show_requests    #########################
     public function show_requests(Request $request):View|JsonResponse
     {
-        $friend_reqs = User::with('friends_add_auth:id')
+        $friend_reqs = User::selection()->with('friends_add_auth:id')
             ->whereHas('friends_add_auth',fn($q)=>$q->where(['status'=>Friends_user::friend_req,'friend_id'=>Auth::id()]))
-            ->selection()->orderByDesc('id')->cursorPaginate(4);
+            ->orderByDesc('id')->cursorPaginate(5);
         
         $page_code = $this->getPageCode($friend_reqs);
         
@@ -30,33 +36,29 @@ class FriendsController extends Controller
         return view('users.friends.index', compact('friend_reqs','page_code'));
     }
 
-    ##########################################    store    ###################################
+    ##########################################    store request   ###################################
     public function store(FriendRequest $request):JsonResponse
     {
-        $friend  = User::findOrFail($request->friend_id);
-        $this->authorize('store',$friend);
+        Friends_user::firstOrCreate($request->validated()+['user_id' => Auth::id()]);
 
-        Friends_user::create($request->validated()+['user_id' => Auth::id()]);
-
-        return response()->json();
+        return response()->json(['success'=>__('messages.you send it successfully')]);
     }
 
-    ##########################################    update    #################################
+    ##########################################    approve request   #################################
     public function update(Friends_user $friend):JsonResponse
     {
         $this->authorize('update_or_delete',$friend);
         
         $friend->update(['status'=>Friends_user::friend]);
-        return response()->json();
+        return response()->json(['success'=>__('messages.you approve it successfully')]);
     }
 
-    ##########################################    show    #################################
-    //ignore friends request
-    public function show(Friends_user $friend):JsonResponse
+    ##########################################    ignore  request   ################################# 
+    public function ignore(Friends_user $friend):JsonResponse
     {
         $this->authorize('update_or_delete',$friend);
         
         $friend->update(['status'=>Friends_user::ignored_user]);
-        return response()->json();
+        return response()->json(['success'=>__('messages.you ignore it successfully')]);
     }
 }

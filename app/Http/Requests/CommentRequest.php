@@ -25,7 +25,7 @@ class CommentRequest extends FormRequest
     {
         return [
             'text'    => 'required|string|max:250',
-            'post_id'    => 'nullable|numeric',
+            'post_id'    => 'required|numeric',
         ];
     }
 

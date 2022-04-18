@@ -44,7 +44,8 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
+            Route::prefix(getLang())
+                ->middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/usersWeb.php'));
             

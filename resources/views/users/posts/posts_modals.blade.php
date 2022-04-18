@@ -94,7 +94,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
-                    <button type="button" id="update_btn" data-comment_id='' class="btn btn-primary">update</button>
+                    <button type="button" id="update_btn" data-comment_id='' data-post_id='' class="btn btn-primary">update</button>
                 </div>
             </div>
         </div>

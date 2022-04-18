@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class SharesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(userMiddleware());
+    }
+    
     ##################################      store      ###############################
     public function store(ShareRequest $request):JsonResponse
     {

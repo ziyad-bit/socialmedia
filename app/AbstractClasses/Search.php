@@ -3,20 +3,18 @@
 namespace App\AbstractClasses;
 
 use App\Models\{Groups,User};
-use App\Traits\GetFriends;
 use Illuminate\Database\Eloquent\Builder;
 
 abstract class Search 
 {
-    use GetFriends;
-
     #########################################     friends     #############################
     public function friends(string $search):Builder
     {
         return  User::selection()
-            ->whereHas('auth_add_friends', fn($q) => $q->authUser())
+            ->with(['auth_add_friends'=> fn($q) => $q->authUser(), 
+                    'friends_add_auth'=> fn($q) => $q->authFriend()])
+            ->whereHas  ('auth_add_friends', fn($q) => $q->authUser())
             ->orWhereHas('friends_add_auth', fn($q) => $q->authFriend())
-            ->with(['auth_add_friends:id', 'friends_add_auth:id'])
             ->search($search);
     }
 
@@ -32,7 +30,7 @@ abstract class Search
     #########################################     groupsJoined     #############################
     public function groupsJoined(string $search):Builder
     {
-        return Groups::selection()->whereHas('group_users')
+        return Groups::selection()->whereHas('group_users', fn($q) => $q->authUser())
             ->with(['group_users' => fn($q) => $q->authUser()])->search($search);
     }
 

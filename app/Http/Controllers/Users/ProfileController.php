@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Classes\Friends\Friends;
 use App\Classes\Posts\PostsAbstractFactory;
-use App\Traits\{GetFriends, GetPageCode,UploadImage};
+use App\Traits\{GetPageCode,UploadImage};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UsersRequest;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\{Hash,Auth};
 
 class ProfileController extends Controller
 {
-    use GetFriends ,UploadImage , GetPageCode;
+    use UploadImage , GetPageCode;
 
     public function __construct()
     {
@@ -53,7 +53,7 @@ class ProfileController extends Controller
     public function show(Request $request):View|JsonResponse
     {
         $friends = new Friends();
-        $friends = $friends->fetch(Auth::id());
+        $friends = $friends->fetch(Auth::id(),5);
 
         if ($request->ajax()) {
             $view=view('users.profile.show',compact('friends'))->render();
@@ -68,6 +68,7 @@ class ProfileController extends Controller
     {
         $auth_id            = Auth::id();
         $user               = User::where('name',$name)->firstOrFail();
+
         $friends            = new Friends();
         $user_friends_ids   = $friends->fetchIds($user->id);
         $mutual_friends_num = count($friends->fetchMutualIds($user->id));
@@ -117,7 +118,7 @@ class ProfileController extends Controller
         $user->update($data);
         unset($user->photo ,$user->created_at ,$user->id,$user->updated_at,$user->email_verified_at);
 
-        return response()->json(['success'=>'you updated it successfully','user'=>$user]);
+        return response()->json(['success'=>__('messages.you updated it successfully') ,'user'=>$user]);
     }
 
     ##################################     update_photo      #################################
@@ -127,6 +128,6 @@ class ProfileController extends Controller
 
         Auth::user()->update(['photo'=>$photo]);
 
-        return response()->json(['success'=>'you updated it successfully','photo'=>$photo]);
+        return response()->json(['success'=>__('messages.you updated it successfully'),'photo'=>$photo]);
     }
 }

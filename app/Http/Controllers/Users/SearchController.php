@@ -13,13 +13,18 @@ use Illuminate\Support\Facades\Auth;
 
 class SearchController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(userMiddleware());
+    }
+    
     #######################################    index    #####################################
-    public function index(SearchRequest $request): View | JsonResponse
+    public function index(SearchRequest $request)//: View | JsonResponse
     {
         $search = $request->search;
 
         //factory method design pattern
-        $search_factory = new PaginateSearchFactory($search , 30);
+        $search_factory = new PaginateSearchFactory($search , 4);
 
         $friends       = $search_factory->createSearch()->paginateFriends();
         $users         = $search_factory->createSearch()->paginateUsers();

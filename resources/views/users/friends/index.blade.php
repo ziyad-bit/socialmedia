@@ -14,7 +14,7 @@
     @else
         <div class="d-flex justify-content-center" style="margin-top: 30px">
             <div class="card text-dark bg-light mb-3" style="width: 50rem;">
-                <div class="card-header" data-page_code="{{ $page_code }}">All</div>
+                <div class="card-header" data-page_code="{{ $page_code }}">{{ __('titles.Requests') }}</div>
                 @foreach ($friend_reqs as $friend_req)
                     @if ($friend_req->friends_add_auth->count() > 0)
                         @foreach ($friend_req->friends_add_auth as $friend)
@@ -28,11 +28,11 @@
 
                                 <button class="btn btn-primary approve_btn"
                                     data-friend_req_id="{{ $friend->request->id }}">
-                                    approve
+                                    {{ __('titles.approve') }}
                                 </button>
 
                                 <button class="btn btn-danger ignore_btn" data-friend_req_id="{{ $friend->request->id }}">
-                                    ignore
+                                    {{ __('titles.ignore') }}
                                 </button>
                             </div>
                         @endforeach
