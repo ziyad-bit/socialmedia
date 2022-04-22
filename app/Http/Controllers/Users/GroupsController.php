@@ -40,7 +40,7 @@ class GroupsController extends Controller
                 $friends_ids = $friends->fetchIds(Auth::id());
                 
                 $posts_factory = new PostsAbstractFactory();
-                $posts         = $posts_factory->groupPage()->fetchPosts(3,$friends_ids,$group->id);
+                $posts         = $posts_factory->groupPage()->fetchPosts(3,$friends_ids,[],$group->id);
 
                 $page_code = $this->getPageCode($posts);
                 $posts     = $posts->map(function($posts){

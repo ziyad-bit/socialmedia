@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    {{--   posts modals    --}}
+    {{-- posts modals --}}
     @include('users.posts.posts_modals')
 
     <!--       add post        -->
@@ -33,7 +33,7 @@
                         <div class="form-group">
                             <label for="exampleInputname1">photo </label>
                             <input type="file" name="photo" class="form-control">
-                            <small style="color:red" class="errors"  id="photo_err">
+                            <small style="color:red" class="errors" id="photo_err">
 
                             </small>
                         </div>
@@ -41,7 +41,7 @@
                         <div class="form-group">
                             <label for="exampleInputname1">file </label>
                             <input type="file" name="file" class="form-control">
-                            <small style="color:red" class="errors"  id="file_err">
+                            <small style="color:red" class="errors" id="file_err">
 
                             </small>
                         </div>
@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <label for="exampleInputname1">video </label>
                             <input type="file" name="video" class="form-control">
-                            <small style="color:red" class="errors"  id="video_err">
+                            <small style="color:red" class="errors" id="video_err">
 
                             </small>
                         </div>
@@ -64,11 +64,11 @@
         </div>
     </div>
 
-  
+
     <button class="btn btn-primary add_post" data-bs-target="#add_post_modal" data-bs-toggle="modal" style="margin-top: 15px;
-        margin-left: 277px;">add post</button>
+            margin-left: 277px;">add post</button>
     <!--      posts     -->
-    <div class="parent_posts" >
+    <div class="parent_posts">
         @include('users.posts.index_posts')
     </div>
 @endsection

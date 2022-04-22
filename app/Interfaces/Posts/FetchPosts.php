@@ -9,5 +9,5 @@ use Illuminate\Pagination\Paginator;
 
 interface FetchPosts
 {
-    public function fetchPosts(int $items_num,array $friends_ids,int $group_id=null,array $shared_posts_id=null,int $user_id=null):CursorPaginator|Collection;
+    public function fetchPosts(int $items_num,array $friends_ids,array $groupJoinedIds=[],int $group_id=null,array $shared_posts_id=[],int $user_id=null):CursorPaginator|Collection;
 }

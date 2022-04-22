@@ -1,5 +1,5 @@
 window.onload=()=>{
-    //scroll to comment_input
+    //scroll to comment input
     generalEventListener('click', '.comment_icon', e => {
         let id    = e.target.id,
             input = document.getElementById('input' + id);
@@ -36,7 +36,7 @@ window.onload=()=>{
                 })
         }
 
-        comments      = document.getElementsByClassName('com' + id);
+        let comments      = document.getElementsByClassName('com' + id);
         if (comments) {
             for (let i = 0; i < comments.length; i++) {
                 if (comments[i].style.display === 'none') {
@@ -52,20 +52,20 @@ window.onload=()=>{
 
 
     //infinite scroll for comments
-    function loadCommentsOnScroll(){
-        comments_box=document.getElementsByClassName('card-bottom');
+    function loadCommentsOnScroll() {
+        const comments_box = document.getElementsByClassName('card-bottom');
 
-        function loadComments(com_id,post_id) {
-            axios.get('/'+lang+"/comment/show_more/"+com_id+'/'+post_id)
-                .then(res=> {
+        function loadComments(com_id, post_id) {
+            axios.get('/' + lang + "/comment/show_more/" + com_id + '/' + post_id)
+                .then(res => {
                     if (res.status == 200) {
-                        let view      = res.data.view;
-                        document.querySelector('.parent_comments'+post_id).insertAdjacentHTML('beforeend', view);
+                        let view = res.data.view;
+                        document.querySelector('.parent_comments' + post_id).insertAdjacentHTML('beforeend', view);
                     }
                 })
-                .catch(err=>{
+                .catch(err => {
                     if (err.response.status == 404) {
-                        document.getElementById('post_'+post_id).setAttribute('data-comments','false');
+                        document.getElementById('post_' + post_id).setAttribute('data-comments', 'false');
                     }
                 })
         }
@@ -73,16 +73,16 @@ window.onload=()=>{
         for (let i = 0; i < comments_box.length; i++) {
             comments_box[i].onscroll = function () {
                 if (comments_box[i].scrollHeight - comments_box[i].scrollTop == comments_box[i].offsetHeight) {
-                    let comments_data=this.getAttribute('data-comments');
+                    let comments_data = this.getAttribute('data-comments');
                     if (comments_data != 'false') {
                         let post_id = this.getAttribute('data-post_id'),
-                            com_id  = document.querySelector('.parent_comments'+post_id).lastElementChild.getAttribute('data-comment_id');
-                        
-                        loadComments(com_id,post_id);
+                            com_id = document.querySelector('.parent_comments' + post_id).lastElementChild.getAttribute('data-comment_id');
+
+                        loadComments(com_id, post_id);
                     }
                 }
             }
-            
+
         }
 
     }
@@ -94,10 +94,11 @@ window.onload=()=>{
     generalEventListener('click', '.edit_comment', e => {
         let com_id       = e.target.getAttribute('data-comment_id'),
             post_id      = e.target.getAttribute('data-post_id'),
-            comment      = document.querySelector('#comm'+com_id+' p span').textContent,
+            comment      = document.querySelector('#comm'+com_id+' p span').innerText,
             update_btn   = document.getElementById('update_btn'),
             update_input = document.querySelector('#update_input');
 
+            console.log(comment)
         update_btn.setAttribute('data-comment_id',com_id);
         update_btn.setAttribute('data-post_id',post_id);
 
@@ -353,15 +354,24 @@ window.onload=()=>{
                     document.querySelector('.text'+post_id).textContent=text;
 
                     if (post.photo) {
-                        document.querySelector('.photo'+post_id).src='/images/posts/'+post.photo;
+                        const photo_ele=document.querySelector('.photo'+post_id);
+
+                        photo_ele.src='/images/posts/'+post.photo;
+                        photo_ele.style.display='';
                     }
 
                     if (post.file) {
-                        document.querySelector('.file'+post_id).src='/files/'+post.file;
+                        const file_ele=document.querySelector('.file'+post_id);
+
+                        file_ele.src='/files/'+post.file;
+                        file_ele.style.display='';
                     }
 
                     if (post.video) {
-                        document.querySelector('.video'+post_id).src='/videos/'+post.video;
+                        const video_ele=document.querySelector('.video'+post_id);
+
+                        video_ele.src='/videos/'+post.video;
+                        video_ele.style.display='';
                     }
                 }
             })

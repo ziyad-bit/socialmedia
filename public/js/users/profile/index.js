@@ -100,7 +100,7 @@ function loadPages(page_code) {
 }
 
 window.onscroll = function () {
-    if (window.scrollY + window.innerHeight-70 >= document.body.clientHeight) {
+    if (window.scrollY + window.innerHeight-54 >= document.body.clientHeight) {
         let page_code = parent_posts.getAttribute('data-page_code');
         if (page_code) {
             loadPages(page_code);

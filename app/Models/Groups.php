@@ -33,11 +33,6 @@ class Groups extends Model
         return $this->belongsTo("App\Models\User",'user_id');
     }
 
-    public function groups()
-    {
-        return $this->hasMany(self::class,'trans_of');
-    }
-
     ################################    scope    #####################################
     public function scopeSelection($q)
     {

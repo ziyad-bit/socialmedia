@@ -31,7 +31,7 @@ Route::group(['prefix'=>'search','namespace'=>'Users'], function () {
 #######################################     friends     ######################################
 Route::any ('friends/requests'                  , 'Users\FriendsController@show_requests')->name('friends.show.requests');
 Route::put ('friends/requests/ignore/{friend}'  , 'Users\FriendsController@ignore');
-Route::apiResource('friend'     , 'Users\FriendsController');
+Route::apiResource('friend'                     , 'Users\FriendsController');
 
 #######################################     Message     ######################################
 Route::any ('message/index'         , 'Users\MessageController@index_friends')->name('message.index.friends');
@@ -53,7 +53,7 @@ Route::group(['prefix'=>'group','namespace'=>'Users'], function () {
     Route::post('update/{group}' , 'GroupsController@update');
 });
 
-Route::Resource('/group'            , 'Users\GroupsController');
+Route::Resource('/group'         , 'Users\GroupsController');
 
 #######################################     groups users    ######################################
 Route::put ('/group-users/punish/{group_user}'  , 'Users\GroupUsersController@punish');

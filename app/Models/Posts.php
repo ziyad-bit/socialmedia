@@ -18,6 +18,11 @@ class Posts extends Model
         return $this->belongsTo('App\Models\User','user_id');
     }
 
+    public function groups()
+    {
+        return $this->belongsTo('App\Models\Groups','group_id');
+    }
+
     public function comments()
     {
         return $this->hasMany('App\Models\Comments','post_id')->orderByDesc('id')->take(4);

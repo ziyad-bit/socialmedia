@@ -9,7 +9,7 @@ use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Classes\Files\UploadAllFiles;
-use App\Classes\Posts\{SharedPosts,PostsAbstractFactory};
+use App\Classes\Posts\{Posts as ClassPosts,PostsAbstractFactory};
 use Illuminate\Http\{JsonResponse,Request};
 
 class PostsController extends Controller
@@ -28,11 +28,12 @@ class PostsController extends Controller
 
         array_unshift($friends_ids,$auth_id);
 
-        $shared_posts_ids = SharedPosts::get_ids($friends_ids);
+        $shared_posts_ids = ClassPosts::getSharedIds($friends_ids);
+        $groupJoinedIds   = ClassPosts::getGroupJoinedIds($friends_ids);
 
         //abstract factory design pattern
         $posts_factory = new PostsAbstractFactory;
-        $posts         = $posts_factory->postsPage()->fetchPosts(3,$friends_ids,null,$shared_posts_ids);
+        $posts         = $posts_factory->postsPage()->fetchPosts(3,$friends_ids,$groupJoinedIds ,null,$shared_posts_ids);
         
         if ($request->ajax()) {
             $view=view('users.posts.index_posts',compact('posts'))->render();

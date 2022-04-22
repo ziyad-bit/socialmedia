@@ -33,7 +33,7 @@ class ProfileController extends Controller
         array_unshift($friends_ids,$auth_id );
 
         $posts_factory = new PostsAbstractFactory();
-        $posts         = $posts_factory->usersProfilePage()->fetchPosts(3,$friends_ids,null,null,$auth_id );
+        $posts         = $posts_factory->usersProfilePage()->fetchPosts(3,$friends_ids,[],null,[],$auth_id );
         
         $page_code = $this->getPageCode($posts);
         $posts     = $posts->map(function($posts){
@@ -76,7 +76,7 @@ class ProfileController extends Controller
         array_unshift($user_friends_ids,$auth_id);
 
         $posts_factory = new PostsAbstractFactory();
-        $posts         = $posts_factory->usersProfilePage()->fetchPosts(3,$user_friends_ids,null,null,$user->id);
+        $posts         = $posts_factory->usersProfilePage()->fetchPosts(3,$user_friends_ids,[],null,[],$user->id);
         
         $page_code = $this->getPageCode($posts);
         

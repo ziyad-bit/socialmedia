@@ -20,7 +20,18 @@ add_btn.onclick=function(){
                 document.querySelector('.parent_posts').insertAdjacentHTML('afterbegin',view);
             }
         })
-        
+        .catch(err=>{
+            let error=err.response;
+            if (error.status == 422) {
+                let err_msgs=error.data.errors;
+                for (const [key, value] of Object.entries(err_msgs)) {
+                    let error_ele=document.getElementById(key+'_err');
+                    
+                    error_ele.textContent=value[0];
+                    error_ele.style.display='';
+                }
+            }
+        })
 }
 
 //infinite scroll for posts
@@ -43,7 +54,7 @@ function loadPages(page) {
 
 let page=1;
 window.onscroll = function () {
-    if (window.scrollY + window.innerHeight-70 >= document.body.clientHeight) {
+    if (window.scrollY + window.innerHeight-54 >= document.body.clientHeight) {
         if (posts_data != false) {
             page++;
             loadPages(page);
