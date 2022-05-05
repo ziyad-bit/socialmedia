@@ -1,8 +1,8 @@
 #list-tab{
-    max-height: 300px;
+    max-height: 263px;
     overflow-y: scroll;
     position: relative;
-min-height: 300px;}
+min-height: 247px;}
 
 .image{
     width: 40px;
@@ -54,4 +54,8 @@ div .send_input{
     margin-left: 634px;
     position: relative;
     bottom: 15px;
+}
+
+.chat_msg{
+    margin-left: 50px;
 }

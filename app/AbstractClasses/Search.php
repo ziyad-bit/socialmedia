@@ -15,7 +15,7 @@ abstract class Search
                     'friends_add_auth'=> fn($q) => $q->authFriend()])
             ->whereHas  ('auth_add_friends', fn($q) => $q->authUser())
             ->orWhereHas('friends_add_auth', fn($q) => $q->authFriend())
-            ->search($search);
+            ->search($search,null,true);
     }
 
     #########################################      users      #############################
@@ -24,20 +24,20 @@ abstract class Search
         return User::selection()
             ->whereDoesntHave('auth_add_friends', fn($q) => $q->authUser())
             ->WhereDoesntHave('friends_add_auth', fn($q) => $q->authFriend())
-            ->notAuth()->search($search);
+            ->notAuth()->search($search,null,true);
     }
 
     #########################################     groupsJoined     #############################
     public function groupsJoined(string $search):Builder
     {
         return Groups::selection()->whereHas('group_users', fn($q) => $q->authUser())
-            ->with(['group_users' => fn($q) => $q->authUser()])->search($search);
+            ->with(['group_users' => fn($q) => $q->authUser()])->search($search,null,true);
     }
 
     #########################################     groups     #############################
     public function groups(string $search):Builder
     {
         return Groups::selection()->whereDoesntHave('group_users', fn($q) => $q->authUser())
-            ->search($search);
+            ->search($search,null,true);
     }
 }

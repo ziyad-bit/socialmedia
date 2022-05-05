@@ -35,6 +35,7 @@ Route::apiResource('friend'                     , 'Users\FriendsController');
 
 #######################################     Message     ######################################
 Route::any ('message/index'         , 'Users\MessageController@index_friends')->name('message.index.friends');
+Route::post('message/search_friends', 'Users\MessageController@search_friends');
 Route::apiResource('message'        , 'Users\MessageController');
 
 #######################################     posts     ######################################

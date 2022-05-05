@@ -6,7 +6,7 @@ let recent_req     = 0,
     search_req_num = 0;
 
 let lang=document.getElementById('lang').value;
-console.log(lang);
+
 //add event listener
 function generalEventListener(type, selector, callback) {
     document.addEventListener(type, e => {

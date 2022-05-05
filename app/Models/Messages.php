@@ -14,9 +14,13 @@ class Messages extends Model
     protected $table = 'messages';
 
     //relations
-    public function users()
+    public function sender()
     {
-        return $this->belongsTo('App\Models\User', 'sender_id');
+        return $this->belongsTo('App\Models\User', 'sender_id')->selection();
+    }
+    public function receiver()
+    {
+        return $this->belongsTo('App\Models\User', 'receiver_id')->selection();
     }
 
     //scopes
@@ -28,5 +32,10 @@ class Messages extends Model
     public function scopeAuth_sender($q)
     {
         $q->Where('sender_id', Auth::id());
+    }
+
+    public function scopeSelection($q)
+    {
+        $q->select('id','sender_id','receiver_id','text','created_at');
     }
 }
