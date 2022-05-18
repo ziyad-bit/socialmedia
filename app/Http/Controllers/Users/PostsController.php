@@ -54,8 +54,7 @@ class PostsController extends Controller
             'photo'   => $all_files['photo'],
             'file'    => $all_files['file'],
             'video'   => $all_files['video'],
-            'text'    => $request->text,
-        ]);
+        ]+$request->validated());
 
         $share='';
 

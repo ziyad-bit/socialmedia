@@ -1,10 +1,10 @@
 window.onload = () => {
-    const users_box = document.getElementById('list-tab');
+    const users_box = document.querySelector('.list_tab_users');
     let old_msg = 1;
 
     //load old messages
     function loadOldMessages() {
-        const chat_box = document.getElementsByClassName('card-body')
+        const chat_box = document.getElementsByClassName('chat_body')
         for (let i = 0; i < chat_box.length; i++) {
             chat_box[i].onscroll = function () {
                 if (chat_box[i].scrollTop == 0) {
@@ -68,14 +68,20 @@ window.onload = () => {
 
                     if (users.length > 0) {
                         for (let i = 0; i < users.length; i++) {
+                            const user=users[i];
+
                             users_box.insertAdjacentHTML('beforeend',
                                 `
-                                <button class="user_btn nav-link list-group-item list-group-item-action "
-                                    id="list-home-list" data-bs-toggle="pill" data-bs-target="#chat_box${users[i].id}" role="tab"
-                                    data-id=${users[i].id} aria-controls="home"
-                                    data-status='0'>${users[i].name} 
+                                <button
+                                    class=" friend_btn user_btn nav-link list-group-item list-group-item-action "
+                                    id="list-home-list" data-bs-toggle="pill" data-bs-target= '#chat_box${user.id} '   role="tab"
+                                    data-id="${user.id}" aria-controls="home"  data-status="0">
 
-                                    <img class="rounded-circle image" src="/images/users/${users[i].photo}" alt="loading">
+                                    <img class="rounded-circle image" src="/images/users/${user.photo}"    alt="loading">
+
+                                    ${user.online == 1 ? '<div class="rounded-circle dot"></div>' :''}
+
+                                    <span style="font-weight: bold">${user.name}</span>
                                 </button>
                                 `
                             );
@@ -83,25 +89,25 @@ window.onload = () => {
                             document.querySelector('.tab-content')
                                 .insertAdjacentHTML('beforeend',
                                     `
-                            <div class="tab-pane fade  " id="chat_box${users[i].id}"
+                            <div class="tab-pane fade  " id="chat_box${user.id}"
                                 role="tabpanel" aria-labelledby="list-home-list">
-                                <form id="form${users.id}"  >
+                                <form id="form${user.id}"  >
             
                                     <div class="card" style="height: 300px">
-                                        <h5 class="card-header">chat<span id="loading${users[i].id}"
+                                        <h5 class="card-header">chat<span id="loading${user.id}"
                                                 style="margin-left: 50px;display:none">loading old messages</span>
                                         </h5>
 
-                                        <div class="card-body " id="box${users[i].id}" data-user_id="${users[i].id}" data-old_msg='1'>
+                                        <div class="card-body " id="box${user.id}" data-user_id="${user.id}" data-old_msg='1'>
                                             
                                         </div>
                                         <input type="hidden" name="receiver_id" class="receiver_id"
-                                            value="${users[i].id}">
-                                        <input type="text" name="message" id="msg${users[i].id}" class="form-control"
-                                            data-id="${users[i].id}">
+                                            value="${user.id}">
+                                        <input type="text" name="message" id="msg${user.id}" class="form-control"
+                                            data-id="${user.id}">
                                         
                                         <button type="button" class="btn btn-success send_btn"
-                                            data-receiver_id="${users[i].id}">Send</button>
+                                            data-receiver_id="${user.id}">Send</button>
                                     </div>
                                 </form>
                             </div>
@@ -114,11 +120,17 @@ window.onload = () => {
             })
     }
 
+    function storeMsg(e) {
+        e.preventDefault();
 
-    //store message
-    generalEventListener('click', '.send_btn', e => {
         let receiver_id = e.target.getAttribute('data-receiver_id'),
-            message     = document.getElementById('msg' + receiver_id).value;
+        message     = document.getElementsByClassName('msg' + receiver_id)[0].value;
+
+        if (message) {
+            message     = document.getElementsByClassName('msg' + receiver_id)[0].value;
+        }else{
+            message     = document.getElementsByClassName('msg' + receiver_id)[1].value;
+        }
 
         axios.post('/' + lang + '/message', { 'text': message, 'receiver_id': receiver_id })
             .then(res => {
@@ -154,6 +166,17 @@ window.onload = () => {
                     
                 }
             })
+    }
+
+    //store message
+    generalEventListener('click', '.send_btn', e => {
+        storeMsg(e);
+    })
+
+    generalEventListener('keypress', '.send_input', e => {
+        if (e.keyCode == 13) {
+            storeMsg(e);
+        }
     })
 
     //get messages for users
@@ -185,8 +208,6 @@ window.onload = () => {
                             }
                         }
 
-
-
                         data_status_ele.setAttribute('data-status', '1');
                     }
                 }).catch(err => {
@@ -212,12 +233,11 @@ window.onload = () => {
         if (data_status == '0') {
             getNewMessages(id);
         }
-
     }
 
     //get messages for other users
     generalEventListener('click', '.user_btn', e => {
-        let id = e.target.getAttribute('data-id');
+        let id          = e.target.getAttribute('data-id');
         let data_status = document.querySelector(`[data-id="${id}"]`).getAttribute('data-status');
 
         if (data_status == '0') {
@@ -251,7 +271,7 @@ window.onload = () => {
 
         //search friends
         function hide_results() {
-            const friend_btn     = document.getElementsByClassName('user_btn'),
+            const friend_btn     = document.getElementsByClassName('friend_btn'),
                 no_results_ele   = document.getElementsByClassName('no_results');
 
             for (let i = 0; i < friend_btn.length; i++) {
@@ -270,25 +290,26 @@ window.onload = () => {
             search_friends_status = false;
 
         function load_search_pages(page,search_input_val) {
-            axios.post('/'+lang+'/message/search_friends?page='+page,{'search':search_input_val})
+            axios.post('/'+lang+'/message/search-friends?page='+page,{'search':search_input_val})
             .then((res)=>{
                 if (res.status == 200) {
-                    let view   = res.data.view;
+                    let friends_view     = res.data.friends_view,
+                        friends_tab_view = res.data.friends_tab_view;
 
-                    if (view != '') {
-                        users_box.insertAdjacentHTML('beforeend',view);
+                    if (friends_view != '') {
+                        users_box.insertAdjacentHTML('beforeend',friends_view);
+                        document.querySelector('.box_msgs').insertAdjacentHTML('beforeend',friends_tab_view);
                     }else{
-                        pages_friends_status=false
+                        pages_friends_status  = false;
                     }
                 }
             })
         }
 
         
-
         function search_friends(page) {
-            let search_input_val=search_input_ele.value;
-            
+            let search_input_val      = search_input_ele.value;
+
             if (search_input_val) {
                 if (search_friends_arr.includes(search_input_val)) {
                     hide_results();
@@ -303,15 +324,17 @@ window.onload = () => {
     
                 search_friends_arr.unshift(search_input_val);
     
-                axios.post('/'+lang+'/message/search_friends?page='+page,{'search':search_input_val})
+                axios.post('/'+lang+'/message/search-friends?page='+page,{'search':search_input_val})
                     .then((res)=>{
                         if (res.status == 200) {
-                            let view   = res.data.view;
+                            let friends_view     = res.data.friends_view,
+                                friends_tab_view = res.data.friends_tab_view;
 
                             hide_results();
 
-                            if (view != '') {
-                                users_box.insertAdjacentHTML('beforeend',view);
+                            if (friends_view != '') {
+                                users_box.insertAdjacentHTML('beforeend',friends_view);
+                                document.querySelector('.box_msgs').insertAdjacentHTML('beforeend',friends_tab_view);
                             }else{
                                 users_box.insertAdjacentHTML('beforeend',`<h3 class="no_results">no matched results</h3>`);
                             }
@@ -324,11 +347,11 @@ window.onload = () => {
                 const friends_1_page=document.getElementsByClassName('friends_1_page');
                 for (let i = 0; i < friends_1_page.length; i++) {
                     friends_1_page[i].style.display='';
-                    
                 }
             }
         }
         
+
     let page_friends = 1;
     search_input_ele.addEventListener('keyup',debounce(()=>{
             search_friends_status=true;
@@ -344,12 +367,88 @@ window.onload = () => {
                 loadPages(page);
             }
             
+            
             if (search_friends_status == true && pages_friends_status == true) {
-                let search_input_val=search_input_ele.value;
+                let search_input_val      = search_input_ele.value;
 
                 page_friends++;
                 load_search_pages(page_friends,search_input_val);
             }
         }
     }
+
+
+    //search last messages
+    const search_friends_chat =document.querySelector('.search_friends_chat');
+    let search_last_msgs_arr=[];
+
+    function hide_results_last_msgs() {
+        const friend_btn     = document.getElementsByClassName('users_chat'),
+            no_results_ele   = document.getElementsByClassName('no_results_last_msgs');
+
+        for (let i = 0; i < friend_btn.length; i++) {
+            friend_btn[i].style.display='none';
+        }
+
+        for (let index = 0; index < no_results_ele.length; index++) {
+            no_results_ele[index].style.display='none';
+        }
+    }
+
+    function search_last_msgs(page) {
+        let search_input_val      = search_friends_chat.value;
+
+        if (search_input_val) {
+            if (search_last_msgs_arr.includes(search_input_val)) {
+                hide_results_last_msgs();
+
+                const old_search_results_ele=document.getElementsByClassName(`${"search"+search_input_val}`);
+                for (let i = 0; i < old_search_results_ele.length; i++) {
+                    old_search_results_ele[i].style.display='';
+                }
+
+                return;
+            } 
+
+            search_last_msgs_arr.unshift(search_input_val);
+
+            axios.post('/'+lang+'/message/search-last-msgs?page='+page,{'search':search_input_val})
+                .then((res)=>{
+                    if (res.status == 200) {
+                        let last_msgs_view     = res.data.last_msgs_view,
+                            last_msgs_tab_view = res.data.last_msgs_tab_view;
+
+                        hide_results_last_msgs();
+
+                        const chat_tab=document.querySelector('.chat_tab_users')
+
+                        if (last_msgs_view != '') {
+                            chat_tab.insertAdjacentHTML('beforeend',last_msgs_view);
+                            document.querySelector('.chat_box_body').insertAdjacentHTML('beforeend',last_msgs_tab_view);
+                        }else{
+                            chat_tab.insertAdjacentHTML('beforeend',`<h3 class="no_results_last_msgs">no matched results</h3>`);
+                        }
+                    }
+                })
+        }else{
+            search_friends_status = false
+            hide_results_last_msgs();
+
+            const friends_1_page=document.getElementsByClassName('last_msgs_1_page');
+            for (let i = 0; i < friends_1_page.length; i++) {
+                friends_1_page[i].style.display='';
+            }
+        }
+    }
+
+    search_friends_chat.addEventListener('keyup',debounce(()=>{
+        search_friends_status=true;
+        search_last_msgs(1);
+    },1000)
+)
+
 }
+
+
+
+

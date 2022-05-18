@@ -1,7 +1,7 @@
 @if ($friends->count() > 0)
     @foreach ($friends as $i => $friend)
         <button
-            class="{{ $search }}  user_btn nav-link list-group-item list-group-item-action "
+            class="{{ $search }} friend_btn user_btn nav-link list-group-item list-group-item-action "
             id="list-home-list" data-bs-toggle="pill" data-bs-target={{ '#chat_box' . $friend->id }} role="tab"
             data-id="{{ $friend->id }}" aria-controls="home" data-index="{{ $i }}" data-status="0">
 

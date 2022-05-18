@@ -15,6 +15,63 @@
         <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
     @endif
 
+    <!--       add post        -->
+    <div class="modal fade" id="add_post_modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="add_post_modal"> add post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="post_form" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="alert alert-success text-center" id="add_post_msg" style="display: none"></div>
+
+                        <div class="form-group">
+                            <label for="exampleInputname1">text </label>
+                            <textarea name="text" class="form-control" cols="15" rows="5"></textarea>
+                            <small style="color:red" class="errors" id="text_err">
+
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputname1">photo </label>
+                            <input type="file" name="photo" class="form-control">
+                            <small style="color:red" class="errors" id="photo_err">
+
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputname1">file </label>
+                            <input type="file" name="file" class="form-control">
+                            <small style="color:red" class="errors" id="file_err">
+
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputname1">video </label>
+                            <input type="file" name="video" class="form-control">
+                            <small style="color:red" class="errors" id="video_err">
+
+                            </small>
+                        </div>
+
+                        <input type="hidden" name="group_id" value="{{ $group->id }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancel</button>
+                        <button type="button" id="add_post_btn" class="btn btn-primary">add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!--       edit post        -->
     <div class="modal fade" id="group_update" tabindex="-1">
         <div class="modal-dialog">
@@ -65,6 +122,7 @@
         </div>
     </div>
 
+    
 
     <input type="hidden" id="auth_id" value="{{ Auth::id() }}">
     @include('users.posts.posts_modals')
@@ -84,6 +142,7 @@
 
     </div>
 
+    
 
     @if ($group_auth)
         @can('owner_admin_member', $group_auth)
@@ -125,6 +184,10 @@
         </button>
     @endcan
 
+    @can('owner_admin_member', $group_auth)
+        <button class="btn btn-primary add_post" data-bs-target="#add_post_modal" data-bs-toggle="modal" style="margin-top: 15px;
+        float: right;">add post</button>
+    @endcan
 
     <hr>
 

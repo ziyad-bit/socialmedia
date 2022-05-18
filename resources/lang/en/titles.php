@@ -32,7 +32,7 @@ return[
     'Requests'           => 'Requests',
     'approve'            => 'approve',
     'ignore'             => 'ignore',
-    'awaiting approval ' => 'awaiting approval',
+    'awaiting approval' => 'awaiting approval',
     'join'               => 'join',
     'joined'             => 'joined',
     'send request'       => 'send request',

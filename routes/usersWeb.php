@@ -34,9 +34,10 @@ Route::put ('friends/requests/ignore/{friend}'  , 'Users\FriendsController@ignor
 Route::apiResource('friend'                     , 'Users\FriendsController');
 
 #######################################     Message     ######################################
-Route::any ('message/index'         , 'Users\MessageController@index_friends')->name('message.index.friends');
-Route::post('message/search_friends', 'Users\MessageController@search_friends');
-Route::apiResource('message'        , 'Users\MessageController');
+Route::any ('message/index'           , 'Users\MessageController@index_friends')->name('message.index.friends');
+Route::post('message/search-friends'  , 'Users\MessageController@search_friends');
+Route::post('message/search-last-msgs', 'Users\MessageController@search_last_msgs');
+Route::apiResource('message'          , 'Users\MessageController');
 
 #######################################     posts     ######################################
 Route::any ('posts/index'            , 'Users\PostsController@index_posts')->name('posts.index.all');

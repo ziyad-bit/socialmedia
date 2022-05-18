@@ -61,4 +61,13 @@ class FriendsController extends Controller
         $friend->update(['status'=>Friends_user::ignored_user]);
         return response()->json(['success'=>__('messages.you ignore it successfully')]);
     }
+
+    ##########################################     unfriend    ################################# 
+    public function destroy(Friends_user $friend):JsonResponse
+    {
+        $this->authorize('update_or_delete',$friend);
+        
+        $friend->delete();
+        return response()->json(['success'=>'you unfriend successfully']);
+    }
 }

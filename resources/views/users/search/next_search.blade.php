@@ -13,14 +13,14 @@
                     {{---  0 =friend request   and   2 = ignored request --}}
                     @if ($friend_user->request->status == 0 || $friend_user->request->status == 2)
                         <button class="btn btn-primary awaiting_btn" disabled="true">
-                            {{ __('titles.awaiting approval ') }}
+                            {{ __('titles.awaiting approval') }}
                         </button>
                     @endif
 
                     {{---  1 = friend --}}
                     @if ($friend_user->request->status == 1)
                         <a class="btn btn-success message_btn" href="{{route('message.index.friends')}}">
-                            {{ __('titles.chat  ') }}
+                            {{ __('titles.chat') }}
                         </a>
                     @endif
                 @endforeach
@@ -30,13 +30,13 @@
                 @foreach ($friend->friends_add_auth as $friend_user)
                     @if ($friend_user->request->status == 0 || $friend_user->request->status == 2)
                         <button class="btn btn-primary awaiting_btn" disabled="true">
-                            {{ __('titles.awaiting approval ') }}
+                            {{ __('titles.awaiting approval') }}
                         </button>
                     @endif
 
                     @if ($friend_user->request->status == 1)
                         <a class="btn btn-success message_btn" href="{{route('message.index.friends')}}">
-                            {{ __('titles.chat  ') }}
+                            {{ __('titles.chat') }}
                         </a>
                     @endif
                 @endforeach
@@ -62,7 +62,7 @@
             </span>
 
             <button class="btn btn-primary add_btn" data-friend_id="{{ $user->id }}">
-                {{ __('titles.send request  ') }}
+                {{ __('titles.send request') }}
             </button>
             
 
@@ -90,11 +90,11 @@
                 @foreach ($group_joined->group_users as $group_user)
                     @if ($group_user->request->role_id == null)
                         <button class="btn btn-primary awaiting_btn" disabled="true">
-                            {{ __('titles.awaiting approval ') }}
+                            {{ __('titles.awaiting approval') }}
                         </button>
                     @else
                         <button class="btn btn-primary awaiting_btn" disabled="true">
-                            {{ __('titles.joined  ') }}
+                            {{ __('titles.joined') }}
                         </button>
                     @endif
                 @endforeach
@@ -119,7 +119,7 @@
                 </a>
                 
             </span>
-            <button class="btn btn-primary join_btn" data-group_id="{{$group->id}}">{{ __('titles.join  ') }}</button>
+            <button class="btn btn-primary join_btn" data-group_id="{{$group->id}}">{{ __('titles.join') }}</button>
             <div class="card-text">
                 {{ $group->description }}
             </div>

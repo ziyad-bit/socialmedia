@@ -30,7 +30,7 @@ class MessageController extends Controller
         $friends_msgs=Messages::selection()->with(['sender','receiver'])
             ->where  (fn ($q)=> $q->auth_receiver()->whereIn('sender_id', $friends_ids)->where('last',1))
             ->orWhere(fn ($q)=> $q->WhereIn('receiver_id', $friends_ids)->auth_sender()->where('last',1))
-            ->orderBydesc('id')->get();
+            ->orderBydesc('id')->simplePaginate(6);
             
         if ($request->ajax()) {
             return response()->json(['auth_friends' => $auth_friends]);
@@ -93,11 +93,37 @@ class MessageController extends Controller
         $search = $request->search;
 
         //factory method design pattern
-        $search_factory = new PaginateSearchFactory($search , 5);
+        $search_factory = new PaginateSearchFactory($search , 7);
+        $friends        = $search_factory->createSearch()->paginateFriends();
 
-        $friends  = $search_factory->createSearch()->paginateFriends();
+        $friends_view     = view('users.chat.index_friends',compact('friends','search'))->render();
+        $friends_tab_view = view('users.chat.index_friends_tab',compact('friends','search'))->render();
 
-        $view=view('users.chat.index_friends',compact('friends','search'))->render();
-        return response()->json(['view'=>$view]);
+        return response()->json([
+                'friends_view'       => $friends_view,
+                'friends_tab_view'   => $friends_tab_view,
+            ]);
+    }
+
+    #############################     search_friends     #######################################
+    public function search_last_msgs(SearchRequest $request)
+    {
+        $search = $request->search;
+
+        $friends_ins = new Friends();
+        $friends_ids = $friends_ins->fetchIds(Auth::id());
+
+        $friends_msgs = Messages::selection()->with(['sender','receiver'])
+            ->where  (fn ($q) => $q->auth_receiver()->whereIn('sender_id', $friends_ids)->where('last',1))
+            ->orWhere(fn ($q) => $q->WhereIn('receiver_id', $friends_ids)->auth_sender()->where('last',1))
+            ->orderBydesc('id')->search($search)->simplePaginate(6);
+
+        $last_msgs_view     = view('users.chat.index_last_msgs',compact('friends_msgs','search'))->render();
+        $last_msgs_tab_view = view('users.chat.index_last_msgs_tab',compact('friends_msgs','search'))->render();
+
+        return response()->json([
+                'last_msgs_view'     => $last_msgs_view,
+                'last_msgs_tab_view' => $last_msgs_tab_view,
+            ]);
     }
 }

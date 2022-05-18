@@ -64,20 +64,25 @@ class ProfileController extends Controller
     }
 
     ##################################     index user profile    #################################
-    public function index_profile(Request $request,string $name):View|JsonResponse
+    public function index_profile(Request $request,string $name)//:View|JsonResponse
     {
-        $auth_id            = Auth::id();
-        $user               = User::where('name',$name)->firstOrFail();
+        $auth_id      = Auth::id();
+        $related_user = User::with(['auth_add_friends'=>fn($q)=>$q->authUser(),
+                                    'friends_add_auth'=>fn($q)=>$q->authFriend(),])
+                                    ->where('name',$name)->get();
 
-        $friends            = new Friends();
-        $user_friends_ids   = $friends->fetchIds($user->id);
-        $mutual_friends_num = count($friends->fetchMutualIds($user->id));
-        
-        array_unshift($user_friends_ids,$auth_id);
+        foreach ($related_user as  $user) {
+            $friends            = new Friends();
+            $user_friends_ids   = $friends->fetchIds($user->id);
+            $mutual_friends_num = count($friends->fetchMutualIds($user->id));
+            
+            array_unshift($user_friends_ids,$auth_id);
+    
+            $posts_factory = new PostsAbstractFactory();
+            $posts         = $posts_factory->usersProfilePage()->fetchPosts(3,$user_friends_ids,[],null,[],$user->id);
+            
+        }
 
-        $posts_factory = new PostsAbstractFactory();
-        $posts         = $posts_factory->usersProfilePage()->fetchPosts(3,$user_friends_ids,[],null,[],$user->id);
-        
         $page_code = $this->getPageCode($posts);
         
         if ($request->ajax()) {
@@ -85,7 +90,7 @@ class ProfileController extends Controller
             return response()->json(['view' => $view,'page_code'=>$page_code]);
         }
 
-        return view('users.profile.index_user',compact('posts','page_code','mutual_friends_num','user'));
+        return view('users.profile.index_user',compact('posts','page_code','mutual_friends_num','related_user'));
     }
 
     ##################################     show user mutual friends    #################################

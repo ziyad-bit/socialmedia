@@ -5,13 +5,24 @@ namespace App\Models;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Messages extends Model
 {
-    use HasFactory;
+    use HasFactory , SearchableTrait;
 
     protected $guarded = [];
     protected $table = 'messages';
+
+    protected $searchable=[
+        'columns'=>[
+            'users.name'        => 10,
+        ],
+        'joins' => [
+            'users' => ['messages.sender_id','users.id'],
+            'users' => ['messages.receiver_id','users.id'],
+        ],
+    ];
 
     //relations
     public function sender()
