@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Models\{Friends_user,User};
+use App\Events\ReceiveReqNotify;
+use App\Models\{Friends_user, Notifications, User};
 use Illuminate\Http\{JsonResponse,Request};
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
@@ -20,12 +21,12 @@ class FriendsController extends Controller
     }
     
     ##########################################    show_requests    #########################
-    public function show_requests(Request $request):View|JsonResponse
-    {
+    public function show_requests(Request $request)//:View|JsonResponse
+    { 
         $friend_reqs = User::selection()->with('friends_add_auth:id')
             ->whereHas('friends_add_auth',fn($q)=>$q->where(['status'=>Friends_user::friend_req,'friend_id'=>Auth::id()]))
             ->orderByDesc('id')->cursorPaginate(5);
-        
+
         $page_code = $this->getPageCode($friend_reqs);
         
         if ($request->ajax()) {
@@ -39,8 +40,15 @@ class FriendsController extends Controller
     ##########################################    store request   ###################################
     public function store(FriendRequest $request):JsonResponse
     {
-        Friends_user::firstOrCreate($request->validated()+['user_id' => Auth::id()]);
+        $auth_user   = ['user_id' => Auth::id()];
+        $req         = Friends_user::firstOrCreate($request->validated() + $auth_user);
+        $receiver_id = $request->friend_id;
 
+        if ($req) {
+            Notifications::create(['type'=>'friend_req','receiver_id'=>$receiver_id ] + $auth_user);
+            event(new ReceiveReqNotify($receiver_id));
+        }
+        
         return response()->json(['success'=>__('messages.you send it successfully')]);
     }
 

@@ -12,6 +12,7 @@
 
     {{-- profile details --}}
 
+    
     @foreach ($related_user as $user)
         @if ($user->auth_add_friends != [])
             @foreach ($user->auth_add_friends as $auth_user)

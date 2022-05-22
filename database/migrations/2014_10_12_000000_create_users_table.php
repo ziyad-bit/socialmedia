@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->tinyInteger('online',false,true)->default(1)->comment('0 = offline , 1 = online ');
             $table->string('name',100)->unique();
             $table->string('work',50)->nullable();
             $table->string('marital_status',10)->nullable();

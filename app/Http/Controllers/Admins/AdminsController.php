@@ -48,7 +48,7 @@ class AdminsController extends Controller
     ####################################      index      ################################
     public function index():view
     {
-        $admins=Admins::cursorPaginate(pagination);
+        $admins=Admins::cursorPaginate(5);
         return view('admins.admin.index',compact('admins'));
     }
 

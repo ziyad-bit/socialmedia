@@ -283,6 +283,7 @@ window.onload = () => {
             }
         }
 
+        
         const search_input_ele      = document.querySelector('.search_friends');
 
         let search_friends_arr    = [],
@@ -353,7 +354,7 @@ window.onload = () => {
         
 
     let page_friends = 1;
-    search_input_ele.addEventListener('keyup',debounce(()=>{
+    search_input_ele.addEventListener('input',debounce(()=>{
             search_friends_status=true;
             search_friends(page_friends);
         },1000)
@@ -441,7 +442,7 @@ window.onload = () => {
         }
     }
 
-    search_friends_chat.addEventListener('keyup',debounce(()=>{
+    search_friends_chat.addEventListener('input',debounce(()=>{
         search_friends_status=true;
         search_last_msgs(1);
     },1000)

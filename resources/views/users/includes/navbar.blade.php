@@ -1,5 +1,7 @@
 <div id="app">
+    <input type="hidden" value="{{ Auth::id() }}" id="auth_id">
     <input type="hidden" value="{{ getLang() }}" id="lang">
+
     <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -16,6 +18,7 @@
             </div>
         </div>
         <div class="container">
+
             <a class="navbar-brand" href="{{ url('/') }}">
                 Social Media
             </a>
@@ -30,19 +33,22 @@
 
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('users.profile.index')}}">{{__('titles.profile')}}</a>
+                        <a class="nav-link"
+                            href="{{ route('users.profile.index') }}">{{ __('titles.profile') }}</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('posts.index.all')}}">{{ __('titles.posts') }}</a>
+                        <a class="nav-link" href="{{ route('posts.index.all') }}">{{ __('titles.posts') }}</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('groups.index_groups')}}">{{ __('titles.groups') }}</a>
+                        <a class="nav-link"
+                            href="{{ route('groups.index_groups') }}">{{ __('titles.groups') }}</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{route('message.index.friends')}}">{{ __('titles.chat') }}</a>
+                        <a class="nav-link"
+                            href="{{ route('message.index.friends') }}">{{ __('titles.chat') }}</a>
                     </li>
                 </ul>
 
@@ -62,8 +68,7 @@
                             </li>
                         @endif
                     @else
-                        <form method="POST" id="search_form" action="{{ route('search.index') }}"
-                            class="d-flex">
+                        <form method="POST" id="search_form" action="{{ route('search.index') }}" class="d-flex">
                             @csrf
 
                             <input required class="form-control me-2" id="search" name="search" type="search"
@@ -76,10 +81,15 @@
                             <button class="btn btn-outline-success" id="search_btn" type="submit">Search</button>
                         </form>
 
+                        <i class="fas fa-bell" style="color: white;font-size: larger;position: relative;" id="bell">
+                            <span id="notifs_count" class="rounded-circle" style="display: none">{{ $notifs_count }}</span>
+                        </i>
+
+
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ ucfirst(substr(Auth::user()->name,0,1)) }}
+                                {{ ucfirst(substr(Auth::user()->name, 0, 1)) }}
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -88,7 +98,7 @@
                                 </a>
 
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                        document.getElementById('logout-form').submit();">
+                                            document.getElementById('logout-form').submit();">
                                     {{ __('titles.logout') }}
                                 </a>
 
@@ -100,6 +110,12 @@
                         </li>
                     @endguest
                 </ul>
+            </div>
+        </div>
+
+        <div>
+            <div class="card notif " style="width: 26rem;display: none " id="notif">
+                @include('users.notifications.index')
             </div>
         </div>
     </nav>

@@ -6,6 +6,7 @@
 @endsection
 
 @section('content')
+
     @include('users.posts.posts_modals')
 
     {{-- edit modal photo --}}

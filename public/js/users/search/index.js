@@ -35,7 +35,7 @@ window.onscroll = function () {
 //add friend
 generalEventListener('click','.add_btn',e=>{
     let target    = e.target,
-        friend_id = target.getAttribute('data-user_id');
+        friend_id = target.getAttribute('data-friend_id');
     
     axios.post('/'+lang+'/friend',{'friend_id':friend_id})
         .then(res=>{

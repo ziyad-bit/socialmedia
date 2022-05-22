@@ -22,10 +22,17 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+#######################################     search     ######################################
 Route::group(['prefix'=>'search','namespace'=>'Users'], function () {
     Route::any ('/index'       , 'SearchController@index')->name('search.index');
     Route::post('/show'        , 'SearchController@show');
     Route::get ('/show/recent' , 'SearchController@show_recent');
+});
+
+#######################################     notifications     ######################################
+Route::group(['prefix'=>'notifications','namespace'=>'Users'], function () {
+    Route::put ('/update'               , 'NotificationsController@update');
+    Route::get ('/show/{last_notif_id}' , 'NotificationsController@show_more');
 });
 
 #######################################     friends     ######################################

@@ -29,12 +29,16 @@ function debounce(cb,delay=1000) {
     }
 }
 
-//hide search results on document click
+//hide search results or notifications on document click
 document.onclick=function(){
     if(window.event.target.id != 'search'){
         for (let i = 0; i < list_ele.length; i++) {
             list_ele[i].style.display = 'none';
         }
+    }
+
+    if(window.event.target.id != 'bell'){
+        notif_ele.style.display='none';
     }
 }
 
@@ -176,7 +180,7 @@ function showMatchedSearch() {
     }
 }
 
-search_ele.addEventListener('keyup',debounce(()=>{
+search_ele.addEventListener('input',debounce(()=>{
         showMatchedSearch()
     },1000)
 )
@@ -186,5 +190,82 @@ search_ele.onfocus=function(){
     let search=search_ele.value;
     if (! search) {
         show_recent_searches();
+    }
+}
+
+//subscribe chat channel and listen to event
+const notif_ele        = document.querySelector('.notif'),
+    notifs_count_ele   = document.querySelector('#notifs_count');
+
+let auth_id      = document.getElementById('auth_id').value,
+    notifs_count = Number(notifs_count_ele.textContent);
+
+
+Echo.private(`receive_req.${auth_id}`)
+    .listen('ReceiveReqNotify', (e) => {
+        console.log('e: ', e);
+        
+        notif_ele.insertAdjacentHTML('afterbegin',
+        `
+        <div class="list-group">
+            <a href="/friends/requests" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <img src="/images/users/${e.user_photo}" class="rounded-circle" alt="error">
+                    <h5 class="mb-1 p" >${e.user_name} sent friend request</h5>
+                    
+                </div>
+                <small class="text-muted"  >few seconds ago</small>
+            </a>
+        </div>
+        `);
+
+        notifs_count++;
+
+        notifs_count_ele.innerText=notifs_count;
+        notifs_count_ele.style.display='';
+    });
+
+
+//show notifications
+const bell_ele=document.querySelector('.fa-bell');
+
+bell_ele.onclick=()=>{
+    notif_ele.style.display='';
+    let notif_count = Number(notifs_count_ele.textContent);
+
+    if (notif_count > 0) {
+        axios.put('/'+lang+'/notifications/update')
+            .then(res=>{
+                if (res.status == 200) {
+                    notifs_count_ele.style.display='none';
+                    notifs_count_ele.innerText='0';
+                }
+            });
+    }
+}
+
+if (notifs_count != 0) {
+    notifs_count_ele.style.display='';
+}
+
+let notif_req=true;
+notif_ele.onscroll=()=>{
+    console.log('notif_ele.offsetHeight: ', notif_ele.offsetHeight);
+    console.log('notif_ele.scrollHeight - notif_ele.scrollTop: ', notif_ele.scrollHeight - notif_ele.scrollTop);
+    if (notif_ele.offsetHeight-2 == notif_ele.scrollHeight - notif_ele.scrollTop && notif_req == true) {
+        let last_notif_id=notif_ele.lastElementChild.getAttribute('data-notif_id');
+
+        axios.get('/'+lang+'/notifications/show/'+last_notif_id)
+            .then(res=>{
+                if (res.status == 200) {
+                    let view=res.data.view;
+
+                    if (view !='') {
+                        notif_ele.insertAdjacentHTML('beforeend',view);
+                    }else{
+                        notif_req=false;
+                    }
+                }
+            });
     }
 }
