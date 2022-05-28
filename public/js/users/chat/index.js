@@ -17,27 +17,20 @@ window.onload = () => {
                         axios.put('/' + lang + "/message/" + reveiver_id, { 'first_msg_id': first_msg_id })
                             .then(res => {
                                 if (res.status == 200) {
-                                    let messages = res.data.messages;
+                                    let view = res.data.view;
 
-                                    for (let i = 0; i < messages.length; i++) {
-                                        for (let index = 0; index < box.length; index++) {
-                                            const each_box = box[index];
+                                    
+                                    for (let index = 0; index < box.length; index++) {
+                                        const each_box = box[index];
 
-                                            each_box.insertAdjacentHTML('afterbegin',
-                                                `
-                                            <img id="${messages[i].id}" class="rounded-circle image" src="/images/users/${messages[i].sender.photo}" alt="loading">
-                                                <span class="user_name">${messages[i].sender.name}</span>
-                                                <p class="user_message"> ${messages[i].text} </p>
-                                            `);
-                                            
-                                            each_box.scrollTo({
-                                                top: 100,
-                                                behavior: 'smooth'
-                                            })
-                                        }
+                                        each_box.insertAdjacentHTML('afterbegin',view);
                                         
+                                        each_box.scrollTo({
+                                            top: 100,
+                                            behavior: 'smooth'
+                                        })
                                     }
-
+                                        
                                     
                                 }
                             })
@@ -189,25 +182,17 @@ window.onload = () => {
             axios.get('/' + lang + "/message/" + receiver_id)
                 .then(res => {
                     if (res.status == 200) {
-                        let messages = res.data.messages;
+                        let view = res.data.view;
 
-                        for (let i = 0; i < messages.length; i++) {
+                        for (let index = 0; index < box.length; index++) {
+                            box[index].insertAdjacentHTML('afterbegin',view);
 
-                            for (let index = 0; index < box.length; index++) {
-                                box[index].insertAdjacentHTML('afterbegin',
-                                    `
-                                    <img id="${messages[i].id}" class="rounded-circle image" src="/images/users/${messages[i].sender.photo}" alt="loading">
-                                        <span class="user_name">${messages[i].sender.name}</span>
-                                        <p class="user_message"> ${messages[i].text} </p>
-                                `);
-
-                                box[index].scrollTo({
-                                    top: 10000,
-                                    behavior: 'smooth'
-                                });
-                            }
+                            box[index].scrollTo({
+                                top: 10000,
+                                behavior: 'smooth'
+                            });
                         }
-
+                        
                         data_status_ele.setAttribute('data-status', '1');
                     }
                 }).catch(err => {

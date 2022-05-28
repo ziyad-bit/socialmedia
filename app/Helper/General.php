@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Languages;
+use Illuminate\Support\Facades\Crypt;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 ###############################     languages      ####################################
@@ -23,17 +24,18 @@ function getLang()
 
 function adminMiddleware():array
 {
-    return [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth:admins' ];
+    return [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth:admins' ,'throttle:all_routes' ];
 }
 
 function userMiddleware():array
 {
-    return [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth' ,'online_users'];
+    return [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth','throttle:all_routes','verified','throttle:all_routes_all_users' ];
 }
 
 
 ###########################         date        ##########################################
-function diff_date($date){
+function diff_date($date):string
+{
     $date_diff=$date->diffInMinutes(date('Y-m-d H:i:s'));
     if($date_diff == 0){
         return 'few seconds ago';
@@ -56,4 +58,11 @@ function diff_date($date){
     }elseif($date_diff >= 483840 ){
         return $date->diffInYears(date('Y-m-d H:i:s'))  . ' years ago';
     }
+}
+
+
+############################    general methods    ##########################
+function text_decrypt(string $msg):string
+{
+    return Crypt::decrypt($msg);
 }

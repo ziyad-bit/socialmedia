@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Notifications extends Model
 {
@@ -17,19 +20,25 @@ class Notifications extends Model
 
 
     #####################################     relations     ##############################
-    public function user()
+    public function user():BelongsTo
     {
         return $this->belongsTo('App\Models\User','user_id');
     }
 
-    public function receiver()
+    public function receiver():BelongsTo
     {
         return $this->belongsTo('App\Models\User','receiver_id');
     }
 
     #####################################     scope     ##############################
-    public function scopeSelection($q)
+    public function scopeSelection(Builder $q):Builder
     {
         return $q->select('created_at','user_id','seen','id');
+    }
+
+    public function scopeForAuth(Builder $query):Builder
+    {
+        return $query->selection()->with(['user'=>fn($q)=>$q->selection()])
+            ->where('receiver_id',Auth::id());
     }
 }

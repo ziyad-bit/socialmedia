@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Classes\Group\GroupFactory;
 use App\Events\UpdateGroupOwner;
-use App\Classes\Group\GetGroupAdmin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\GroupUsersRequest;
-use App\Models\{User,Roles,Group_users};
+use App\Models\{Roles,Group_users};
 use App\Traits\{GetGroupAuth,GetPageCode};
 use Illuminate\Http\{RedirectResponse,JsonResponse};
 
@@ -34,13 +34,12 @@ class GroupReqsController extends Controller
         $group_auth = $this->getGroupAuth($group_req->group_id);
         $this->authorize('owner_admin', $group_auth);
 
-        $group_reqs = User::selection()->with('group_joined:id')
-            ->whereHas('group_joined', fn($q) => $q->where(['group_id' => $group_req->group_id ,'group_users.status' => Group_users::join_req] ))
-            ->cursorPaginate(3);
+        $group_factory = GroupFactory::factory('GroupReq');
+        $group_reqs    = $group_factory->get($group_req->group_id);
 
         $page_code = $this->getPageCode($group_reqs);
         
-        $view = view('', compact('group_reqs'))->render();
+        $view = view('users.groups.index_requests', compact('group_reqs'))->render();
         return response()->json(['view' => $view, 'page_code' => $page_code]);
     }
 
@@ -72,7 +71,9 @@ class GroupReqsController extends Controller
         $group_auth = $this->getGroupAuth($group_req->group_id);
         $this->authorize('owner_admin_member',$group_auth);
 
-        $group_admin = GetGroupAdmin::getGroupAdmin($group_req);
+        $groupFactory = GroupFactory::factory('GroupAdmin');
+        $group_admin  = $groupFactory->getAdmin($group_req->group_id);
+
         if ($group_req->role_id == Roles::group_owner) {
             if ($group_admin) {
                 event(new UpdateGroupOwner($group_admin));

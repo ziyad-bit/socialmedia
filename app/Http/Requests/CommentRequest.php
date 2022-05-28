@@ -36,4 +36,12 @@ class CommentRequest extends FormRequest
             'max'         => 'you should enter less than 250 characters',
         ];
     }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'text'=>filter_var($this->text,FILTER_SANITIZE_FULL_SPECIAL_CHARS)
+        ]);
+    }
+
 }

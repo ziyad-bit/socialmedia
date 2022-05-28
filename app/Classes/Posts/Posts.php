@@ -15,10 +15,4 @@ class Posts
 
         return array_unique($share_post_ids);
     }
-
-    public static function getGroupJoinedIds():array
-    {
-        return  Group_users::where('user_id',Auth::id())->orderByDesc('id')
-            ->limit(20)->pluck('group_id')->toArray();
-    }
 }

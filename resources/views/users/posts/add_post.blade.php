@@ -1,4 +1,11 @@
+@if ($post->group != null)
+    <p style="margin-left: 279px;position: relative;top: 108px;font-weight: bold">
+        from {{ $post->group->name }} group
+    </p>
+@endif
+
 <section class="d-flex justify-content-center post{{ $post->id }}" id="{{ $post->id }}">
+    
     <div class="card bg-light mb-3" style="width: 500px;">
 
         <!--      card top      -->

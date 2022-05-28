@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Classes\Friends\Friends;
+use App\Traits\GetPageCode;
 use App\Events\ReceiveReqNotify;
-use App\Models\{Friends_user, Notifications, User};
-use Illuminate\Http\{JsonResponse,Request};
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FriendRequest;
-use App\Traits\GetPageCode;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\{JsonResponse,Request};
+use App\Models\{Friends_user, Notifications, User};
 
 class FriendsController extends Controller
 {
@@ -23,9 +25,7 @@ class FriendsController extends Controller
     ##########################################    show_requests    #########################
     public function show_requests(Request $request)//:View|JsonResponse
     { 
-        $friend_reqs = User::selection()->with('friends_add_auth:id')
-            ->whereHas('friends_add_auth',fn($q)=>$q->where(['status'=>Friends_user::friend_req,'friend_id'=>Auth::id()]))
-            ->orderByDesc('id')->cursorPaginate(5);
+        $friend_reqs = Friends::getRequests();
 
         $page_code = $this->getPageCode($friend_reqs);
         
@@ -40,12 +40,16 @@ class FriendsController extends Controller
     ##########################################    store request   ###################################
     public function store(FriendRequest $request):JsonResponse
     {
-        $auth_user   = ['user_id' => Auth::id()];
-        $req         = Friends_user::firstOrCreate($request->validated() + $auth_user);
-        $receiver_id = $request->friend_id;
+        $auth_user = ['user_id' => Auth::id()];
 
-        if ($req) {
-            Notifications::create(['type'=>'friend_req','receiver_id'=>$receiver_id ] + $auth_user);
+        $req_data  = $request->validated() + $auth_user;
+        $req       = Friends_user::where($req_data)->first();
+
+        if ($req == null) {
+            $receiver_id = $request->friend_id;
+
+            Friends_user::create($req_data);
+            Notifications::Create(['type'=>'friend_req','receiver_id'=>$receiver_id ] + $auth_user);
             event(new ReceiveReqNotify($receiver_id));
         }
         
@@ -58,6 +62,9 @@ class FriendsController extends Controller
         $this->authorize('update_or_delete',$friend);
         
         $friend->update(['status'=>Friends_user::friend]);
+
+        Cache::forget('friends_ids_'.Auth::id());
+
         return response()->json(['success'=>__('messages.you approve it successfully')]);
     }
 
@@ -76,6 +83,9 @@ class FriendsController extends Controller
         $this->authorize('update_or_delete',$friend);
         
         $friend->delete();
+
+        Cache::forget('friends_ids_'.Auth::id());
+
         return response()->json(['success'=>'you unfriend successfully']);
     }
 }

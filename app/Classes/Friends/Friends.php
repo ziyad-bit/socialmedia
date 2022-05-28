@@ -4,9 +4,10 @@ namespace App\Classes\Friends;
 
 use App\Models\User;
 use App\Traits\GetFriends;
-use Illuminate\Pagination\{CursorPaginator,Paginator};
+use App\Models\Friends_user;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Pagination\{CursorPaginator,Paginator};
 
 class Friends 
 {
@@ -64,5 +65,13 @@ class Friends
 
         User::where('online',1)->whereIn('id',$offline_users_ids)->limit(50)->update(['online'=>0]);
         return User::whereIn('id',$friends_ids)->orderbydesc('online')->simplePaginate($item_num);
+    }
+
+    ###############################     get Friends By Online Order    ###################################
+    public static function getRequests()
+    {
+        return User::selection()->with('friends_add_auth:id')
+            ->whereHas('friends_add_auth',fn($q)=>$q->where(['status'=>Friends_user::friend_req,'friend_id'=>Auth::id()]))
+            ->cursorPaginate(5);
     }
 }

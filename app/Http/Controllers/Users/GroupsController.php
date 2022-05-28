@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Users;
 use Illuminate\Http\Request;
 use App\Events\StoreGroupOwner;
 use App\Classes\Friends\Friends;
-use App\Classes\Group\GetGroupAuth;
+use App\Classes\Group\GroupFactory;
 use App\Http\Requests\GroupRequest;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
@@ -28,8 +28,9 @@ class GroupsController extends Controller
     #################################    index_posts   ###################################
     public function index_posts(Request $request, Groups $group):View|JsonResponse
     {
-        $group_users_count = Groups::whereHas('group_users',fn($q)=>$q->where('role_id','!=',null))->count();
-        $group_auth        = GetGroupAuth::getGroupAuth($group->id);
+        $group_factory     = GroupFactory::factory('Group');
+        $group_users_count = $group_factory->get_users_count();
+        $group_auth        = $group_factory->getAuth($group->id);
 
         $posts     = null;
         $page_code = null;
@@ -61,8 +62,8 @@ class GroupsController extends Controller
     #################################    index_groups   ###################################
     public function index_groups(Request $request):View|JsonResponse
     {
-        $groups_joined = Groups::selection()->whereHas('group_users', fn($q) => $q->where("user_id", Auth::id()))
-            ->cursorPaginate(10);
+        $groupFactory  = GroupFactory::factory('Group');
+        $groups_joined = $groupFactory->get(Auth::id());
 
         $page_code = $this->getPageCode($groups_joined);
 

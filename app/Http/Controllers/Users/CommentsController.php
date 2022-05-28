@@ -13,6 +13,7 @@ class CommentsController extends Controller
     public function __construct()
     {
         $this->middleware(userMiddleware());
+        $this->middleware(['throttle:1,10'])->only(['store']);
     }
     
     #############################     store    #######################################
@@ -36,7 +37,7 @@ class CommentsController extends Controller
     #############################     show_more     #######################################
     public function show_more(int $com_id, int $post_id):JsonResponse
     {
-        $comments = Comments::selection()->with(['users' => fn($q) => $q->selection()])->where('post_id', $post_id)
+        $comments = Comments::selection()->with(['user' => fn($q) => $q->selection()])->where('post_id', $post_id)
             ->where('id', '<', $com_id)->orderByDesc('id')->limit(5)->get();
 
         if ($comments->count() == 0) {

@@ -27,4 +27,11 @@ class SearchRequest extends FormRequest
             'search'=>'required|string|max:50'
         ];
     }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'search'  => filter_var($this->search,FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+        ]);
+    }
 }

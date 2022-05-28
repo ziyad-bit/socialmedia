@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Models\{Group_users,User,Roles};
-use App\Traits\{GetPageCode,GetGroupAuth};
-use App\Http\Controllers\Controller;
+use App\Classes\Group\GroupFactory;
 use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Models\{Group_users,Roles};
+use App\Traits\{GetPageCode,GetGroupAuth};
 
 class GroupUsersController extends Controller
 {
@@ -22,9 +23,8 @@ class GroupUsersController extends Controller
         $group_auth = $this->getGroupAuth($group_user->group_id);
         $this->authorize('owner_admin_member',$group_auth);
 
-        $group_users = User::selection()->with('group_joined:id')
-            ->whereHas('group_joined', fn($q) => $q->where(['role_id'=>Roles::group_member,'group_id'=>$group_user->group_id]))
-            ->cursorPaginate(2);
+        $groupFactory = GroupFactory::factory('GroupUsers');
+        $group_users  = $groupFactory->get($group_user->group_id);
 
         $page_code  = $this->getPageCode($group_users);
 

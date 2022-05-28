@@ -19,7 +19,7 @@
         </div>
         <div class="container">
 
-            <a class="navbar-brand" href="{{ url('/') }}">
+            <a class="navbar-brand" href="{{ route('posts.index.all') }}">
                 Social Media
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -31,26 +31,25 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
 
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link"
-                            href="{{ route('users.profile.index') }}">{{ __('titles.profile') }}</a>
-                    </li>
+                @auth
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="{{ route('users.profile.index') }}">{{ __('titles.profile') }}</a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('posts.index.all') }}">{{ __('titles.posts') }}</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="{{ route('groups.index_groups') }}">{{ __('titles.groups') }}</a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                            href="{{ route('groups.index_groups') }}">{{ __('titles.groups') }}</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="{{ route('message.index.friends') }}">{{ __('titles.chat') }}</a>
+                        </li>
+                    </ul>
+                @endauth
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                            href="{{ route('message.index.friends') }}">{{ __('titles.chat') }}</a>
-                    </li>
-                </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
@@ -82,7 +81,8 @@
                         </form>
 
                         <i class="fas fa-bell" style="color: white;font-size: larger;position: relative;" id="bell">
-                            <span id="notifs_count" class="rounded-circle" style="display: none">{{ $notifs_count }}</span>
+                            <span id="notifs_count" class="rounded-circle"
+                                style="display: none">{{ $notifs_count }}</span>
                         </i>
 
 
@@ -98,7 +98,7 @@
                                 </a>
 
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                            document.getElementById('logout-form').submit();">
+                                                    document.getElementById('logout-form').submit();">
                                     {{ __('titles.logout') }}
                                 </a>
 
@@ -114,8 +114,10 @@
         </div>
 
         <div>
-            <div class="card notif " style="width: 26rem;display: none " id="notif">
-                @include('users.notifications.index')
-            </div>
+            @auth
+                <div class="card notif " style="width: 26rem;display: none " id="notif">
+                    @include('users.notifications.index')
+                </div>
+            @endauth
         </div>
     </nav>

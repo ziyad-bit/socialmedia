@@ -31,4 +31,11 @@ class PostsRequest extends FormRequest
             'file'     => 'nullable|file|max:100000',
         ];
     }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'text'        => filter_var($this->text,FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+        ]);
+    }
 }

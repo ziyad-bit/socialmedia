@@ -106,7 +106,7 @@ let search_words=[];
 
 function showMatchedSearch() {
     let search = search_ele.value;
-    if (search) {
+    if (search != '') {
         if (search_words.includes(search)) {
             for (let i = 0; i < list_ele.length; i++) {
                 list_ele[i].style.display = 'none';
@@ -188,7 +188,7 @@ search_ele.addEventListener('input',debounce(()=>{
 //show recent searches
 search_ele.onfocus=function(){
     let search=search_ele.value;
-    if (! search) {
+    if (search == '') {
         show_recent_searches();
     }
 }
@@ -248,6 +248,7 @@ if (notifs_count != 0) {
     notifs_count_ele.style.display='';
 }
 
+//infinite scroll for notifications
 let notif_req=true;
 notif_ele.onscroll=()=>{
     console.log('notif_ele.offsetHeight: ', notif_ele.offsetHeight);

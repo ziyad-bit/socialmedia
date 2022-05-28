@@ -125,8 +125,6 @@
                                                 src="{{ asset('images/users/' . $msg->receiver->photo) }}" alt="loading">
                                         @endif
 
-
-
                                         @if ($user->online == 1)
                                             <div class="rounded-circle dot"></div>
                                         @endif
@@ -141,7 +139,7 @@
                                             @if ($msg->sender->id == Auth::id())
                                                 you :
                                             @endif
-                                            {{ $msg->text }}
+                                            {{  text_decrypt($msg->text)   }}
                                         </p>
                                     </button>
                                 @endforeach

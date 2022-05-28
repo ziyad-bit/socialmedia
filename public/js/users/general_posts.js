@@ -56,7 +56,7 @@ window.onload=()=>{
         const comments_box = document.getElementsByClassName('card-bottom');
 
         function loadComments(com_id, post_id) {
-            axios.get('/' + lang + "/comment/show_more/" + com_id + '/' + post_id)
+            axios.get('/' + lang + "/comment/show/" + com_id + '/' + post_id)
                 .then(res => {
                     if (res.status == 200) {
                         let view = res.data.view;

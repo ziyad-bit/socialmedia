@@ -48,6 +48,13 @@ class UsersRequest extends FormRequest
             'photo.required_without'    => 'you should select photo',
             'photo.image'               => 'photo is invalid',
         ];
-        
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'name'   => filter_var($this->name,FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+            'email'  => filter_var($this->email,FILTER_SANITIZE_EMAIL),
+        ]);
     }
 }

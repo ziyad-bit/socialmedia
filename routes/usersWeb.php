@@ -14,13 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Auth::routes(['verify'=>true]);
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/email/verify','Auth\VerificationController@verifyEmail')->middleware('auth')->name('verification.notice');
 
 #######################################     search     ######################################
 Route::group(['prefix'=>'search','namespace'=>'Users'], function () {
@@ -47,12 +43,12 @@ Route::post('message/search-last-msgs', 'Users\MessageController@search_last_msg
 Route::apiResource('message'          , 'Users\MessageController');
 
 #######################################     posts     ######################################
-Route::any ('posts/index'            , 'Users\PostsController@index_posts')->name('posts.index.all');
+Route::any ('/'                      , 'Users\PostsController@index_posts')->name('posts.index.all');
 Route::post('post/{post}'            , 'Users\PostsController@update');
 Route::apiResource('post'            , 'Users\PostsController');
 
 #######################################     comments     ######################################
-Route::get ('comments/show/{com_id}/{post_id}'  , 'Users\CommentsController@show_more');
+Route::get ('comment/show/{com_id}/{post_id}'   , 'Users\CommentsController@show_more');
 Route::apiResource('comment'                    , 'Users\CommentsController');
 
 #######################################     groups     ######################################

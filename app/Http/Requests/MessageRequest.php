@@ -28,4 +28,11 @@ class MessageRequest extends FormRequest
             'text'        => 'required|string|max:250'
         ];
     }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'text'        => filter_var($this->text,FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+        ]);
+    }
 }
