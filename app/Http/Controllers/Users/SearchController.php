@@ -19,7 +19,7 @@ class SearchController extends Controller
     }
     
     #######################################    index    #####################################
-    public function index(SearchRequest $request): View | JsonResponse
+    public function index(SearchRequest $request)//: View | JsonResponse
     {
         $search = $request->search;
 

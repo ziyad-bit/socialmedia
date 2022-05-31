@@ -1,17 +1,34 @@
-@if ($post->group != null)
-    <p style="margin-left: 279px;position: relative;top: 108px;font-weight: bold">
-        from {{ $post->group->name }} group
-    </p>
+@if ($group_name == true)
+    @if ($post->group != null)
+    <a href="{{ route('groups.posts.index', $post->group->slug) }}" style="text-decoration: none">
+        <p style="margin-left: 279px;position: relative;top: 108px;font-weight: bold">
+            from {{ $post->group->name }} group
+        </p>
+    </a>
+    @endif
 @endif
 
+
 <section class="d-flex justify-content-center post{{ $post->id }}" id="{{ $post->id }}">
-    
+
     <div class="card bg-light mb-3" style="width: 500px;">
 
         <!--      card top      -->
         <div class="card-header card-top">
-            <img src="{{ asset('images/users/' . $post->users->photo) }}" alt="loading" class="rounded-circle">
-            <span> {{ $post->users->name }}</span>
+            
+            @if (Auth::id() == $post->users->id)
+                <a href="{{ route('users.profile.index') }}">
+                    <img src="{{ asset('images/users/' . $post->users->photo) }}" alt="loading" class="rounded-circle">
+                    {{ $post->users->name }}
+                </a>
+            @else
+                <a href="{{ route('users.index', str_replace(' ', '-', $post->users->name)) }}">
+                    <img src="{{ asset('images/users/' . $post->users->photo) }}" alt="loading" class="rounded-circle">
+                    {{ $post->users->name }}
+                </a>
+            @endif
+
+
             <!-- diff_date is autoloaded from app\helper\general -->
             <small>{{ diff_date($post->created_at) }}</small>
 
@@ -45,19 +62,19 @@
                     class="btn btn-primary file{{ $post->id }}">
                     <i class="fas fa-arrow-down"></i>{{ strstr($post->file, '-') }}
                 </a>
-                <embed src="{{ asset('files/' . $post->file) }}">
+                <embed src="{{ asset( $post->file) }}">
             @endif
 
             @if ($post->photo)
-                <img src="{{ asset('images/posts/' . $post->photo) }}" alt="loading"
+                <img src="{{ asset( $post->photo) }}" alt="error"
                     class="image photo{{ $post->id }}">
             @else
-            <img src="{{ asset('images/posts/' . $post->photo) }}" alt="loading"
-            class="image photo{{ $post->id }}" style="display: none">
+                <img src="" alt="loading"
+                    class="image photo{{ $post->id }}" style="display: none">
             @endif
 
             @if ($post->video)
-                <video class="video{{ $post->id }}" src="{{ asset('videos/' . $post->video) }}"
+                <video class="video{{ $post->id }}" src="{{ asset( $post->video) }}"
                     controls></video>
             @endif
 

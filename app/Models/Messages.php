@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Crypt;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Messages extends Model
@@ -51,10 +52,23 @@ class Messages extends Model
         return $q->select('id','sender_id','receiver_id','text','created_at');
     }
 
-
     public function scopeGetMsgs(Builder $query,int $id):Builder
     {
         return $query->where (fn ($q)=> $q->auth_receiver()->where('sender_id', $id))
             ->orWhere(fn ($q)=> $q->Where('receiver_id', $id)->auth_sender());
+    }
+
+    //mutators
+
+    public function setTextAttribute(string $text):string
+    {
+        return $this->attributes['text'] = Crypt::encrypt($text);
+    }
+
+    //accessors
+
+    public function getTextAttribute($text)
+    {
+        return Crypt::decrypt($text);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Classes\Friends;
 use App\Models\User;
 use App\Traits\GetFriends;
 use App\Models\Friends_user;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Pagination\{CursorPaginator,Paginator};
@@ -73,5 +74,13 @@ class Friends
         return User::selection()->with('friends_add_auth:id')
             ->whereHas('friends_add_auth',fn($q)=>$q->where(['status'=>Friends_user::friend_req,'friend_id'=>Auth::id()]))
             ->cursorPaginate(5);
+    }
+
+    ###############################        getProfileData      ###################################
+    public static function getProfileData(string $name):Collection
+    {
+        return User::with(['auth_add_friends'=>fn($q)=>$q->authUser(),
+            'friends_add_auth'=>fn($q)=>$q->authFriend(),])
+            ->where('name',$name)->get();
     }
 }

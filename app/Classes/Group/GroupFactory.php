@@ -10,7 +10,7 @@ use App\Classes\Group\GroupUsers;
 class GroupFactory
 {
     ##############################    get admin   ##################################
-    public static function factory(string $type):object
+    public static function factory(string $type):object|null
     {
         if ($type == 'GroupReq') {
             return new GroupReq();

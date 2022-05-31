@@ -49,7 +49,8 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/usersWeb.php'));
             
-            Route::middleware('web')
+            Route::prefix(getLang().'/admins')
+                ->middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/adminsWeb.php'));
         });
@@ -64,10 +65,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('all_routes', function (Request $request) {
             return Limit::perMinute(30)->by(optional($request->user())->id ?: $request->ip());
-        });
-
-        RateLimiter::for('all_routes_all_users', function () {
-            return Limit::perMinute(1000);
         });
     }
 }

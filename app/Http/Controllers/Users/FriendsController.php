@@ -51,6 +51,8 @@ class FriendsController extends Controller
             Friends_user::create($req_data);
             Notifications::Create(['type'=>'friend_req','receiver_id'=>$receiver_id ] + $auth_user);
             event(new ReceiveReqNotify($receiver_id));
+        }else{
+            return response()->json(['error'=>__("messages.you can't send request again")]);
         }
         
         return response()->json(['success'=>__('messages.you send it successfully')]);

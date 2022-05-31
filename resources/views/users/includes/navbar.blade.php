@@ -3,7 +3,7 @@
     <input type="hidden" value="{{ getLang() }}" id="lang">
 
     <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
-        <div class="dropdown">
+        <div class="dropdown" style="margin-left: 10px">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ __('titles.languages') }}
@@ -86,7 +86,7 @@
                         </i>
 
 
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown" style="margin-right: 70px">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ ucfirst(substr(Auth::user()->name, 0, 1)) }}

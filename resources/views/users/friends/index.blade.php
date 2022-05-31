@@ -2,6 +2,13 @@
 
 @section('header')
     <link rel="stylesheet" href="{{ asset('css/users/friends/requests.css') }}">
+
+    <title>
+        
+        {{  'Friend Requests - ' .config('app.name') }}
+    
+</title>
+<meta name="keywords" content="friend requests page contain all requests from other users ">
 @endsection
 
 @section('content')

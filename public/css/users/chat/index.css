@@ -19,7 +19,7 @@ min-height: 247px;}
 div .list_search {
     position: absolute;
     top     : 50px;
-    right   : 245px;
+    right: 291px;
     z-index : 6;
     width   : 200px;
 }

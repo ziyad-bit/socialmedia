@@ -2,6 +2,10 @@
 
 @section('header')
     <link rel="stylesheet" href="{{ asset('css/users/search.css') }}">
+    <title>
+        {{  'Search - ' .config('app.name') }}
+    </title>
+    <meta name="keywords" content="search page contain search results for friend name">
 @endsection
 
 @section('content')

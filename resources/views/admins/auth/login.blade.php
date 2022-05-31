@@ -4,10 +4,10 @@
         <div class="alert alert-danger text-center">{{ Session::get('error') }}</div> 
     @endif
     
-    <div class="card text-white bg-primary mb-3" style="max-width: 26rem;margin:auto;margin-top: 150px">
+    <div class="card text-white bg-dark mb-3" style="max-width: 26rem;margin:auto;margin-top: 150px">
         <div class="card-header">admin login</div>
         <div class="card-body">
-            <form action="{{url('admins/login')}}" method="POST">
+            <form action="{{route('admins.post.login')}}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="exampleInputEmail1">Email address</label>
@@ -28,5 +28,9 @@
                 <button type="submit" class="btn btn-success" style="margin-top: 10px">login</button>
             </form>
         </div>
+
+        <a class="btn btn-link" href="{{ route('admins.reset.password') }}">
+            {{ __('Forgot Your Password?') }}
+        </a>
     </div>
 @endsection

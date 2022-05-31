@@ -36,4 +36,10 @@ class Group implements Get
         return  Group_users::where('user_id',Auth::id())->orderByDesc('id')
             ->limit(20)->pluck('group_id')->toArray();
     }
+
+    ##############################    get users count    ##################################
+    public  function getSpecific($slug):Groups
+    {
+        return Groups::where('slug',$slug)->first();
+    }
 }

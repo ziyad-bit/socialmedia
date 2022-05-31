@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\MessageRequest;
 use Illuminate\Http\{Request,JsonResponse};
 use App\Classes\Search\PaginateSearchFactory;
-use Illuminate\Support\Facades\Crypt;
 
 class MessageController extends Controller
 {
@@ -41,14 +40,11 @@ class MessageController extends Controller
     #############################     store     #######################################
     public function store(MessageRequest $request):JsonResponse
     {
-        $sender_id =['sender_id'=>Auth::id()];
-
         Messages::getMsgs($request->receiver_id)->where('last',1)->update(['last'=>0]);
 
-        event(new MessageSend($request->validated()+$sender_id , Auth::user()));
+        event(new MessageSend($request->validated() , Auth::user()));
 
-        $encrypted_text=Crypt::encrypt($request->text);
-        Messages::create($request->except('text')+$sender_id+['text'=>$encrypted_text]);
+        Messages::create($request->validated()+['sender_id'=>Auth::id()]);
 
         return response()->json();
     }

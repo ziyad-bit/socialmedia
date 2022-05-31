@@ -2,6 +2,12 @@
 
 @section('header')
     <link rel="stylesheet" href="{{ asset('css/users/posts/index.css') }}">
+    <title>
+        
+            {{  'Posts - ' .config('app.name') }}
+        
+    </title>
+    <meta name="keywords" content="posts page contain all posts for all friends">
 @endsection
 
 @section('content')

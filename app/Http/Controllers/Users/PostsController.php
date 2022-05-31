@@ -27,6 +27,7 @@ class PostsController extends Controller
         $auth_id     = Auth::id();
         $friends     = new Friends();
         $friends_ids = $friends->fetchIds($auth_id);
+        $group_name  = true;
 
         array_unshift($friends_ids,$auth_id);
 
@@ -40,18 +41,19 @@ class PostsController extends Controller
         $posts         = $posts_factory->postsPage()->fetchPosts(3,$friends_ids,$groupJoinedIds ,null,$shared_posts_ids);
         
         if ($request->ajax()) {
-            $view=view('users.posts.index_posts',compact('posts'))->render();
+            $view=view('users.posts.index_posts',compact('posts','group_name'))->render();
             return response()->json(['view'=>$view]);
         }
         
-        return view('users.posts.index',compact('posts'));
+        return view('users.posts.index',compact('posts','group_name'));
     }
 
     ##################################      store      ##################################
     public function store(PostsRequest $request):JsonResponse
     {
-        $files     = new UploadAllFiles();
-        $all_files = $files->uploadAll($request);
+        $files      = new UploadAllFiles();
+        $all_files  = $files->uploadAll($request);
+        $group_name = true;
         
         $post=Posts::create([
             'user_id' => Auth::id(),
@@ -62,7 +64,7 @@ class PostsController extends Controller
 
         $share='';
 
-        $view=view('users.posts.add_post',compact('post','share'))->render();
+        $view=view('users.posts.add_post',compact('post','share','group_name'))->render();
         return response()->json(['success'=>__('messages.you created it successfully'),'view'=>$view]);
     }
 

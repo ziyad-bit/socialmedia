@@ -43,4 +43,21 @@ class Posts extends Model
     {
         return $q->select('text','id','created_at','user_id','group_id','video','file','photo');
     }
+
+    //accessors
+
+    public function getPhotoAttribute($photo)
+    {
+        return $photo ? 'images/posts/'.$photo : '';
+    }
+
+    public function getFileAttribute($file)
+    {
+        return $file ? 'files/'.$file : '';
+    }
+
+    public function getVideoAttribute($video)
+    {
+        return $video ? 'videos/'.$video : '';
+    }
 }

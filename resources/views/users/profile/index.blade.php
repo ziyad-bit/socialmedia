@@ -3,6 +3,13 @@
 @section('header')
     <link rel="stylesheet" href="{{ asset('css/users/posts/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/users/profile/index.css') }}">
+
+    <title>
+        
+        {{  ucfirst(Auth::user()->name).' - ' .config('app.name') }}
+        
+    </title>
+    <meta name="keywords" content="profile page contain information about user">
 @endsection
 
 @section('content')

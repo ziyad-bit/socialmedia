@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+#######################################     auth routes     ######################################
 Auth::routes(['verify'=>true]);
-
 Route::get('/email/verify','Auth\VerificationController@verifyEmail')->middleware('auth')->name('verification.notice');
 
 #######################################     search     ######################################
@@ -32,45 +32,50 @@ Route::group(['prefix'=>'notifications','namespace'=>'Users'], function () {
 });
 
 #######################################     friends     ######################################
-Route::any ('friends/requests'                  , 'Users\FriendsController@show_requests')->name('friends.show.requests');
-Route::put ('friends/requests/ignore/{friend}'  , 'Users\FriendsController@ignore');
-Route::apiResource('friend'                     , 'Users\FriendsController');
+Route::group(['prefix'=>'friends','namespace'=>'Users'], function () {
+    Route::any ('requests'                  , 'FriendsController@show_requests')->name('friends.show.requests');
+    Route::put ('requests/ignore/{friend}'  , 'FriendsController@ignore');
+});
+
+Route::apiResource('friend'                 , 'Users\FriendsController')->only(['store','update','destroy']);
 
 #######################################     Message     ######################################
-Route::any ('message/index'           , 'Users\MessageController@index_friends')->name('message.index.friends');
-Route::post('message/search-friends'  , 'Users\MessageController@search_friends');
-Route::post('message/search-last-msgs', 'Users\MessageController@search_last_msgs');
-Route::apiResource('message'          , 'Users\MessageController');
+Route::group(['prefix'=>'message','namespace'=>'Users'], function () {
+    Route::any ('index'           , 'MessageController@index_friends')->name('message.index.friends');
+    Route::post('search-friends'  , 'MessageController@search_friends');
+    Route::post('search-last-msgs', 'MessageController@search_last_msgs');
+});
+
+Route::apiResource('message'      , 'Users\MessageController')->only(['store','update','show']);
 
 #######################################     posts     ######################################
-Route::any ('/'                      , 'Users\PostsController@index_posts')->name('posts.index.all');
-Route::post('post/{post}'            , 'Users\PostsController@update');
-Route::apiResource('post'            , 'Users\PostsController');
+Route::any ('/'                     , 'Users\PostsController@index_posts')->name('posts.index.all');
+Route::post('post/{post}'           , 'Users\PostsController@update');
+
+Route::apiResource('post'           , 'Users\PostsController')->only(['store','update','destroy']);
 
 #######################################     comments     ######################################
 Route::get ('comment/show/{com_id}/{post_id}'   , 'Users\CommentsController@show_more');
-Route::apiResource('comment'                    , 'Users\CommentsController');
+Route::apiResource('comment'                    , 'Users\CommentsController')->only(['store','update','destroy']);
 
 #######################################     groups     ######################################
 Route::group(['prefix'=>'group','namespace'=>'Users'], function () {
-    Route::any ('posts/{group}'  , 'GroupsController@index_posts')->name('groups.posts.index');
+    Route::any ('posts/{slug}'   , 'GroupsController@index_posts')->name('groups.posts.index');
     Route::any ('index-groups'   , 'GroupsController@index_groups')->name('groups.index_groups');
     Route::post('update/{group}' , 'GroupsController@update');
 });
 
-Route::Resource('/group'         , 'Users\GroupsController');
+Route::Resource('/group'         , 'Users\GroupsController')->only(['store','update','destroy','create']);
 
 #######################################     groups users    ######################################
 Route::put ('/group-users/punish/{group_user}'  , 'Users\GroupUsersController@punish');
-Route::apiResource('/group-users'               , 'Users\GroupUsersController')->parameter('group-users','group_user');
+Route::apiResource('/group-users'               , 'Users\GroupUsersController')->parameter('group-users','group_user')->only(['show','update','destroy']);
 
 #######################################     groups admins    ######################################R
-Route::apiResource('/group-admins'               , 'Users\GroupAdminsController')->parameter('group-admins','group_admin');
-
+Route::apiResource('/group-admins'               , 'Users\GroupAdminsController')->parameter('group-admins','group_admin')->only(['show','update','destroy']);
 #######################################     groups reqs    ######################################
 Route::put ('/group/reqs/ignore/{group_req}'    , 'Users\GroupReqsController@ignore');
-Route::apiResource('/group/reqs'                , 'Users\GroupReqsController')->parameter('reqs','group_req');
-
+Route::apiResource('/group/reqs'                , 'Users\GroupReqsController')->parameter('reqs','group_req')->only(['store','update','destroy','show']);
 #######################################     likes     ######################################
 Route::post ('/like/store'  , 'Users\LikesController@store');
 

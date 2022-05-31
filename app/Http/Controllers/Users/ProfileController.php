@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Classes\Friends\Friends;
-use App\Classes\Posts\PostsAbstractFactory;
-use App\Traits\{GetPageCode,UploadImage};
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UsersRequest;
 use App\Models\User;
-use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use App\Classes\Friends\Friends;
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\UsersRequest;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use App\Traits\{GetPageCode,UploadImage};
+use App\Classes\Posts\PostsAbstractFactory;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\{Hash,Auth};
 
 class ProfileController extends Controller
@@ -25,10 +26,12 @@ class ProfileController extends Controller
     ##################################     index auth profile    #################################
     public function index(Request $request):View|JsonResponse
     {
+        RateLimiter::clear('all_routes');
         $auth_id       = Auth::id();
         $friends       = new Friends();
         $friends_ids   = $friends->fetchIds($auth_id );
         $friends_count = count($friends_ids);
+        $group_name    = false;
 
         array_unshift($friends_ids,$auth_id );
 
@@ -42,11 +45,11 @@ class ProfileController extends Controller
             });
             
         if ($request->ajax()) {
-            $view = view('users.posts.index_posts', compact('posts'))->render();
+            $view = view('users.posts.index_posts', compact('posts' , 'group_name'))->render();
             return response()->json(['view' => $view,'page_code'=>$page_code]);
         }
 
-        return view('users.profile.index',compact('posts','page_code','friends_count'));
+        return view('users.profile.index',compact('posts','page_code','friends_count','group_name'));
     }
 
     ##################################     show auth friends    #################################
@@ -64,23 +67,23 @@ class ProfileController extends Controller
     }
 
     ##################################     index user profile    #################################
-    public function index_profile(Request $request,string $name)//:View|JsonResponse
+    public function index_profile(Request $request,string $name):View|JsonResponse
     {
         $auth_id      = Auth::id();
-        $related_user = User::with(['auth_add_friends'=>fn($q)=>$q->authUser(),
-                                    'friends_add_auth'=>fn($q)=>$q->authFriend(),])
-                                    ->where('name',$name)->get();
+        $name         = str_replace('-',' ',$name);
+        $friends      = new Friends();
+        $related_user = $friends->getProfileData($name);
+        $group_name   = false;
 
         foreach ($related_user as  $user) {
-            $friends            = new Friends();
             $user_friends_ids   = $friends->fetchIds($user->id);
-            $mutual_friends_num = count($friends->fetchMutualIds($user->id));
+            $mutual_friends_ids = $friends->fetchMutualIds($user->id);
+            $mutual_friends_num = count($mutual_friends_ids);
             
             array_unshift($user_friends_ids,$auth_id);
     
             $posts_factory = new PostsAbstractFactory();
-            $posts         = $posts_factory->usersProfilePage()->fetchPosts(3,$user_friends_ids,[],null,[],$user->id);
-            
+            $posts         = $posts_factory->usersProfilePage()->fetchPosts(3,$mutual_friends_ids,[],null,[],$user->id);
         }
 
         $page_code = $this->getPageCode($posts);
@@ -90,7 +93,7 @@ class ProfileController extends Controller
             return response()->json(['view' => $view,'page_code'=>$page_code]);
         }
 
-        return view('users.profile.index_user',compact('posts','page_code','mutual_friends_num','related_user'));
+        return view('users.profile.index_user',compact('group_name','posts','page_code','mutual_friends_num','related_user'));
     }
 
     ##################################     show user mutual friends    #################################

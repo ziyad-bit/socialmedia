@@ -1,5 +1,15 @@
 @extends('layouts.app')
 
+@section('header')
+<title>
+    
+    {{  'Groups - ' .config('app.name') }}
+    
+</title>
+
+<meta name="keywords" content="groups page contain information about all groups which you joined">
+@endsection
+
 @section('content')
     @if (Session::has('success'))
         <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
@@ -26,13 +36,13 @@
                 <tr>
                     <th scope="row">{{ $i + 1 }}</th>
 
-                    <td> <a href="{{ route('groups.posts.index', $group->id) }}" >
+                    <td> <a href="{{ route('groups.posts.index', $group->slug) }}" >
                             <img src="{{ asset('images/groups/' . $group->photo) }}" alt="">
                         </a>
                     </td>
 
                     <td>
-                        <a href="{{ route('groups.posts.index', $group->id) }}" style="text-decoration: none">
+                        <a href="{{ route('groups.posts.index', $group->slug) }}" style="text-decoration: none">
                             {{ $group->name }}
                         </a>
                     </td>

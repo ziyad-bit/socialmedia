@@ -29,7 +29,7 @@ function adminMiddleware():array
 
 function userMiddleware():array
 {
-    return [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth','throttle:all_routes','verified','throttle:all_routes_all_users' ];
+    return [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth','throttle:all_routes','verified' ];
 }
 
 
@@ -60,9 +60,3 @@ function diff_date($date):string
     }
 }
 
-
-############################    general methods    ##########################
-function text_decrypt(string $msg):string
-{
-    return Crypt::decrypt($msg);
-}

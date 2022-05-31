@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Users;
 
 use Illuminate\Http\Request;
-use App\Events\StoreGroupOwner;
 use App\Classes\Friends\Friends;
 use App\Classes\Group\GroupFactory;
 use App\Http\Requests\GroupRequest;
@@ -13,8 +12,10 @@ use App\Models\{Group_users,Groups};
 use Illuminate\Support\Facades\Auth;
 use App\Traits\{UploadImage,GetPageCode};
 use App\Classes\Posts\PostsAbstractFactory;
+use App\Events\StoreGroup;
 use App\Traits\GetGroupAuth as TraitsGetGroupAuth;
 use Illuminate\Http\{RedirectResponse,JsonResponse};
+use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class GroupsController extends Controller
 {
@@ -26,14 +27,17 @@ class GroupsController extends Controller
     }
     
     #################################    index_posts   ###################################
-    public function index_posts(Request $request, Groups $group):View|JsonResponse
+    public function index_posts(Request $request, string $slug):View|JsonResponse
     {
         $group_factory     = GroupFactory::factory('Group');
+
+        $group             = $group_factory->getSpecific($slug);
         $group_users_count = $group_factory->get_users_count();
         $group_auth        = $group_factory->getAuth($group->id);
 
-        $posts     = null;
-        $page_code = null;
+        $group_name = false;
+        $posts      = null;
+        $page_code  = null;
         
         if ($group_auth) {
             if ($group_auth->role_id != null || $group_auth->punish == Group_users::punished) {
@@ -49,14 +53,15 @@ class GroupsController extends Controller
                         return $posts;
                     });
 
+                    
                 if ($request->ajax()) {
-                    $view = view('users.posts.index_posts', compact('posts'))->render();
+                    $view = view('users.posts.index_posts', compact('posts' ,'group_name'))->render();
                     return response()->json(['view' => $view, 'page_code' => $page_code]);
                 }
             }
         }
 
-        return view('users.groups.show', compact('posts', 'group', 'group_users_count', 'group_auth', 'page_code'));
+        return view('users.groups.show', compact('posts', 'group', 'group_users_count', 'group_auth', 'page_code','group_name'));
     }
 
     #################################    index_groups   ###################################
@@ -85,10 +90,9 @@ class GroupsController extends Controller
     public function store(GroupRequest $request):RedirectResponse
     {
         try{
-            $photo_name=$this->uploadPhoto($request->file('photo'),'images/groups/',300);
-
-            $group=Groups::create($request->except('photo')+['photo'=>$photo_name]);
-            event(new StoreGroupOwner($group->id));
+            $photo_name = $this->uploadPhoto($request->file('photo'),'images/groups/',300);
+            
+            event(new StoreGroup($request,$photo_name));
 
             return redirect()->back()->with(['success'=>__('messages.you created it successfully')]);
         }catch(\Exception){

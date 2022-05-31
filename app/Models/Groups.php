@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Groups extends Model
 {
-    use HasFactory;
-    use SearchableTrait;
+    use HasFactory ,SearchableTrait , Sluggable;
 
     protected $guarded=[];
     protected $table='groups';
@@ -20,6 +20,15 @@ class Groups extends Model
             'groups.description' => 7,
         ],
     ];
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
     ################################    relations    #####################################
 
     public function group_users()
@@ -36,7 +45,7 @@ class Groups extends Model
     ################################    scope    #####################################
     public function scopeSelection($q)
     {
-        return $q->select('name','description','photo','created_at','id');
+        return $q->select('name','description','photo','created_at','id','slug');
     }
 
     public function scopeDefaultLang($q)

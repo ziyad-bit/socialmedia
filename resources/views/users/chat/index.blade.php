@@ -2,11 +2,17 @@
 
 @section('header')
     <link rel="stylesheet" href="{{ asset('css/users/chat/index.css') }}">
+    <title>
+        
+        {{  'Chat - ' .config('app.name') }}
+    
+</title>
+<meta name="keywords" content="chat page contain all messages from your friends ">
 @endsection
 
 @section('content')
     <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist" style="margin-top: 20px">
             <button class="nav-link active" id="nav-friends-tab" data-bs-toggle="tab" data-bs-target="#nav-friends"
                 type="button" role="tab">friends</button>
 
@@ -17,7 +23,7 @@
 
 
 
-    <div class="tab-content" id="nav-tabContent">
+    <div class="tab-content" id="nav-tabContent" >
         <div class="tab-pane fade show active" id="nav-friends" role="tabpanel" aria-labelledby="nav-friends-tab">
 
             <div class="container">
@@ -66,7 +72,7 @@
                                         id={{ 'chat_box' . $user->id }} role="tabpanel" aria-labelledby="list-home-list">
 
                                         <form id={{ 'form' . $user->id }}>
-                                            <div class="card" style="height: 300px">
+                                            <div class="card" style="height: 316px">
                                                 <h5 class="card-header">chat<span id="loading{{ $user->id }}"
                                                         style="margin-left: 50px;display:none">loading old messages</span>
                                                 </h5>
@@ -139,7 +145,7 @@
                                             @if ($msg->sender->id == Auth::id())
                                                 you :
                                             @endif
-                                            {{  text_decrypt($msg->text)   }}
+                                            {{  $msg->text   }}
                                         </p>
                                     </button>
                                 @endforeach
@@ -158,7 +164,7 @@
                                         <form
                                             id={{ 'form' . $msg->sender->id != 'form' . Auth::id() ? 'form' . $msg->sender->id : 'form' . $msg->receiver->id }}>
 
-                                            <div class="card" style="height: 300px">
+                                            <div class="card" style="height: 316px">
                                                 <h5 class="card-header">chat<span id="loading{{  $msg->sender->id !=  Auth::id() ?  $msg->sender->id :  $msg->receiver->id }}"
                                                         style="margin-left: 50px;display:none">loading old messages</span>
                                                 </h5>

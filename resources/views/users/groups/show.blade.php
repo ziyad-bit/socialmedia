@@ -3,6 +3,13 @@
 @section('header')
     <link rel="stylesheet" href="{{ asset('css/users/posts/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/users/group/show.css') }}">
+
+    <title>
+        
+            {{  $group->name.' - ' .config('app.name') }}
+        
+    </title>
+    <meta name="keywords" content="group page contain all posts and members in this group ">
 @endsection
 
 @section('content')

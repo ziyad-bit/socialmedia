@@ -2,38 +2,32 @@
 
 namespace App\Events;
 
-use App\Models\User;
+use App\Models\Groups;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Http\Request;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSend implements ShouldBroadcast
+class StoreGroup
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public string $text;
-    public int    $receiver_id;
-    public int    $sender_id;
-    public string $user_name;
-    public string $user_photo;
-
-
+    public $photo_name;
+    public $request;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(array $data,User $user)
+    public function __construct(Request $request ,string $photo_name)
     {
-        $this->text        = $data['text'];
-        $this->receiver_id = $data['receiver_id'];
-        $this->sender_id   = $user->id;
-        $this->user_name   = $user->name;
-        $this->user_photo  = $user->photo;
+        $this->photo_name = $photo_name;
+        $this->request    = $request;
     }
-
 
     /**
      * Get the channels the event should broadcast on.
@@ -42,6 +36,6 @@ class MessageSend implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('chat.'.$this->receiver_id);
+        return new PrivateChannel('channel-name');
     }
 }

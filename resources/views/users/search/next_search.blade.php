@@ -5,7 +5,7 @@
                 alt="loading">
 
             <span class="card-title">
-                <a href="{{route('users.index',$friend->name)}}">{{$friend->name}}</a>
+                <a href="{{route('users.index',str_replace(' ','-',$friend->name))}}">{{$friend->name}}</a>
             </span>
 
             @if ($friend->auth_add_friends->count() > 0)
@@ -58,7 +58,7 @@
                 alt="loading">
 
             <span class="card-title">
-                <a href="{{route('users.index',$user->name)}}">{{$user->name}}</a>
+                <a href="{{route('users.index', str_replace('','-',$user->name) )}}">{{$user->name}}</a>
             </span>
 
             <button class="btn btn-primary add_btn" data-friend_id="{{ $user->id }}">
@@ -81,7 +81,7 @@
                 alt="loading">
 
             <span class="card-title">
-                <a href="{{ route('groups.posts.index',$group_joined->id) }}"  >
+                <a href="{{ route('groups.posts.index',$group_joined->slug) }}"  >
                     {{ $group_joined->name }}
                 </a>
             </span>
@@ -114,7 +114,7 @@
             <img src="{{ asset('images/groups/' . $group->photo) }}" class="rounded-circle" style="width: 100px"
                 alt="loading">
             <span class="card-title">
-                <a href="{{ route('groups.posts.index',$group->id) }}"  >
+                <a href="{{ route('groups.posts.index',$group->slug) }}"  >
                     {{ $group->name }}
                 </a>
                 

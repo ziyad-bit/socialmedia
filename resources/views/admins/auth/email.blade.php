@@ -2,17 +2,22 @@
 
 @section('content')
     <div class="container">
+        @if (Session::has('error'))
+            <div class="alert alert-danger text-center">{{ Session::get('error') }}</div>
+        @endif
+
+        @if (Session::has('success'))
+        <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
+    @endif
+
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ __('Reset Password') }}</div>
 
                     <div class="card-body">
-                        @if (Session::has('error'))
-                            <div class="alert alert-danger text-center">{{ Session::get('error') }}</div>
-                        @endif
 
-                        <form method="POST" action="{{ route('password.email') }}">
+                        <form method="POST" action="{{ route('admins.reset.password') }}">
                             @csrf
 
                             <div class="row mb-3">

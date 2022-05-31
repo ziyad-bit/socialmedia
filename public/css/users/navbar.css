@@ -1,42 +1,42 @@
-.list_search{
+.list_search {
     position: absolute;
     top     : 50px;
-    right: 233px;
+    right   : 290px;
     z-index : 6;
     width   : 200px;
 }
-.search_item{
-    background-color: rgb(166, 183, 196) ;
+.search_item {
+    background-color: rgb(166, 183, 196);
 }
 
-.nav-pill{
+.nav-pill {
     border: none;
 }
 
-.search_item:hover{
+.search_item:hover {
     cursor          : pointer;
     background-color: rgb(219, 215, 208);
 }
 
-.search_image{
+.search_image {
     width: 30px;
 }
 
-.rtl{
+.rtl {
     direction: rtl;
 }
 
-.notif{
+.notif {
     position: absolute;
-    top: 54px;
-    right: 40px;
+    top     : 54px;
+    right   : 40px;
 }
 
-.list-group .rounded-circle{
-    width: 94px;
-    height: 50px;
-    position: relative;
-    bottom: 8px;
+.list-group .rounded-circle {
+    width       : 94px;
+    height      : 50px;
+    position    : relative;
+    bottom      : 8px;
     margin-right: 5px;
 }
 
@@ -45,56 +45,66 @@
     top: 10px;
 }
 
-.notif{
-    position: absolute;
-    top: 54px;
-    right: 40px;
-z-index: 6;max-height: 220px;overflow-y: scroll;}
+.notif {
+    position  : absolute;
+    top: 42px;
+    right     : 40px;
+    z-index   : 6;
+    max-height: 220px;
+    overflow-y: scroll;
+}
 
-.list-group .rounded-circle{
-    width: 73px;
-    height: 50px;
-    position: relative;
-    bottom: 8px;
+.list-group .rounded-circle {
+    width       : 73px;
+    height      : 50px;
+    position    : relative;
+    bottom      : 8px;
     margin-right: 5px;
 }
 
-.list-group .list-group-item-action:hover{
+.list-group .notif_hover:hover {
     background-color: #eee;
 }
 
 #bell {
-    right: -2px;
-    top: 10px;
-margin-left: 17px;margin-right: 12px;}
+    right       : -2px;
+    top         : 10px;
+    margin-left : 17px;
+    margin-right: 12px;
+}
 
-.p{
-    position: relative;
-    right: 62px;
-width: 80%;margin-left: 78px;}
+#bell:hover{
+    cursor: pointer;
+}
 
-.notifications small{
+.p {
+    position   : relative;
+    right      : 62px;
+    width      : 80%;
+    margin-left: 78px;
+}
+
+.notifications small {
     margin-left: 20px;
 }
 
-.notifications .rounded-circle{
+.notifications .rounded-circle {
     max-height  : 50px;
     margin-right: 10px;
 }
 
-.notifications p{
+.notifications p {
     position: relative;
     right   : -71px;
     bottom  : 22px;
 }
 
-
-#notifs_count{
-    position: absolute;
-    left: 6px;
-    bottom: 31px;
+#notifs_count {
+    position        : absolute;
+    left            : 6px;
+    bottom          : 31px;
     color           : var(--white_color);
-    background-color: #F02849;
+    background-color: #f02849;
     padding         : 5px;
-    font-size: 11px;
+    font-size       : 11px;
 }
