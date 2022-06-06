@@ -16,7 +16,7 @@
                     <div class="card-header">{{ __('add language') }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('languages.store') }}">
+                        <form method="POST" action="{{ route('admins-language.store') }}">
                             @csrf
 
                             <div class="form-group ">

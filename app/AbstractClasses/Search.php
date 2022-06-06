@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 abstract class Search 
 {
     #########################################     friends     #############################
-    public function friends(string $search):Builder
+    protected function friends(string $search):Builder
     {
         return  User::selection()
             ->with(['auth_add_friends'=> fn($q) => $q->authUser(), 
@@ -19,7 +19,7 @@ abstract class Search
     }
 
     #########################################      users      #############################
-    public function users(string $search):Builder
+    protected function users(string $search):Builder
     {
         return User::selection()
             ->whereDoesntHave('auth_add_friends', fn($q) => $q->authUser())
@@ -28,14 +28,14 @@ abstract class Search
     }
 
     #########################################     groupsJoined     #############################
-    public function groupsJoined(string $search):Builder
+    protected function groupsJoined(string $search):Builder
     {
         return Groups::selection()->whereHas('group_users', fn($q) => $q->authUser())
             ->with(['group_users' => fn($q) => $q->authUser()])->search($search,null,true);
     }
 
     #########################################     groups     #############################
-    public function groups(string $search):Builder
+    protected function groups(string $search):Builder
     {
         return Groups::selection()->whereDoesntHave('group_users', fn($q) => $q->authUser())
             ->search($search,null,true);

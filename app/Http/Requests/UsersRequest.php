@@ -25,10 +25,10 @@ class UsersRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'           => 'required_without:id|string|max:50|min:3',
-            'email'          => 'required_without:id|email|max:50|min:10|unique:users,email,'.Auth::id(),
-            'old_password'   => 'current_password|string',
-            'password'       => 'nullable|string|max:50|min:8',
+            'name'           => 'required_with:name_id|string|max:50|min:3',
+            'email'          => 'required_with:email_id|email|max:50|min:10|unique:users,email,'.Auth::id(),
+            'old_password'   => 'nullable|current_password|string',
+            'password'       => 'nullable|required_with:password_id|string|max:50|min:8',
             'work'           => 'nullable|string|max:50|min:8',
             'marital_status' => 'nullable|string|max:50|min:3',
             'photo'          => 'required_without:photo_id|image|mimes:jpg,gif,jpeg,png,webp|max:14',

@@ -12,13 +12,13 @@ class LanguagesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(adminMiddleware());
+        $this->middleware('auth:admins' );
     }
 
     ####################################      index      ################################
     public function index():View
     {
-        $languages=Languages::cursorPaginate(pagination);
+        $languages=Languages::cursorPaginate(5);
         return view('admins.languages.index',compact('languages'));
     }
 
@@ -37,28 +37,24 @@ class LanguagesController extends Controller
     }
 
     ####################################      edit      ###############################
-    public function edit(int $id):View
+    public function edit(Languages $admins_language):View
     {
-        $language=Languages::findOrfail($id);
-
-        return view('admins.languages.edit',compact('language'));
+        return view('admins.languages.edit',compact('admins_language'));
     }
 
     ####################################      update      ###############################
-    public function update(LanguagesRequest $request,int $id):RedirectResponse
+    public function update(LanguagesRequest $request,Languages $admins_language):RedirectResponse
     {
-        $language=Languages::findOrfail($id);
-        $language->update($request->validated());
+        $admins_language->update($request->validated());
 
         return redirect()->back()->with('success','you updated language successfully');
     }
 
     ####################################      destroy      ###############################
-    public function destroy(int $id):RedirectResponse
+    public function destroy(Languages $admins_language):RedirectResponse
     {
-        $language=Languages::findOrfail($id);
-
-        $language->delete();
+        $admins_language->delete();
+        
         return redirect()->back()->with('success','you deleted language successfully');
     }
 }

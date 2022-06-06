@@ -14,10 +14,16 @@
                     <a class="nav-link" href="{{url('admins/index')}}">{{__("titles.admins")}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('languages.index')}}">{{__("titles.languages")}}</a>
+                    <a class="nav-link" href="{{route('admins-users.index')}}">users</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('groups.index')}}">{{__("titles.groups")}}</a>
+                    <a class="nav-link" href="{{route('admins-comments.index')}}">comments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('admins-language.index')}}">{{__("titles.languages")}}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('admins-groups.index')}}">{{__("titles.groups")}}</a>
                 </li>
                 
                 <li class="nav-item">

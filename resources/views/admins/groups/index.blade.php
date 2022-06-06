@@ -9,7 +9,7 @@
         <div class="alert alert-danger text-center">{{ Session::get('error') }}</div>
     @endif
 
-    <a class="btn btn-primary" href="{{ route('groups.create') }}" style="margin-top: 20px">add group</a>
+    <a class="btn btn-primary" href="{{ route('admins-groups.create') }}" style="margin-top: 20px">add group</a>
 
     <table class="table" style="margin-top: 20px">
         <thead class="thead-dark">
@@ -27,17 +27,13 @@
                     <th scope="row">{{ $group->id }}</th>
                     <td>{{ $group->name }}</td>
                     <td>{{ $group->description }}</td>
-                    <td><img src="{{$group->photo}}" alt="loading"></td>
+                    <td><img src="{{asset('images/groups/'.$group->photo)}}" alt="loading"></td>
                     <td>
-                        <a href="{{ route('groups.edit',$group->id) }}" class='btn btn-primary'>
+                        <a href="{{ route('admins-groups.edit',$group->id) }}" class='btn btn-primary'>
                             {{__('titles.edit')}}
                         </a>
 
-                        <a href="{{ route('groups.show',$group->id) }}" class='btn btn-info' style="margin-top: 10px">
-                            {{__('titles.add language')}}
-                        </a>
-
-                        <form action="{{route('groups.destroy',$group->id)}}" method="POST" style="display: inline-block">
+                        <form action="{{route('admins-groups.destroy',$group->id)}}" method="POST" style="display: inline-block">
                             @csrf
                             @method('delete')
 

@@ -36,4 +36,5 @@ return[
     'join'               => 'join',
     'joined'             => 'joined',
     'send request'       => 'send request',
+    'update'=>'update'
 ];

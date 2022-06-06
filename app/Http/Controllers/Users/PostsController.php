@@ -17,12 +17,12 @@ class PostsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(userMiddleware());
-        $this->middleware(['throttle:1,10'])->only(['store']);
+        $this->middleware(['auth','verified']);
+        $this->middleware(['throttle:1,6'])->only(['store']);
     }
     
     ##################################       index      ###############################
-    public function index_posts(Request $request)//:View|JsonResponse
+    public function index_posts(Request $request):View|JsonResponse
     {
         $auth_id     = Auth::id();
         $friends     = new Friends();

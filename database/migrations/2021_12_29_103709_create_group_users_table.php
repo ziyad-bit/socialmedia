@@ -17,7 +17,8 @@ class CreateGroupUsersTable extends Migration
             $table->id();
             $table->tinyInteger('status')->default(0)->comment('0 = join request , 1 = approved , 2 = ignored');
             $table->tinyInteger('punish')->default(0)->comment('0 = false , 1 = true ');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('admin_id')->nullable()->constrained('admins')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('group_id')->constrained('groups')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('role_id')->default(null)->constrained('roles')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

@@ -20,7 +20,7 @@ class ProfileController extends Controller
 
     public function __construct()
     {
-        $this->middleware(userMiddleware());
+        $this->middleware(['auth','verified']);
     }
 
     ##################################     index auth profile    #################################
@@ -120,7 +120,7 @@ class ProfileController extends Controller
         $data = $request->except('old_password','password','photo_id');
 
         if ($request->password) {
-            $data=$data+['password'=>Hash::make($request->password)];
+            $data=$data+['password'=>$request->password];
         }
 
         $user->update($data);

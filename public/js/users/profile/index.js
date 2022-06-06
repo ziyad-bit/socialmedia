@@ -5,7 +5,7 @@ update_photo_ele.onclick=function(){
     let form=document.getElementById('photoForm'),
     formData=new FormData(form);
 
-    axios.post('/'+lang+"/users/profile/update/photo" ,formData)
+    axios.post('/'+lang+"/profile/update/photo" ,formData)
         .then(res=> {
             if (res.status == 200) {
                 let photo = res.data.photo,
@@ -48,7 +48,7 @@ update_profile_ele.onclick=function(){
         errors_ele[i].style.display='none';
     }
 
-    axios.post('/'+lang+"/users/profile/update" ,formData)
+    axios.post('/'+lang+"/profile/update" ,formData)
         .then(res=> {
             if (res.status == 200) {
                 let res_data = res.data,

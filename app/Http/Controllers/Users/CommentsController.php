@@ -12,7 +12,7 @@ class CommentsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(userMiddleware());
+        $this->middleware(['auth','verified']);
         $this->middleware(['throttle:1,10'])->only(['store']);
     }
     

@@ -17,7 +17,7 @@ class GroupReqsController extends Controller
 
     public function __construct()
     {
-        $this->middleware(userMiddleware());
+        $this->middleware(['auth','verified']);
     }
     
     ##################################     join    ########################################

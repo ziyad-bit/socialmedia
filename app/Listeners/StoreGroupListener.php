@@ -31,15 +31,20 @@ class StoreGroupListener
     {
         $slug  = SlugService::createSlug(Groups::class,'slug',$event->request->name );
 
+        if ($event->is_admin == true) {
+            $owner=['admin_id' => Auth::id()];
+        }else{
+            $owner=['user_id' => Auth::id()];
+        }
+
         $group = Groups::create($event->request->except('photo')+[  'photo'   => $event->photo_name,
                                                                     'slug'    => $slug,
-                                                                    'user_id' => Auth::id()]);
+                                                                    ]+$owner);
 
         Group_users::create([
-            'user_id'  => Auth::id(),
             'group_id' => $group->id,
             'role_id'  => Roles::group_owner,
             'status'   => Group_users::approved_req,
-        ]);
+        ]+$owner);
     }
 }

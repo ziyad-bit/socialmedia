@@ -9,6 +9,7 @@ use Nicolaslopezj\Searchable\SearchableTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -120,5 +121,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function scopeAuthFriend($q)
     {
         return $q->where('friend_id',Auth::id());
+    }
+
+    //mutators
+    public function setPasswordAttribute($value):string
+    {
+        return $this->attributes['password'] = Hash::make($value);
     }
 }

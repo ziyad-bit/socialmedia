@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.adminLogin')
 
 @section('content')
     <div class="container">
@@ -17,7 +17,7 @@
 
                     <div class="card-body">
 
-                        <form method="POST" action="{{ route('admins.reset.password') }}">
+                        <form method="POST" action="{{ route('admins.send.resetPasswordLink') }}">
                             @csrf
 
                             <div class="row mb-3">

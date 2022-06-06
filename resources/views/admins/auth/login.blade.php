@@ -29,7 +29,7 @@
             </form>
         </div>
 
-        <a class="btn btn-link" href="{{ route('admins.reset.password') }}">
+        <a class="btn btn-link" href="{{ route('admins.get.resetPasswordLink') }}">
             {{ __('Forgot Your Password?') }}
         </a>
     </div>

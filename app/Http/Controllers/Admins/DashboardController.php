@@ -9,7 +9,7 @@ class DashboardController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(adminMiddleware());
+        $this->middleware('auth:admins' );
     }
 
     ####################################      index      ################################

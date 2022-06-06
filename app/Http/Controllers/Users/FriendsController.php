@@ -11,7 +11,7 @@ use App\Http\Requests\FriendRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\{JsonResponse,Request};
-use App\Models\{Friends_user, Notifications, User};
+use App\Models\{Friends_user, Notifications};
 
 class FriendsController extends Controller
 {
@@ -19,11 +19,11 @@ class FriendsController extends Controller
 
     public function __construct()
     {
-        $this->middleware(userMiddleware());
+        $this->middleware(['auth','verified']);
     }
     
     ##########################################    show_requests    #########################
-    public function show_requests(Request $request)//:View|JsonResponse
+    public function show_requests(Request $request):View|JsonResponse
     { 
         $friend_reqs = Friends::getRequests();
 

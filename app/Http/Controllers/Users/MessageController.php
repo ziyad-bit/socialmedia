@@ -18,7 +18,7 @@ class MessageController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(userMiddleware());
+        $this->middleware(['auth','verified']);
     }
 
     #############################     index_friends     #######################################

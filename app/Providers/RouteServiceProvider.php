@@ -45,12 +45,12 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/api.php'));
 
             Route::prefix(getLang())
-                ->middleware('web')
+                ->middleware(['web' ,'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','throttle:all_routes'])
                 ->namespace($this->namespace)
                 ->group(base_path('routes/usersWeb.php'));
             
             Route::prefix(getLang().'/admins')
-                ->middleware('web')
+                ->middleware(['web' ,'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','throttle:all_routes'])
                 ->namespace($this->namespace)
                 ->group(base_path('routes/adminsWeb.php'));
         });

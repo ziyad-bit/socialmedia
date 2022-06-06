@@ -12,7 +12,7 @@ class SharesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(userMiddleware());
+        $this->middleware(['auth','verified']);
     }
     
     ##################################      store      ###############################

@@ -24,7 +24,8 @@ class AdminAuthRequest extends FormRequest
     public function rules()
     {
         return [
-            'email'=>'required|email'
+            'email'    => 'required|email',
+            'password' => 'required_with:password_id|confirmed|min:8'
         ];
     }
 }

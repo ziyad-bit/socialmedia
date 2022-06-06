@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Languages;
-use Illuminate\Support\Facades\Crypt;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 ###############################     languages      ####################################
@@ -19,19 +18,6 @@ function getLang()
 {
     return LaravelLocalization::setLocale();
 }
-
-###############################     middlewares      ####################################
-
-function adminMiddleware():array
-{
-    return [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth:admins' ,'throttle:all_routes' ];
-}
-
-function userMiddleware():array
-{
-    return [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth','throttle:all_routes','verified' ];
-}
-
 
 ###########################         date        ##########################################
 function diff_date($date):string

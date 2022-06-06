@@ -9,6 +9,11 @@ use Illuminate\Http\JsonResponse;
 
 class NotificationsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth','verified']);
+    }
+
     public function show_more(int $last_notif_id):JsonResponse
     {
         $notifications = Notifs::get($last_notif_id);

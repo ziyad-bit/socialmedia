@@ -9,7 +9,7 @@
         <div class="alert alert-danger text-center">{{ Session::get('error') }}</div>
     @endif
 
-    <a class="btn btn-primary" href="{{ route('languages.create') }}" style="margin-top: 20px">add language</a>
+    <a class="btn btn-primary" href="{{ route('admins-language.create') }}" style="margin-top: 20px">add language</a>
 
     <table class="table" style="margin-top: 20px">
         <thead class="thead-dark">
@@ -29,11 +29,11 @@
                     <td>{{ $language->direction }}</td>
                     <td>{{ $language->abbr }}</td>
                     <td>
-                        <a href="{{ route('languages.edit',$language->id) }}" class='btn btn-primary'>
+                        <a href="{{ route('admins-language.edit',$language->id) }}" class='btn btn-primary'>
                             {{__('titles.edit')}}
                         </a>
 
-                        <form action="{{route('languages.destroy',$language->id)}}" method="POST" style="display: inline-block">
+                        <form action="{{route('admins-language.destroy',$language->id)}}" method="POST" style="display: inline-block">
                             @csrf
                             @method('delete')
 

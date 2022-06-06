@@ -34,6 +34,7 @@
 
                     <form method="POST" id="photoForm" enctype="multipart/form-data">
 
+
                         <div class="form-group">
                             <label for="exampleInputEmail1">photo</label>
                             <input type="file" name="photo" class="form-control photo" aria-describedby="emailHelp">

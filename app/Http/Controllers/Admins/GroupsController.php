@@ -17,130 +17,63 @@ class GroupsController extends Controller
 
     public function __construct()
     {
-        $this->middleware(adminMiddleware());
+        $this->middleware('auth:admins' );
     }
 
     ####################################      index      ################################
     public function index():View
     {
-        $groups=Groups::selection()->defaultLang()->cursorPaginate(5);
+        $groups=Groups::selection()->cursorPaginate(5);
         return view('admins.groups.index',compact('groups'));
     }
 
     ####################################      create      ################################
     public function create():View
     {
-        $languages=Languages::select('abbr')->get();
-        return view('admins.groups.create',compact('languages'));
+        return view('admins.groups.create');
     }
 
     ####################################      store      ################################
     public function store(GroupRequest $request):RedirectResponse
     {
         try{
-            event(new StoreGroup($request));
-            return redirect()->back()->with(['success'=>__('messages.you created group successfully')]);
+            $photo_name = $this->uploadPhoto($request->file('photo'),'images/groups/',300);
+            $is_admin   = true;
 
+            event(new StoreGroup($request,$photo_name,$is_admin));
+
+            return redirect()->back()->with(['success'=>__('messages.you created it successfully')]);
         }catch(\Exception){
             DB::rollback();
             return redirect()->back()->with(['error'=>__('messages.something went wrong')]);
         }
     }
 
-    ####################################      show      ################################
-    public function show(int $id):View|RedirectResponse
-    {
-        $group=Groups::select('trans_of','id')->findOrfail($id);
-
-        if ($group->trans_of != 0) {
-            $group=Groups::findOrfail($group->trans_of);
-        }
-        
-        $lang_diff=$this->langs_diff($group);
-
-        if ($lang_diff == []) {
-            return redirect()->route('groups.index')->with('success','all languages are added');
-        }
-
-        return view('admins.groups.show',compact('lang_diff','group'));
-    }
-
-    ####################################      add lang      ################################
-    public function add_lang(int $id , GroupRequest $request):RedirectResponse
-    {
-        $group=(array)$request->group;
-        $group=Groups::findOrfail($id);
-
-        Groups::create([
-            'trans_lang'  => $request->abbr,
-            'trans_of'    => $id,
-            'name'        => $group['name'],
-            'description' => $group['description'],
-            'photo'       => $group->photo,
-            'status'      => $group->status,
-            'admin_id'    => Auth::id(),
-        ]);
-
-        return redirect()->back()->with(['success'=>'you added new language successfully for this group']);
-    }
-
     ####################################      edit      ################################
-    public function edit(int $id):View
+    public function edit(Groups $admins_group):View
     {
-        $group=Groups::with('groups')->selection()->findOrfail($id);
-
-        if ($group->trans_of != 0) {
-            $group=Groups::with('groups')->selection()->findOrfail($group->trans_of);
-        }
-
-        return view('admins.groups.edit',compact('group'));
+        return view('admins.groups.edit',compact('admins_group'));
     }
 
     ####################################      update      ################################
-    public function update(GroupRequest $request,int $id):RedirectResponse
+    public function update(GroupRequest $request,Groups $admins_group):RedirectResponse
     {
-        $group         = Groups::findOrfail($id);
-        $request_group = array_values($request->group);
-
-        $group->update([
-            'name'        => $request_group[0]['name'],
-            'description' => $request_group[0]['description'],
-        ]);
-
-        return redirect()->back()->with(['success'=>__('messages.you updated it successfully')]);
-    }
-
-    ####################################      change      ################################
-    public function change(GroupRequest $request,int $id):RedirectResponse
-    {
-        $group      = Groups::findOrfail($id);
-        if ($group->trans_of != 0) {
-            $group=Groups::findOrfail($group->trans_of);
-        }
-
-        $groups_ids = $group->groups->pluck('id')->toArray();
-        array_push($groups_ids,$id);
-
-        if ($request->photo) {
-            $photo_name   = $this->uploadphoto($request , 'images/groups');
-            Groups::whereIn('id',$groups_ids)->update([
-                    'photo'  => $photo_name,
-                    'status' => $request->status
-                ]);
+        $photo = $request->file('photo');
+        if (!$photo) {
+            $photo_name = $admins_group->photo;
         }else{
-            Groups::whereIn('id',$groups_ids)->update([
-                'status'=>$request->status
-            ]);
+            $photo_name = $this->uploadPhoto($photo,'images/groups/',300);
         }
-        
+
+        $admins_group->update($request->except(['photo','photo_id'])+['photo'=>$photo_name]);
+
         return redirect()->back()->with(['success'=>__('messages.you updated it successfully')]);
     }
 
     ####################################      destroy      ################################
-    public function destroy(int $id):RedirectResponse
+    public function destroy(Groups $admins_group):RedirectResponse
     {
-        $group      = Groups::findOrfail($id);
-        $group->delete();
+        $admins_group->delete();
 
         return redirect()->back()->with(['success'=>__('messages.you deleted it successfully')]);
     }

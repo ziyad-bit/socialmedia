@@ -15,7 +15,6 @@ use App\Classes\Posts\PostsAbstractFactory;
 use App\Events\StoreGroup;
 use App\Traits\GetGroupAuth as TraitsGetGroupAuth;
 use Illuminate\Http\{RedirectResponse,JsonResponse};
-use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class GroupsController extends Controller
 {
@@ -23,7 +22,7 @@ class GroupsController extends Controller
 
     public function __construct()
     {
-        $this->middleware(userMiddleware());
+        $this->middleware(['auth','verified']);
     }
     
     #################################    index_posts   ###################################
@@ -91,8 +90,8 @@ class GroupsController extends Controller
     {
         try{
             $photo_name = $this->uploadPhoto($request->file('photo'),'images/groups/',300);
-            
-            event(new StoreGroup($request,$photo_name));
+            $is_admin=false;
+            event(new StoreGroup($request,$photo_name,$is_admin));
 
             return redirect()->back()->with(['success'=>__('messages.you created it successfully')]);
         }catch(\Exception){
@@ -106,11 +105,11 @@ class GroupsController extends Controller
         $group_auth=$this->getGroupAuth($group->id);
         $this->authorize('owner',$group_auth);
 
-        $photo=$request->file('photo');
+        $photo = $request->file('photo');
         if (!$photo) {
-            $photo_name=$group->photo;
+            $photo_name = $group->photo;
         }else{
-            $photo_name=$this->uploadPhoto($photo,'images/groups/',300);
+            $photo_name = $this->uploadPhoto($photo,'images/groups/',300);
         }
 
         $group->update($request->except(['photo','photo_id'])+['photo'=>$photo_name]);

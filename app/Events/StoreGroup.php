@@ -2,12 +2,8 @@
 
 namespace App\Events;
 
-use App\Models\Groups;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Http\Request;
 use Illuminate\Queue\SerializesModels;
@@ -18,15 +14,17 @@ class StoreGroup
 
     public $photo_name;
     public $request;
+    public $is_admin;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Request $request ,string $photo_name)
+    public function __construct(Request $request ,string $photo_name,bool $is_admin)
     {
         $this->photo_name = $photo_name;
         $this->request    = $request;
+        $this->is_admin   = $is_admin;
     }
 
     /**
