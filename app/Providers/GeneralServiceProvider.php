@@ -33,12 +33,20 @@ class GeneralServiceProvider extends ServiceProvider
                     //get notifications
                     $auth_id   = Auth::id();
 
-                    $notifications = Notifications::selection()->with(['user'=>fn($q)=>$q->selection()])
-                        ->where('receiver_id',Auth::id());
+                    if (Cache::has('notifs_'.$auth_id)) {
+                        $all_notifications = Cache::get('notifs_'.$auth_id);
+                        $notifs_count      = Cache::get('notifs_count_'.$auth_id);
+                    }else{
+                        $notifications = Notifications::selection()->with(['user'=>fn($q)=>$q->selection()])
+                        ->where('receiver_id',$auth_id);
 
-                    $all_notifications = $notifications->orderByDesc('id')->limit(3)->get();
+                        $all_notifications = $notifications->orderByDesc('id')->limit(3)->get();
 
-                    $notifs_count = $notifications->where('seen',0)->count();
+                        $notifs_count = $notifications->where('seen',0)->count();
+
+                        Cache::put('notifs_'.$auth_id,$all_notifications,now()->addHours(2));
+                        Cache::put('notifs_count_'.$auth_id,$notifs_count,now()->addHours(2));
+                    }
 
                     $view->with(['all_notifications'=>$all_notifications,'notifs_count'=>$notifs_count]);
 

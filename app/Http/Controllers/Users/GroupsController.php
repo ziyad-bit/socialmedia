@@ -13,12 +13,12 @@ use Illuminate\Support\Facades\Auth;
 use App\Traits\{UploadImage,GetPageCode};
 use App\Classes\Posts\PostsAbstractFactory;
 use App\Events\StoreGroup;
-use App\Traits\GetGroupAuth as TraitsGetGroupAuth;
+use App\Traits\GetAuthInGroup ;
 use Illuminate\Http\{RedirectResponse,JsonResponse};
 
 class GroupsController extends Controller
 {
-    use GetPageCode,UploadImage,TraitsGetGroupAuth;
+    use GetPageCode,UploadImage,GetAuthInGroup;
 
     public function __construct()
     {
@@ -102,7 +102,7 @@ class GroupsController extends Controller
     #################################     update    ###################################
     public function update(GroupRequest $request, Groups $group):JsonResponse
     {
-        $group_auth=$this->getGroupAuth($group->id);
+        $group_auth=$this->getAuthInGroup($group->id);
         $this->authorize('owner',$group_auth);
 
         $photo = $request->file('photo');
@@ -120,7 +120,7 @@ class GroupsController extends Controller
     #################################     delete    ###################################
     public function destroy(Groups $group):RedirectResponse
     {
-        $group_auth=$this->getGroupAuth($group->id);
+        $group_auth=$this->getAuthInGroup($group->id);
         $this->authorize('owner',$group_auth);
 
         $group->delete();

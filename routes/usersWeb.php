@@ -74,8 +74,8 @@ Route::apiResource('/group-users'               , 'Users\GroupUsersController')-
 #######################################     groups admins    ######################################R
 Route::apiResource('/group-admins'               , 'Users\GroupAdminsController')->parameter('group-admins','group_admin')->only(['show','update','destroy']);
 #######################################     groups reqs    ######################################
-Route::put ('/group/reqs/ignore/{group_req}'    , 'Users\GroupReqsController@ignore');
-Route::apiResource('/group/reqs'                , 'Users\GroupReqsController')->parameter('reqs','group_req')->only(['store','update','destroy','show']);
+Route::put ('/group/requests/ignore/{group_request}'    , 'Users\GroupReqsController@ignore');
+Route::apiResource('/group-requests'                    , 'Users\GroupReqsController')->only(['store','update','destroy','show']);
 #######################################     likes     ######################################
 Route::post ('/like/store'  , 'Users\LikesController@store');
 

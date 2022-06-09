@@ -21,12 +21,12 @@ class PostsSeeder extends Seeder
         $groups=collect(Groups::all()->modelKeys());
         $faker=Factory::create();
 
-        for ($i=0; $i <100 ; $i++) { 
+        for ($i=0; $i <1000 ; $i++) { 
             Posts::create([
                 'text'     => $faker->paragraph(),
-                'user_id'  => $users->random(),
+                'user_id'  =>  $users->random(),
                 'group_id' => $groups->random(),
-                'photo'    => 'https://via.placeholder.com/150',
+                'photo'    => '0c1g15lpwtk85PuMtW9WndK8RLPwMp90wwBgJj9h.jpg',
             ]);
         }
     }

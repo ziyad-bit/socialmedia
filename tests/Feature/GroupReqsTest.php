@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Group_users;
 use App\Models\Groups;
 use App\Models\Roles;
 use Tests\TestCase;
@@ -39,7 +40,7 @@ class GroupReqsTest extends TestCase
     public function test_store():void
     {
         $data=$this->data;
-        $response = $this->post('/group/reqs',$data);
+        $response = $this->post('/group-requests',$data);
 
         $response->assertStatus(200);
         $response->assertJson(['success'=>true]);
@@ -50,12 +51,116 @@ class GroupReqsTest extends TestCase
     #################################     test show    ###############################
     public function test_show():void
     {
+        $auth_user=$this->auth_user;
+
+        $user  = User::factory()->create();
+        $group = Groups::factory()->create();
+
+        Group_users::factory()->create([
+            'user_id'  => $user->id,
+            'group_id' => $group->id,
+            'status'   => 0,
+            'role_id'  => null
+        ]);
+
+        $group_users_auth=Group_users::factory()->create([
+            'user_id'  => $auth_user->id,
+            'group_id' => $group->id,
+            'status'   => 1,
+            'role_id'  => 2
+        ]);
+
+        $response = $this->get('/group-requests/'.$group_users_auth->id);
+
+        $response->assertStatus(200);
+        $response->assertJson(['view'=>true]);
+        $response->assertSee(''.$user->name);
+    }
+
+    #################################     test update    ###############################
+    public function test_update():void
+    {
+        $auth_user=$this->auth_user;
+
+        $user  = User::factory()->create();
+        $group = Groups::factory()->create();
+
+        $group_user=Group_users::factory()->create([
+            'user_id'  => $user->id,
+            'group_id' => $group->id,
+            'status'   => 0,
+        ]);
+
+        Group_users::factory()->create([
+            'user_id'  => $auth_user->id,
+            'group_id' => $group->id,
+            'status'   => 1,
+            'role_id'  => 2
+        ]);
+
         $data=$this->data;
-        $response = $this->post('/group/reqs',$data);
+
+        $response = $this->call('put','/group-requests/'.$group_user->id,$data);
 
         $response->assertStatus(200);
         $response->assertJson(['success'=>true]);
+        
+        $this->assertDatabaseHas('group_users',['id'=> $group_user->id ,'status'=> 1]);
+    }
 
-        $this->assertDatabaseHas('group_users',['group_id'=>$data['group_id']]);
+    #################################     test ignore    ###############################
+    public function test_ignore():void
+    {
+        $auth_user=$this->auth_user;
+
+        $user  = User::factory()->create();
+        $group = Groups::factory()->create();
+
+        $group_user=Group_users::factory()->create([
+            'user_id'  => $user->id,
+            'group_id' => $group->id,
+            'status'   => 0,
+            'role_id'  => null
+        ]);
+
+        Group_users::factory()->create([
+            'user_id'  => $auth_user->id,
+            'group_id' => $group->id,
+            'status'   => 1,
+            'role_id'  => 2
+        ]);
+
+        $data=$this->data;
+
+        $response = $this->call('put','/group/requests/ignore/'.$group_user->id,$data);
+
+        $response->assertStatus(200);
+        $response->assertJson(['success'=>true]);
+        
+        $this->assertDatabaseHas('group_users',['id'=> $group_user->id ,'status'=> 2]);
+    }
+
+    #################################     test delete (leave group)   ###############################
+    public function test_delete():void
+    {
+        $auth_user=$this->auth_user;
+
+        $group = Groups::factory()->create();
+
+        $group_user_auth=Group_users::factory()->create([
+            'user_id'  => $auth_user->id,
+            'group_id' => $group->id,
+            'status'   => 1,
+            'role_id'  => 1
+        ]);
+
+        $data=$this->data;
+
+        $response = $this->call('delete','/group-requests/'.$group_user_auth->id,$data);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
+        
+        $this->assertDatabaseMissing('group_users',['id'=>$group_user_auth->id]);
     }
 }

@@ -6,11 +6,11 @@ use App\Classes\Group\GroupFactory;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\{Roles,Group_users};
-use App\Traits\{GetGroupAuth,GetPageCode};
+use App\Traits\{GetAuthInGroup,GetPageCode};
 
 class GroupAdminsController extends Controller
 {
-    use GetPageCode ,GetGroupAuth;
+    use GetPageCode ,GetAuthInGroup;
 
     public function __construct()
     {
@@ -20,8 +20,9 @@ class GroupAdminsController extends Controller
     ###########################################      show        ########################
     public function show(Group_users $group_admin):JsonResponse
     {
-        $group_auth = $this->getGroupAuth($group_admin->group_id);
-        $this->authorize('owner_admin_member',$group_auth);
+        $this->authorize('owner_admin_member',$group_admin);
+
+        $group_auth=$group_admin;
 
         $group_factory = GroupFactory::factory('GroupAdmin');
         $group_admins  = $group_factory->get($group_admin->group_id);
@@ -35,7 +36,7 @@ class GroupAdminsController extends Controller
     ###########################################    remove admin   ########################
     public function update(Group_users $group_admin):JsonResponse
     {
-        $group_auth = $this->getGroupAuth($group_admin->group_id);
+        $group_auth = $this->getAuthInGroup($group_admin->group_id);
         $this->authorize('owner',  $group_auth);
 
         $group_admin->update(['role_id' => Roles::group_member]);
@@ -46,7 +47,7 @@ class GroupAdminsController extends Controller
     ###########################################    delete    #############################
     public function destroy(Group_users $group_admin):JsonResponse
     {
-        $group_auth = $this->getGroupAuth($group_admin->group_id);
+        $group_auth = $this->getAuthInGroup($group_admin->group_id);
         $this->authorize('owner',  $group_auth);
 
         $group_admin->delete();

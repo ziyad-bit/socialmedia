@@ -19,7 +19,7 @@ class LikesSeeder extends Seeder
         $users=collect(User::all()->modelKeys());
         $posts=collect(Posts::all()->modelKeys());
 
-        for ($i=0; $i <100 ; $i++) { 
+        for ($i=0; $i <1000 ; $i++) { 
             Likes::create([
                 'user_id'=>$users->random(),
                 'post_id'=>$posts->random(),

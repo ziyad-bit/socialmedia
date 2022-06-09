@@ -20,7 +20,7 @@ class CreateGroupUsersTable extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('admin_id')->nullable()->constrained('admins')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('group_id')->constrained('groups')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('role_id')->default(null)->constrained('roles')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

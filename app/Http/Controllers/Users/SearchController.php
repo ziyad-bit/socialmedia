@@ -24,7 +24,7 @@ class SearchController extends Controller
         $search = $request->search;
 
         //factory method design pattern
-        $search_factory = new PaginateSearchFactory($search , 4);
+        $search_factory = new PaginateSearchFactory($search , 3);
 
         $friends       = $search_factory->createSearch()->paginateFriends();
         $users         = $search_factory->createSearch()->paginateUsers();

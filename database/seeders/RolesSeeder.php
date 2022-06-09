@@ -23,5 +23,10 @@ class RolesSeeder extends Seeder
             'name'        => 'group_admin',
             'description' => 'mid level permission'
         ]);
+
+        Roles::create([
+            'name'        => 'group_owner',
+            'description' => 'all permissions'
+        ]);
     }
 }

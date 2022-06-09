@@ -48,7 +48,7 @@ let group_id    = document.getElementById('group_id').value;
 const join_btn = document.querySelector('.join_btn');
 if (join_btn) {
     join_btn.onclick = function () {
-        axios.post('/'+lang+"/group/reqs", { 'group_id': group_id })
+        axios.post('/'+lang+"/group-requests", { 'group_id': group_id })
             .then(res => {
                 if (res.status == 200) {
                     this.disabled = true;
@@ -84,7 +84,7 @@ if (update_btn_group) {
             errors[i].style.display='none';
         }
 
-        axios.post('/'+lang+"/group/update/"+group_id, formData)
+        axios.post('/'+lang+"/group-update/"+group_id, formData)
             .then(res => {
                 if (res.status == 200) {
                     let res_data    = res.data,
@@ -124,7 +124,7 @@ if (parent_requests) {
             group_req_id   = document.getElementById('group_req_id').value;
 
         function getRequests(reqs_page_code, group_req_id) {
-            axios.get('/'+lang+"/group/reqs/" + group_req_id + '?cursor=' + reqs_page_code)
+            axios.get('/'+lang+"/group-requests/" + group_req_id + '?cursor=' + reqs_page_code)
                 .then(res => {
                     if (res.status == 200) {
                         let view           = res.data.view;
@@ -132,7 +132,6 @@ if (parent_requests) {
 
                         if (view == '') {
                             parent_requests.insertAdjacentHTML('beforeend', 
-
                                 '<h3 style="margin-left:5px">No requests</h3>');
                         }
 
@@ -171,7 +170,7 @@ if (parent_requests) {
         //approve request
         generalEventListener('click', '.btn_approve', e => {
             let group_req_id = e.target.getAttribute('data-group_req_id');
-            axios.put('/'+lang+'/group/reqs/' + group_req_id)
+            axios.put('/'+lang+'/group-requests/' + group_req_id)
                 .then(res => {
                     if (res.status == 200) {
                         let success_msg = res.data.success;
@@ -193,7 +192,7 @@ if (parent_requests) {
         //ignore request
         generalEventListener('click', '.btn_ignore', e => {
             let group_req_id = e.target.getAttribute('data-group_req_id');
-            axios.put('/'+lang+'/group/reqs/ignore/' + group_req_id)
+            axios.put('/'+lang+'/group-requests/ignore/' + group_req_id)
                 .then(res => {
                     if (res.status == 200) {
                         let success_msg = res.data.success;

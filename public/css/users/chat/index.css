@@ -25,13 +25,13 @@ div .list_search {
 }
 
 .dot {
-    height          : 10px;
-    width           : 10px;
+    height          : 10px !important;
+    width           : 10px !important;
     background-color: green;
     float           : right;
-    position        : relative;
-    right: 262px;
-    top             : 28px;
+    position        : relative !important;
+    right: 232px;
+    top: 32px;
 }
 
 .user_name{

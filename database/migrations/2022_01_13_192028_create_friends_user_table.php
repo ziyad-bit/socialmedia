@@ -13,7 +13,7 @@ class CreateFriendsUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('friends_user', function (Blueprint $table) {
+        Schema::create('friend_user', function (Blueprint $table) {
             $table->id();
             $table->foreignId('friend_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');

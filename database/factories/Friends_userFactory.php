@@ -18,7 +18,7 @@ class Friends_userFactory extends Factory
 
         return [
             'status'    => 1,
-            'user_id'   => $users->random(),
+            'user_id'   => 1001,
             'friend_id' => $users->random(),
         ];
     }

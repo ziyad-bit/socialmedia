@@ -8,12 +8,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\GroupUsersRequest;
 use App\Models\{Roles,Group_users};
-use App\Traits\{GetGroupAuth,GetPageCode};
+use App\Traits\{GetAuthInGroup,GetPageCode};
 use Illuminate\Http\{RedirectResponse,JsonResponse};
 
 class GroupReqsController extends Controller
 {
-    use GetPageCode ,GetGroupAuth;
+    use GetPageCode ,GetAuthInGroup;
 
     public function __construct()
     {
@@ -29,13 +29,12 @@ class GroupReqsController extends Controller
     }
 
     ##################################      show      ########################################
-    public function show(Group_users $group_req):JsonResponse
+    public function show(Group_users $group_request)//:JsonResponse
     {
-        $group_auth = $this->getGroupAuth($group_req->group_id);
-        $this->authorize('owner_admin', $group_auth);
+        $this->authorize('owner_admin', $group_request);
 
         $group_factory = GroupFactory::factory('GroupReq');
-        $group_reqs    = $group_factory->get($group_req->group_id);
+        $group_reqs    = $group_factory->get($group_request->group_id);
 
         $page_code = $this->getPageCode($group_reqs);
         
@@ -44,37 +43,36 @@ class GroupReqsController extends Controller
     }
 
     ##################################     approve     ########################################
-    public function update(Group_users $group_req):JsonResponse
+    public function update(Group_users $group_request):JsonResponse
     {
-        $group_auth = $this->getGroupAuth($group_req->group_id);
+        $group_auth = $this->getAuthInGroup($group_request->group_id);
         $this->authorize('owner_admin',$group_auth);
         
-        $group_req->update(['role_id'=>Roles::group_member,'status'=>Group_users::approved_req]);
+        $group_request->update(['role_id'=>Roles::group_member,'status'=>Group_users::approved_req]);
 
         return response()->json(['success'=>__('messages.you approve it successfully')]);
     }
 
     ##################################     ignore    ########################################
-    public function ignore(Group_users $group_req):JsonResponse
+    public function ignore(Group_users $group_request):JsonResponse
     {
-        $group_auth = $this->getGroupAuth($group_req->group_id);
+        $group_auth = $this->getAuthInGroup($group_request->group_id);
         $this->authorize('owner_admin',$group_auth);
 
-        $group_req->update(['status'=>Group_users::ignored_req]);
+        $group_request->update(['status'=>Group_users::ignored_req]);
 
         return response()->json(['success'=>__('messages.you ignore it successfully')]);
     }
 
     ##################################     leave     ########################################
-    public function destroy(Group_users $group_req):RedirectResponse
+    public function destroy(Group_users $group_request):RedirectResponse
     {
-        $group_auth = $this->getGroupAuth($group_req->group_id);
-        $this->authorize('owner_admin_member',$group_auth);
+        $this->authorize('owner_admin_member',$group_request);
 
-        $groupFactory = GroupFactory::factory('GroupAdmin');
-        $group_admin  = $groupFactory->getAdmin($group_req->group_id);
+        if ($group_request->role_id == Roles::group_owner) {
+            $groupFactory = GroupFactory::factory('GroupAdmin');
+            $group_admin  = $groupFactory->getAdmin($group_request->group_id);
 
-        if ($group_req->role_id == Roles::group_owner) {
             if ($group_admin) {
                 event(new UpdateGroupOwner($group_admin));
             } else {
@@ -82,7 +80,7 @@ class GroupReqsController extends Controller
             }
         }
 
-        $group_req->delete();
+        $group_request->delete();
 
         return redirect()->back()->with('success', __('messages.you left it successfully'));
     }

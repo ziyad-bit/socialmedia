@@ -21,11 +21,11 @@ class CommentsSeeder extends Seeder
         $posts=collect(Posts::all()->modelKeys());
         $faker=Factory::create();
 
-        for ($i=0; $i <2000 ; $i++) { 
+        for ($i=0; $i <1000 ; $i++) { 
             Comments::create([
                 'text'    => $faker->sentence(),
-                'user_id'=>$users->random(),
-                'post_id'=>$posts->random(),
+                'user_id' => $users->random(),
+                'post_id' => $posts->random(),
             ]);
         }
     }

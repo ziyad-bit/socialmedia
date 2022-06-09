@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\Messages;
 use App\Models\User;
-use Faker\Factory;
+use App\Models\Notifications;
 use Illuminate\Database\Seeder;
 
-class MessagesSeeder extends Seeder
+class NotificationsSeeder extends Seeder
 {
+
     /**
      * Run the database seeds.
      *
@@ -17,14 +17,15 @@ class MessagesSeeder extends Seeder
     public function run()
     {
         $users=collect(User::all()->modelKeys());
-        $faker=Factory::create();
-
-        for ($i=0; $i <1000 ; $i++) { 
-            Messages::create([
+        
+        for ($i=0; $i <10 ; $i++) { 
+            Notifications::create([
+                'type'        => 'friend_request',
+                'seen'        => rand(0,1),
                 'receiver_id' => $users->random(),
-                'sender_id'   => $users->random(),
-                'text'        => $faker->sentence(),
+                'user_id'     => $users->random(),
             ]);
         }
+        
     }
 }

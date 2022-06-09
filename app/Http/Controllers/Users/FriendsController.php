@@ -40,7 +40,8 @@ class FriendsController extends Controller
     ##########################################    store request   ###################################
     public function store(FriendRequest $request):JsonResponse
     {
-        $auth_user = ['user_id' => Auth::id()];
+        $auth_id=Auth::id();
+        $auth_user = ['user_id' => $auth_id];
 
         $req_data  = $request->validated() + $auth_user;
         $req       = Friends_user::where($req_data)->first();
@@ -51,6 +52,9 @@ class FriendsController extends Controller
             Friends_user::create($req_data);
             Notifications::Create(['type'=>'friend_req','receiver_id'=>$receiver_id ] + $auth_user);
             event(new ReceiveReqNotify($receiver_id));
+
+            Cache::forget('notifs_'.$auth_id);
+            Cache::forget('notifs_count_'.$auth_id);
         }else{
             return response()->json(['error'=>__("messages.you can't send request again")]);
         }

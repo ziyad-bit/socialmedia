@@ -32,7 +32,7 @@ class ResetPasswordListener
 
         $email=$event->email;
 
-        Password_reset::create(['token'=>$token,'email'=>$email]);
+        Password_reset::insert(['token'=>$token,'email'=>$email,'created_at'=>now()]);
 
         Mail::to($email)->send(new ResetPasswordMail($token,$email));
     }

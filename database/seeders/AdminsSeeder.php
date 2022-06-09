@@ -19,7 +19,7 @@ class AdminsSeeder extends Seeder
             Admins::create([
                 'name'     => 'ziyad',
                 'photo'    => 'user.jpg',
-                'email'    => 'ziyad199523102'.$i.'@yahoo.com',
+                'email'    => 'ziyad199523'.$i.'@yahoo.com',
                 'password' => Hash::make('12121212'),
             ]);
         }

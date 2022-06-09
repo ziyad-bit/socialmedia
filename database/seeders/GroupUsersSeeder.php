@@ -17,15 +17,16 @@ class GroupUsersSeeder extends Seeder
      */
     public function run()
     {
-        $users=collect(User::all()->modelKeys());
-        $roles=collect(Roles::all()->modelKeys());
-        $groups=collect(Groups::all()->modelKeys());
+        $users  = collect(User::all()->modelKeys());
+        $roles  = collect(Roles::all()->modelKeys());
+        $groups = collect(Groups::all()->modelKeys());
 
-        for ($i=0; $i <10 ; $i++) { 
+        for ($i=0; $i <1000 ; $i++) { 
             Group_users::create([
                 'role_id'  => $roles->random(),
                 'user_id'  => $users->random(),
                 'group_id' => $groups->random(),
+                'status'   => 1,
             ]);
         }
     }

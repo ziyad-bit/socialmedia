@@ -154,7 +154,7 @@
     @if ($group_auth)
         @can('owner_admin_member', $group_auth)
             <input type="hidden" id="group_req_id" value="{{ $group_auth->id }}">
-            <form action="{{ route('group-users.destroy', $group_auth->id) }}" method="POST" style="display: inline-block">
+            <form action="{{ route('group-requests.destroy', $group_auth->id) }}" method="POST" style="display: inline-block">
                 @csrf
                 @method('delete')
 
@@ -217,7 +217,7 @@
                     @can('owner_admin', $group_auth)
                         <button class="nav-link requests_tap" id="nav_requests-tab" data-bs-toggle="tab"
                             data-bs-target="#nav_requests" type="button" role="tab"
-                            data-group_id="{{ $group->id }}">Requests</button>
+                            data-group_id="{{ $group_auth->id }}">Requests</button>
                     @endcan
 
                 </div>
