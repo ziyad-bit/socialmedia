@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admins;
 use App\Models\User;
+use App\Models\Admins;
+use Faker\Factory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,11 +18,26 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        for ($i=1; $i <100 ; $i++) { 
-            $user=User::find($i);
+        $faker=Factory::create();
 
-            $users=User::inRandomOrder()->take(3)->pluck('id')->toArray();
-            $user->auth_add_friends()->attach($users);
+        for ($i=0; $i <1000 ; $i++) { 
+            User::create([
+                'name'              => $faker->unique()->name(),
+                'photo'             => 'user.jpg',
+                'email'             => $faker->unique()->email(),
+                'email_verified_at' => now(),
+                'online'            => 0,
+                'password'          => Hash::make('12121212'),                // password
+                'remember_token'    => Str::random(10),
+            ]); 
+
+            if ($i > 50) {
+                $user=User::find(57);
+                $users=User::inRandomOrder()->take(10)->pluck('id')->toArray();
+                $user->auth_add_friends()->attach($users);
+            }
+           
+            
         }
         
     }

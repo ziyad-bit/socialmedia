@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Admins;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,11 +16,13 @@ class AdminsSeeder extends Seeder
      */
     public function run()
     {
+        $faker=Factory::create();
+
         for ($i=0; $i <10 ; $i++) { 
             Admins::create([
                 'name'     => 'ziyad',
                 'photo'    => 'user.jpg',
-                'email'    => 'ziyad199523'.$i.'@yahoo.com',
+                'email'    => $faker->unique()->email(),
                 'password' => Hash::make('12121212'),
             ]);
         }

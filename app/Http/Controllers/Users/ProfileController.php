@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Traits\{GetPageCode,UploadImage};
 use App\Classes\Posts\PostsAbstractFactory;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\{Hash,Auth};
+use Illuminate\Support\Facades\{Hash,Auth, Cache};
 
 class ProfileController extends Controller
 {
@@ -24,9 +24,8 @@ class ProfileController extends Controller
     }
 
     ##################################     index auth profile    #################################
-    public function index(Request $request):View|JsonResponse
+    public function index(Request $request)//:View|JsonResponse
     {
-        RateLimiter::clear('all_routes');
         $auth_id       = Auth::id();
         $friends       = new Friends();
         $friends_ids   = $friends->fetchIds($auth_id );
