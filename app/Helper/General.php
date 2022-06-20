@@ -11,7 +11,15 @@ function default_lang():string
 
 function lang_rtl():array
 {
-    return Languages::where('direction','rtl')->pluck('abbr')->toArray();
+    
+    if (Cache::has('langs_abbr')) {
+        return Cache::get('langs_abbr');
+    }
+
+    $langs_abbr= Languages::where('direction','rtl')->pluck('abbr')->toArray();
+    Cache::put('langs_abbr',$langs_abbr , now()->addHours(6));
+
+    return $langs_abbr;
 }
 
 function getLang()

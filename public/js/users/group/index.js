@@ -60,21 +60,23 @@ if (join_btn) {
 
 
 //update group
-const group_name_ele        = document.querySelector('.group_name'),
-    group_description_ele   = document.querySelector('.group_description'),
-    group_name_input        = document.querySelector('.input_name'),
-    group_description_input = document.querySelector('.input_description');
+    const group_name_ele        = document.querySelector('.group_name'),
+        group_description_ele   = document.querySelector('.group_description'),
+        group_name_input        = document.querySelector('.input_name'),
+        group_description_input = document.querySelector('.input_description'),
+        role_id                 = document.querySelector('.role_id');
 
-document.querySelector('.btn_edit').onclick=function(){
-    let group_name        = group_name_ele.innerText,
-        group_description = group_description_ele.innerText;
+if (role_id == 3) {
+    document.querySelector('.btn_edit').onclick=function(){
+        let group_name        = group_name_ele.innerText,
+            group_description = group_description_ele.innerText;
+    
+            group_name_input.value        = group_name;
+            group_description_input.value = group_description;
+    }
 
-        group_name_input.value        = group_name;
-        group_description_input.value = group_description;
-}
+    const update_btn_group = document.querySelector('#update_group_btn');
 
-const update_btn_group = document.querySelector('#update_group_btn');
-if (update_btn_group) {
     update_btn_group.onclick = function () {
         let form     = document.getElementById('edit_group_form'),
             formData = new FormData(form);
@@ -116,6 +118,10 @@ if (update_btn_group) {
             })
     }
 }
+
+
+
+
 
 //show requests
 const parent_requests = document.querySelector('.parent_requests');

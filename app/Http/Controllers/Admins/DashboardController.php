@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Models\User;
+use App\Models\Posts;
+use App\Models\Admins;
+use App\Models\Comments;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -15,6 +18,11 @@ class DashboardController extends Controller
     ####################################      index      ################################
     public function index()
     {
-        return view('admins.auth.dashboard');
+        $users    = User::all()->count();
+        $admins   = Admins::all()->count();
+        $posts    = Posts::all()->count();
+        $comments = Comments::all()->count();
+
+        return view('admins.auth.dashboard',compact('users','admins','posts','comments'));
     }
 }

@@ -14,20 +14,30 @@ class NotificationsController extends Controller
         $this->middleware(['auth','verified']);
     }
 
+    #######################################     show_more    #############################
     public function show_more(int $last_notif_id):JsonResponse
     {
-        $notifications = Notifs::get($last_notif_id);
+        try {
+            $notifications = Notifs::get($last_notif_id);
                             
-        $view=view('users.notifications.show',compact('notifications'))->render();
-        return response()->json(['view'=>$view]);
+            $view=view('users.notifications.show',compact('notifications'))->render();
+            return response()->json(['view'=>$view]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
+        }
     }
 
+    #######################################     update     #############################
     public function update():JsonResponse
     {
-        $unseen_notifs_ids = Notifs::get_ids();
+        try {
+            $unseen_notifs_ids = Notifs::get_ids();
 
-        Notifications::whereIn('id',$unseen_notifs_ids)->update(['seen'=>1]);
+            Notifications::whereIn('id',$unseen_notifs_ids)->update(['seen'=>1]);
 
-        return response()->json([]);
+            return response()->json([]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
+        }
     }
 }

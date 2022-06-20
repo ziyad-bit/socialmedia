@@ -5,13 +5,15 @@ namespace App\Http\Controllers\Users;
 use App\Classes\Friends\Friends;
 use App\Traits\GetPageCode;
 use App\Events\ReceiveReqNotify;
+use App\Events\StoreFriendRequestEvent;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FriendRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Http\{JsonResponse,Request};
-use App\Models\{Friends_user, Notifications};
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
+use App\Models\{Friends_user};
+use Illuminate\Support\Facades\DB;
 
 class FriendsController extends Controller
 {
@@ -23,75 +25,90 @@ class FriendsController extends Controller
     }
     
     ##########################################    show_requests    #########################
-    public function show_requests(Request $request):View|JsonResponse
+    public function show_requests(Request $request):View|JsonResponse|RedirectResponse
     { 
-        $friend_reqs = Friends::getRequests();
+        try {
+            $friend_reqs = Friends::getRequests();
 
-        $page_code = $this->getPageCode($friend_reqs);
-        
-        if ($request->ajax()) {
-            $view = view('users.friends.next_requests', compact('friend_reqs'))->render();
-            return response()->json(['view' => $view,'page_code'=>$page_code]);
+            $page_code = $this->getPageCode($friend_reqs);
+            
+            if ($request->ajax()) {
+                $view = view('users.friends.next_requests', compact('friend_reqs'))->render();
+                return response()->json(['view' => $view,'page_code'=>$page_code]);
+            }
+    
+            return view('users.friends.index', compact('friend_reqs','page_code'));
+        } catch (\Exception) {
+            return redirect()->route('posts.index.all')->with('error','something went wrong');
         }
-
-        return view('users.friends.index', compact('friend_reqs','page_code'));
     }
 
     ##########################################    store request   ###################################
     public function store(FriendRequest $request):JsonResponse
     {
-        $auth_id=Auth::id();
-        $auth_user = ['user_id' => $auth_id];
-
-        $req_data  = $request->validated() + $auth_user;
-        $req       = Friends_user::where($req_data)->first();
-
-        if ($req == null) {
-            $receiver_id = $request->friend_id;
-
-            Friends_user::create($req_data);
-            Notifications::Create(['type'=>'friend_req','receiver_id'=>$receiver_id ] + $auth_user);
-            event(new ReceiveReqNotify($receiver_id));
-
-            Cache::forget('notifs_'.$auth_id);
-            Cache::forget('notifs_count_'.$auth_id);
-        }else{
-            return response()->json(['error'=>__("messages.you can't send request again")]);
+        try {
+            $auth_user = ['user_id' => Auth::id()];
+            $req_data  = $request->validated() + $auth_user;
+            $req       = Friends_user::where($req_data)->first();
+    
+            if ($req == null) {
+                $receiver_id = $request->friend_id;
+    
+                event(new StoreFriendRequestEvent($receiver_id,$req_data,$auth_user));
+                event(new ReceiveReqNotify($receiver_id));
+            }else{
+                return response()->json(['error'=>__("messages.you can't send request again")]);
+            }
+            
+            return response()->json(['success'=>__('messages.you send it successfully')]);
+        } catch (\Exception) {
+            DB::rollBack();
+            return response()->json(['error' => 'something went wrong'],500);
         }
-        
-        return response()->json(['success'=>__('messages.you send it successfully')]);
     }
 
     ##########################################    approve request   #################################
     public function update(Friends_user $friend):JsonResponse
     {
-        $this->authorize('update_or_delete',$friend);
+        try {
+            $this->authorize('update_or_delete',$friend);
         
-        $friend->update(['status'=>Friends_user::friend]);
+            $friend->update(['status'=>Friends_user::friend]);
 
-        Cache::forget('friends_ids_'.Auth::id());
+            Cache::forget('friends_ids_'.Auth::id());
 
-        return response()->json(['success'=>__('messages.you approve it successfully')]);
+            return response()->json(['success'=>__('messages.you approve it successfully')]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
+        }
     }
 
     ##########################################    ignore  request   ################################# 
     public function ignore(Friends_user $friend):JsonResponse
     {
-        $this->authorize('update_or_delete',$friend);
+        try {
+            $this->authorize('update_or_delete',$friend);
         
-        $friend->update(['status'=>Friends_user::ignored_user]);
-        return response()->json(['success'=>__('messages.you ignore it successfully')]);
+            $friend->update(['status'=>Friends_user::ignored_user]);
+            return response()->json(['success'=>__('messages.you ignore it successfully')]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
+        }
     }
 
     ##########################################     unfriend    ################################# 
     public function destroy(Friends_user $friend):JsonResponse
     {
-        $this->authorize('update_or_delete',$friend);
+        try {
+            $this->authorize('update_or_delete',$friend);
         
-        $friend->delete();
-
-        Cache::forget('friends_ids_'.Auth::id());
-
-        return response()->json(['success'=>'you unfriend successfully']);
+            $friend->delete();
+    
+            Cache::forget('friends_ids_'.Auth::id());
+    
+            return response()->json(['success'=>'you unfriend successfully']);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
+        }
     }
 }

@@ -17,16 +17,20 @@ class LikesController extends Controller
     
     public function store(LikesRequest $request):JsonResponse
     {
-        $like_arr=['user_id'=>Auth::id(),'post_id'=>$request->post_id];
+        try {
+            $like_arr=['user_id'=>Auth::id(),'post_id'=>$request->post_id];
 
-        $like=Likes::where($like_arr)->first();
-
-        if ($like) {
-            $like->delete();
-        }else{
-            Likes::create($like_arr);
+            $like=Likes::where($like_arr)->first();
+    
+            if ($like) {
+                $like->delete();
+            }else{
+                Likes::create($like_arr);
+            }
+    
+            return response()->json();
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
         }
-
-        return response()->json();
     }
 }

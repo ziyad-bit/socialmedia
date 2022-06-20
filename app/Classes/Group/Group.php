@@ -25,9 +25,9 @@ class Group implements Get
     }
 
     ##############################    get users count    ##################################
-    public function get_users_count()
+    public function get_users_count(int $group_id)
     {
-        return Groups::whereHas('group_users',fn($q)=>$q->where('role_id','!=',null))->count();
+        return Group_users::where('group_id',$group_id)->where('role_id','!=',null)->count();
     }
 
     ##############################    get users count    ##################################

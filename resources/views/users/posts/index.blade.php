@@ -3,14 +3,18 @@
 @section('header')
     <link rel="stylesheet" href="{{ asset('css/users/posts/index.css') }}">
     <title>
-        
-            {{  'Posts - ' .config('app.name') }}
-        
+
+        {{ 'Posts - ' . config('app.name') }}
+
     </title>
     <meta name="keywords" content="posts page contain all posts for all friends">
 @endsection
 
 @section('content')
+    @if (Session::has('error'))
+        <div class="alert alert-danger text-center">{{ Session::get('error') }}</div>
+    @endif
+    
     {{-- posts modals --}}
     @include('users.posts.posts_modals')
 
@@ -72,7 +76,7 @@
 
 
     <button class="btn btn-primary add_post" data-bs-target="#add_post_modal" data-bs-toggle="modal" style="margin-top: 15px;
-            margin-left: 277px;">add post</button>
+                margin-left: 277px;">add post</button>
     <!--      posts     -->
     <div class="parent_posts">
         @include('users.posts.index_posts')

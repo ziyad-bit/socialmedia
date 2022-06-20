@@ -50,19 +50,19 @@ class User extends Authenticatable implements MustVerifyEmail
     #############################    relations   ########################################
     public function auth_add_friends()
     {
-        return $this->belongsToMany(self::class,'friend_user','friend_id','user_id')
+        return $this->belongsToMany(self::class,'App\Models\Friends_user','friend_id','user_id')
             ->as('request')->withPivot('status','id');
     }
 
     public function friends_add_auth()
     {
-        return $this->belongsToMany(self::class,'friend_user','user_id','friend_id')
+        return $this->belongsToMany(self::class,'App\Models\Friends_user','user_id','friend_id')
             ->as('request')->withPivot('status','id');
     }
 
     public function group_joined()
     {
-        return $this->belongsToMany("App\Models\Groups",'Group_users','user_id','group_id')
+        return $this->belongsToMany("App\Models\Groups",'App\Models\Group_users','user_id','group_id')
         ->as('request')->withPivot('status','id','punish');
     }
 

@@ -1,12 +1,12 @@
-@if ($group_users->count() > 0)
-    @foreach ($group_users as $group_user)
-        @foreach ($group_user->group_joined as $group_req)
+@if ($group_members->count() > 0)
+    @foreach ($group_members as $group_member)
+        @foreach ($group_member->group_joined as $group_req)
             <div class="card-body group_user{{ $group_req->request->id }}">
-                <img src="{{ asset('images/users/' . $group_user->photo) }}" class="rounded-circle" style="width: 80px"
+                <img src="{{ asset('images/users/' . $group_member->photo) }}" class="rounded-circle" style="width: 80px"
                     alt="loading">
 
                 <span class="card-title">
-                    {{ $group_user->name }}
+                    {{ $group_member->name }}
                 </span>
 
                 @can('owner_admin', $group_user)

@@ -15,6 +15,7 @@ use App\Classes\Posts\PostsAbstractFactory;
 use App\Events\StoreGroup;
 use App\Traits\GetAuthInGroup ;
 use Illuminate\Http\{RedirectResponse,JsonResponse};
+use Illuminate\Support\Facades\DB;
 
 class GroupsController extends Controller
 {
@@ -26,57 +27,65 @@ class GroupsController extends Controller
     }
     
     #################################    index_posts   ###################################
-    public function index_posts(Request $request, string $slug):View|JsonResponse
+    public function index_posts(Request $request, string $slug):View|JsonResponse|RedirectResponse
     {
-        $group_factory     = GroupFactory::factory('Group');
+        try {
+            $group_factory     = GroupFactory::factory('Group');
 
-        $group             = $group_factory->getSpecific($slug);
-        $group_users_count = $group_factory->get_users_count();
-        $group_auth        = $group_factory->getAuth($group->id);
-
-        $group_name = false;
-        $posts      = null;
-        $page_code  = null;
-        
-        if ($group_auth) {
-            if ($group_auth->role_id != null || $group_auth->punish == Group_users::punished) {
-                $friends     = new Friends();
-                $friends_ids = $friends->fetchIds(Auth::id());
-                
-                $posts_factory = new PostsAbstractFactory();
-                $posts         = $posts_factory->groupPage()->fetchPosts(3,$friends_ids,[],$group->id);
-
-                $page_code = $this->getPageCode($posts);
-                $posts     = $posts->map(function($posts){
-                        $posts->shares = $posts->shares->take(3);
-                        return $posts;
-                    });
-
+            $group             = $group_factory->getSpecific($slug);
+            $group_users_count = $group_factory->get_users_count($group->id);
+            $group_auth        = $group_factory->getAuth($group->id);
+    
+            $group_name = false;
+            $posts      = null;
+            $page_code  = null;
+            
+            if ($group_auth) {
+                if ($group_auth->role_id != null || $group_auth->punish == Group_users::punished) {
+                    $friends     = new Friends();
+                    $friends_ids = $friends->fetchIds(Auth::id());
                     
-                if ($request->ajax()) {
-                    $view = view('users.posts.index_posts', compact('posts' ,'group_name'))->render();
-                    return response()->json(['view' => $view, 'page_code' => $page_code]);
+                    $posts_factory = new PostsAbstractFactory();
+                    $posts         = $posts_factory->groupPage()->fetchPosts(3,$friends_ids,[],$group->id);
+    
+                    $page_code = $this->getPageCode($posts);
+                    $posts     = $posts->map(function($posts){
+                            $posts->shares = $posts->shares->take(3);
+                            return $posts;
+                        });
+    
+                        
+                    if ($request->ajax()) {
+                        $view = view('users.posts.index_posts', compact('posts' ,'group_name'))->render();
+                        return response()->json(['view' => $view, 'page_code' => $page_code]);
+                    }
                 }
             }
+    
+            return view('users.groups.show', compact('posts', 'group', 'group_users_count', 'group_auth', 'page_code','group_name'));
+        } catch (\Exception) {
+            return redirect()->route('posts.index.all')->with('error','something went wrong');
         }
-
-        return view('users.groups.show', compact('posts', 'group', 'group_users_count', 'group_auth', 'page_code','group_name'));
     }
 
     #################################    index_groups   ###################################
     public function index_groups(Request $request):View|JsonResponse
     {
-        $groupFactory  = GroupFactory::factory('Group');
-        $groups_joined = $groupFactory->get(Auth::id());
+        try {
+            $groupFactory  = GroupFactory::factory('Group');
+            $groups_joined = $groupFactory->get(Auth::id(),10);
 
-        $page_code = $this->getPageCode($groups_joined);
+            $page_code = $this->getPageCode($groups_joined);
 
-        if ($request->ajax()) {
-            $view = view('users.posts.index_posts', compact('posts', 'page_code'))->render();
-            return response()->json(['view' => $view, 'page_code' => $page_code]);
+            if ($request->ajax()) {
+                $view = view('users.posts.index_posts', compact('posts', 'page_code'))->render();
+                return response()->json(['view' => $view, 'page_code' => $page_code]);
+            }
+
+            return view('users.groups.index', compact('groups_joined'));
+        } catch (\Exception) {
+            return redirect()->route('posts.index.all')->with('error','something went wrong');
         }
-
-        return view('users.groups.index', compact('groups_joined'));
     }
 
     #################################      create    ###################################
@@ -95,6 +104,7 @@ class GroupsController extends Controller
 
             return redirect()->back()->with(['success'=>__('messages.you created it successfully')]);
         }catch(\Exception){
+            DB::rollBack();
             return redirect()->back()->with(['error'=>__('messages.something went wrong')]);
         }
     }
@@ -102,28 +112,36 @@ class GroupsController extends Controller
     #################################     update    ###################################
     public function update(GroupRequest $request, Groups $group):JsonResponse
     {
-        $group_auth=$this->getAuthInGroup($group->id);
-        $this->authorize('owner',$group_auth);
+        try {
+            $group_auth=$this->getAuthInGroup($group->id);
+            $this->authorize('owner',$group_auth);
 
-        $photo = $request->file('photo');
-        if (!$photo) {
-            $photo_name = $group->photo;
-        }else{
-            $photo_name = $this->uploadPhoto($photo,'images/groups/',300);
+            $photo = $request->file('photo');
+            if (!$photo) {
+                $photo_name = $group->photo;
+            }else{
+                $photo_name = $this->uploadPhoto($photo,'images/groups/',300);
+            }
+
+            $group->update($request->except(['photo','photo_id'])+['photo'=>$photo_name]);
+
+            return response()->json(['success'=>__('messages.you updated it successfully')]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
         }
-
-        $group->update($request->except(['photo','photo_id'])+['photo'=>$photo_name]);
-
-        return response()->json(['success'=>__('messages.you updated it successfully')]);
     }
 
     #################################     delete    ###################################
     public function destroy(Groups $group):RedirectResponse
     {
-        $group_auth=$this->getAuthInGroup($group->id);
-        $this->authorize('owner',$group_auth);
-
-        $group->delete();
-        return redirect()->route('groups.index_groups')->with(['success'=>__('messages.you deleted it successfully')]);
+        try {
+            $group_auth=$this->getAuthInGroup($group->id);
+            $this->authorize('owner',$group_auth);
+    
+            $group->delete();
+            return redirect()->route('groups.index_groups')->with(['success'=>__('messages.you deleted it successfully')]);
+        } catch (\Exception) {
+            return redirect()->route('groups.posts.index',$group->slug)->with(['error'=>__('something went wrong')]);
+        }
     }
 }

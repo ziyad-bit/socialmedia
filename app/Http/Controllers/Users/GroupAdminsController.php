@@ -20,38 +20,50 @@ class GroupAdminsController extends Controller
     ###########################################      show        ########################
     public function show(Group_users $group_admin):JsonResponse
     {
-        $this->authorize('owner_admin_member',$group_admin);
+        try {
+            $this->authorize('owner_admin_member',$group_admin);
 
-        $group_auth=$group_admin;
-
-        $group_factory = GroupFactory::factory('GroupAdmin');
-        $group_admins  = $group_factory->get($group_admin->group_id);
-
-        $page_code = $this->getPageCode($group_admins);
-        
-        $view = view('users.groups.index_admins', compact('group_admins','group_auth'))->render();
-        return response()->json(['view' => $view, 'page_code' => $page_code]);
+            $group_auth=$group_admin;
+    
+            $group_factory = GroupFactory::factory('GroupAdmin');
+            $group_admins  = $group_factory->get($group_admin->group_id,5);
+    
+            $page_code = $this->getPageCode($group_admins);
+            
+            $view = view('users.groups.index_admins', compact('group_admins','group_auth'))->render();
+            return response()->json(['view' => $view, 'page_code' => $page_code]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
+        }
     }
 
     ###########################################    remove admin   ########################
     public function update(Group_users $group_admin):JsonResponse
     {
-        $group_auth = $this->getAuthInGroup($group_admin->group_id);
-        $this->authorize('owner',  $group_auth);
-
-        $group_admin->update(['role_id' => Roles::group_member]);
-
-        return response()->json(['success' => __('messages.you removed admin successfully')]);
+        try {
+            $group_auth = $this->getAuthInGroup($group_admin->group_id);
+            $this->authorize('owner',  $group_auth);
+    
+            $group_admin->update(['role_id' => Roles::group_member]);
+    
+            return response()->json(['success' => __('messages.you removed admin successfully')]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
+        }
     }
 
     ###########################################    delete    #############################
     public function destroy(Group_users $group_admin):JsonResponse
     {
-        $group_auth = $this->getAuthInGroup($group_admin->group_id);
-        $this->authorize('owner',  $group_auth);
-
-        $group_admin->delete();
-
-        return response()->json(['success' => __('messages.you deleted it successfully')]);
+        try {
+            $group_auth = $this->getAuthInGroup($group_admin->group_id);
+            $this->authorize('owner',  $group_auth);
+    
+            $group_admin->delete();
+    
+            return response()->json(['success' => __('messages.you deleted it successfully')]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
+        }
     }
 }

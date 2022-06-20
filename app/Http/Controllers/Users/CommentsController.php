@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentRequest;
-use App\Models\{Posts,Comments};
+use App\Models\Comments;
+use App\Models\Posts;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,57 +13,77 @@ class CommentsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth','verified']);
-        $this->middleware(['throttle:1,10'])->only(['store']);
+        $this->middleware(['auth', 'verified']);
+        $this->middleware(['throttle:10,1'])->only(['store']);
     }
-    
-    #############################     store    #######################################
-    public function store(CommentRequest $request):JsonResponse
-    {
-        $comment = Comments::create($request->validated() + ['user_id' => Auth::id()]);
 
-        $view = view('users.posts.add_comments', compact('comment'))->render();
-        return response()->json(['view' => $view]);
+    #############################     store    #######################################
+    public function store(CommentRequest $request): JsonResponse
+    {
+        try {
+            $comment = Comments::create($request->validated() + ['user_id' => Auth::id()]);
+
+            $view = view('users.posts.add_comments', compact('comment'))->render();
+            return response()->json(['view' => $view]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
+        }
     }
 
     #############################     show     #######################################
-    public function show(int $post_id):JsonResponse
+    public function show(int $post_id): JsonResponse
     {
-        $comments = Posts::findOrFail($post_id)->comments;
+        try {
+            $comments = Posts::findOrFail($post_id)->comments;
 
-        $view = view('users.posts.index_comments', compact('comments'))->render();
-        return response()->json(['view' => $view]);
+            $view = view('users.posts.index_comments', compact('comments'))->render();
+            return response()->json(['view' => $view]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
+        }
     }
 
     #############################     show_more     #######################################
-    public function show_more(int $com_id, int $post_id):JsonResponse
+    public function show_more(int $com_id, int $post_id): JsonResponse
     {
-        $comments = Comments::selection()->with(['user' => fn($q) => $q->selection()])->where('post_id', $post_id)
-            ->where('id', '<', $com_id)->orderByDesc('id')->limit(5)->get();
+        try {
+            $comments = Comments::selection()->with(['user' => fn($q) => $q->selection()])->where('post_id', $post_id)
+                ->where('id', '<', $com_id)->orderByDesc('id')->limit(5)->get();
 
-        if ($comments->count() == 0) {
-            return response()->json([], 404);
+            if ($comments->count() == 0) {
+                return response()->json([], 404);
+            }
+
+            $view = view('users.posts.index_comments', compact('comments'))->render();
+            return response()->json(['view' => $view]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
         }
-
-        $view = view('users.posts.index_comments', compact('comments'))->render();
-        return response()->json(['view' => $view]);
     }
 
     #############################     update     #######################################
-    public function update(CommentRequest $request, Comments $comment):JsonResponse
+    public function update(CommentRequest $request, Comments $comment): JsonResponse
     {
-        $this->authorize('update_or_delete', $comment);
-        $comment->update($request->except('post_id'));
-
-        return response()->json(['success_msg' => __('messages.you updated it successfully')]);
+        try {
+            $this->authorize('update_or_delete', $comment);
+            $comment->update($request->except('post_id'));
+    
+            return response()->json(['success_msg' => __('messages.you updated it successfully')]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
+        }
     }
 
     #############################     destroy     #######################################
-    public function destroy(Comments $comment):JsonResponse
+    public function destroy(Comments $comment): JsonResponse
     {
-        $this->authorize('update_or_delete', $comment);
-        $comment->delete();
-
-        return response()->json(['success_msg' => __('messages.you deleted it successfully')]);
+        try {
+            $this->authorize('update_or_delete', $comment);
+            $comment->delete();
+    
+            return response()->json(['success_msg' => __('messages.you deleted it successfully')]);
+        } catch (\Exception) {
+            return response()->json(['error' => 'something went wrong'],500);
+        }
     }
 }
