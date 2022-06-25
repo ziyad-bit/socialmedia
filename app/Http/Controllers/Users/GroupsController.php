@@ -27,7 +27,7 @@ class GroupsController extends Controller
     }
     
     #################################    index_posts   ###################################
-    public function index_posts(Request $request, string $slug):View|JsonResponse|RedirectResponse
+    public function index_posts(Request $request,  Friends $friends, PostsAbstractFactory $posts_factory, string $slug ):View|JsonResponse|RedirectResponse
     {
         try {
             $group_factory     = GroupFactory::factory('Group');
@@ -42,11 +42,8 @@ class GroupsController extends Controller
             
             if ($group_auth) {
                 if ($group_auth->role_id != null || $group_auth->punish == Group_users::punished) {
-                    $friends     = new Friends();
                     $friends_ids = $friends->fetchIds(Auth::id());
-                    
-                    $posts_factory = new PostsAbstractFactory();
-                    $posts         = $posts_factory->groupPage()->fetchPosts(3,$friends_ids,[],$group->id);
+                    $posts       = $posts_factory->groupPage()->fetchPosts(3,$friends_ids,[],$group->id);
     
                     $page_code = $this->getPageCode($posts);
                     $posts     = $posts->map(function($posts){
@@ -72,8 +69,7 @@ class GroupsController extends Controller
     public function index_groups(Request $request):View|JsonResponse
     {
         try {
-            $groupFactory  = GroupFactory::factory('Group');
-            $groups_joined = $groupFactory->get(Auth::id(),10);
+            $groups_joined  = GroupFactory::factory('Group')->get(Auth::id(),10);
 
             $page_code = $this->getPageCode($groups_joined);
 
@@ -99,7 +95,8 @@ class GroupsController extends Controller
     {
         try{
             $photo_name = $this->uploadPhoto($request->file('photo'),'images/groups/',300);
-            $is_admin=false;
+            $is_admin   = false;
+
             event(new StoreGroup($request,$photo_name,$is_admin));
 
             return redirect()->back()->with(['success'=>__('messages.you created it successfully')]);

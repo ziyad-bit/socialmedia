@@ -38,8 +38,7 @@ class GroupReqsController extends Controller
         try {
             $this->authorize('owner_admin', $group_request);
 
-            $group_factory = GroupFactory::factory('GroupReq');
-            $group_reqs    = $group_factory->get($group_request->group_id,5);
+            $group_reqs = GroupFactory::factory('GroupReq')->get($group_request->group_id,5);
     
             $page_code = $this->getPageCode($group_reqs);
             
@@ -87,8 +86,7 @@ class GroupReqsController extends Controller
             $this->authorize('owner_admin_member',$group_request);
 
             if ($group_request->role_id == Roles::group_owner) {
-                $groupFactory = GroupFactory::factory('GroupAdmin');
-                $group_admin  = $groupFactory->getAdmin($group_request->group_id);
+                $group_admin = GroupFactory::factory('GroupAdmin')->getAdmin($group_request->group_id);
 
                 if ($group_admin) {
                     event(new UpdateGroupOwner($group_admin));

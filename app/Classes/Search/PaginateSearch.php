@@ -7,36 +7,27 @@ use Illuminate\Pagination\Paginator;
 
 class PaginateSearch extends Search
 {
-    private string $search;
-    private int $items_num;
-
-    public function __construct(string $search , int $items_num)
-    {
-        $this->search    = $search;
-        $this->items_num = $items_num;
-    }
-
     #######################################      friends      ##########################
-    public function paginateFriends():Paginator
+    public function paginateFriends($search , $items_num):Paginator
     {
-        return $this->friends($this->search)->simplePaginate($this->items_num);
+        return $this->friends($search)->simplePaginate($items_num);
     }
 
     #######################################      users      ##########################
-    public function paginateUsers():Paginator
+    public function paginateUsers($search , $items_num):Paginator
     {
-        return $this->users($this->search)->simplePaginate($this->items_num);
+        return $this->users($search)->simplePaginate($items_num);
     }
 
     #######################################      groupsJoined      ##########################
-    public function paginateGroupsJoined():Paginator
+    public function paginateGroupsJoined($search , $items_num):Paginator
     {
-        return $this->groupsJoined($this->search)->simplePaginate($this->items_num);
+        return $this->groupsJoined($search)->simplePaginate($items_num);
     }
 
     #######################################      groups      ##########################
-    public function paginateGroups():Paginator
+    public function paginateGroups($search , $items_num):Paginator
     {
-        return $this->groups($this->search)->simplePaginate($this->items_num);
+        return $this->groups($search)->simplePaginate($items_num);
     }
 }

@@ -23,8 +23,7 @@ class GroupUsersController extends Controller
         try {
             $this->authorize('owner_admin_member',$group_user);
 
-            $groupFactory  = GroupFactory::factory('GroupUsers');
-            $group_members = $groupFactory->get($group_user->group_id,5);
+            $group_members  = GroupFactory::factory('GroupUsers')->get($group_user->group_id,5);
 
             $page_code  = $this->getPageCode($group_members);
 

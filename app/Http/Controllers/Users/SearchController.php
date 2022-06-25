@@ -19,18 +19,18 @@ class SearchController extends Controller
     }
     
     #######################################    index    #####################################
-    public function index(SearchRequest $request)//: View | JsonResponse
+    public function index(SearchRequest $request , PaginateSearchFactory $search_factory): View | JsonResponse
     {
         try {
             $search = $request->search;
+            
+            /** @var  \App\Classes\Search\PaginateSearch $search_ins */
+            $search_ins = $search_factory->createSearch();
 
-            //factory method design pattern
-            $search_factory = new PaginateSearchFactory($search , 3);
-    
-            $friends       = $search_factory->createSearch()->paginateFriends();
-            $users         = $search_factory->createSearch()->paginateUsers();
-            $groups_joined = $search_factory->createSearch()->paginateGroupsJoined();
-            $groups        = $search_factory->createSearch()->paginateGroups();
+            $friends       = $search_ins->paginateFriends($search , 3);
+            $users         = $search_ins->paginateUsers($search , 3);
+            $groups_joined = $search_ins->paginateGroupsJoined($search , 3);
+            $groups        = $search_ins->paginateGroups($search , 3);
     
             $next_page = true;
             if (!$groups->hasMorePages() && !$users->hasMorePages() && !$friends->hasMorePages() && !$groups_joined->hasMorePages()) {
@@ -53,15 +53,18 @@ class SearchController extends Controller
 
     #######################################    show    #####################################
     //show matched results under search input
-    public function show(SearchRequest $request): JsonResponse
+    public function show(SearchRequest $request ,GetSearchFactory $search_factory): JsonResponse
     {
         try {
-            $search_factory = new GetSearchFactory($request->search , 3);
+            $search = $request->search;
 
-            $friends       = $search_factory->createSearch()->get_friends();
-            $users         = $search_factory->createSearch()->getUsers();
-            $groups_joined = $search_factory->createSearch()->getGroupsJoined();
-            $groups        = $search_factory->createSearch()->getGroups();
+             /** @var  \App\Classes\Search\GetSearch $search_ins */
+            $search_ins = $search_factory->createSearch();
+
+            $friends       = $search_ins->get_friends($search , 3);
+            $users         = $search_ins->getUsers($search , 3);
+            $groups_joined = $search_ins->getGroupsJoined($search , 3);
+            $groups        = $search_ins->getGroups($search , 3);
     
             return response()->json(['users' => $users ,'friends'=> $friends ,'groups' => $groups ,'groups_joined' => $groups_joined]);
         } catch (\Exception) {

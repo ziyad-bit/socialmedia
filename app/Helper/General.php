@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Languages;
+use Illuminate\Support\Facades\Cache;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 ###############################     languages      ####################################
@@ -11,7 +12,6 @@ function default_lang():string
 
 function lang_rtl():array
 {
-    
     if (Cache::has('langs_abbr')) {
         return Cache::get('langs_abbr');
     }

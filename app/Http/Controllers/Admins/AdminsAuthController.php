@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Models\Admins;
 use App\Events\ResetPassword;
+use App\Models\Password_reset;
 use App\Events\UpdatePasswordEvent;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminAuthRequest;
-use App\Models\Admins;
-use App\Models\Password_reset;
 use Illuminate\Support\Facades\{Auth};
+use App\Http\Requests\AdminAuthRequest;
 use Illuminate\Http\{Request,RedirectResponse};
 
 class AdminsAuthController extends Controller
@@ -49,7 +49,7 @@ class AdminsAuthController extends Controller
         $email = $request->email;
         $admin = Admins::where('email',$email)->first();
 
-        if ($admin != null) {
+        if ($admin ) {
             event(new ResetPassword($email));
         }else{
             return redirect()->back()->with('error','incorrect email');

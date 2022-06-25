@@ -22,10 +22,9 @@ class MessageController extends Controller
     }
 
     #############################     index_friends     #######################################
-    public function index_friends(Request $request):View|JsonResponse
+    public function index_friends(Request $request , Friends $friends):View|JsonResponse
     {
         try {
-            $friends      = new Friends();
             $auth_friends = $friends->getByOnlineOrder(5);
             $friends_ids  = $friends->fetchIds(Auth::id());
 
@@ -93,15 +92,14 @@ class MessageController extends Controller
         }
     }
 
-    #############################     search_friends     #######################################
-    public function search_friends(SearchRequest $request):JsonResponse
+    #############################     search friends     #######################################
+    public function search_friends(SearchRequest $request , PaginateSearchFactory $search_factory):JsonResponse
     {
         try {
             $search = $request->search;
 
             //factory method design pattern
-            $search_factory = new PaginateSearchFactory($search , 7);
-            $friends        = $search_factory->createSearch()->paginateFriends();
+            $friends  = $search_factory->createSearch()->paginateFriends($search , 7);
     
             $friends_view     = view('users.chat.index_friends',compact('friends','search'))->render();
             $friends_tab_view = view('users.chat.index_friends_tab',compact('friends','search'))->render();
@@ -115,14 +113,13 @@ class MessageController extends Controller
         }
     }
 
-    #############################     search_friends     #######################################
-    public function search_last_msgs(SearchRequest $request):JsonResponse
+    #############################     search last msgs     #######################################
+    public function search_last_msgs(SearchRequest $request , Friends $friends):JsonResponse
     {
         try {
             $search = $request->search;
 
-            $friends_ins = new Friends();
-            $friends_ids = $friends_ins->fetchIds(Auth::id());
+            $friends_ids = $friends->fetchIds(Auth::id());
     
             $friends_msgs = Msgs::getLast($friends_ids)->search($search)->simplePaginate(6);
     

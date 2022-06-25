@@ -13,10 +13,21 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+#######################################     privacy policy and data deletion urls    ######################################
+Route::group(['namespace'=>'Users'], function () {
+    Route::get('/data/deletion'         , 'GeneralController@getDataDeletion');
+    Route::get('/privacy/policy'        , 'GeneralController@getPrivacyPolicy');
+});
 
 #######################################     auth routes     ######################################
 Auth::routes(['verify'=>true]);
 Route::get('/email/verify','Auth\VerificationController@verifyEmail')->middleware('auth')->name('verification.notice');
+
+#######################################     facebook login     ######################################
+Route::group(['prefix'=>'auth/facebook','namespace'=>'Users'], function () {
+    Route::get('/redirect'        , 'FaceBookController@redirect')->name('facebook.redirect');
+    Route::get('/callback'        , 'FaceBookController@callback');
+});
 
 #######################################     search     ######################################
 Route::group(['prefix'=>'search','namespace'=>'Users'], function () {

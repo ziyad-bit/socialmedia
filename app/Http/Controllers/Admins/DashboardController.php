@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Models\User;
-use App\Models\Posts;
+use App\Http\Controllers\Controller;
 use App\Models\Admins;
 use App\Models\Comments;
-use App\Http\Controllers\Controller;
+use App\Models\Posts;
+use App\Models\User;
 
 class DashboardController extends Controller
 {

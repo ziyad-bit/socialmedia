@@ -11,10 +11,10 @@ use Illuminate\Pagination\CursorPaginator;
 class Group implements Get
 {
     ##############################    get admins   ##################################
-    public function get(int $auth_id):CursorPaginator
+    public function get(int $auth_id,int $items_num):CursorPaginator
     {
         return Groups::selection()->whereHas('group_users', fn($q) => $q->where("user_id", $auth_id))
-            ->cursorPaginate(10);
+            ->cursorPaginate($items_num);
     }
 
     ##############################    get  auth    ##################################
@@ -25,7 +25,7 @@ class Group implements Get
     }
 
     ##############################    get users count    ##################################
-    public function get_users_count(int $group_id)
+    public function get_users_count(int $group_id):int
     {
         return Group_users::where('group_id',$group_id)->where('role_id','!=',null)->count();
     }

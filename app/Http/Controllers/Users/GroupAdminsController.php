@@ -23,12 +23,9 @@ class GroupAdminsController extends Controller
         try {
             $this->authorize('owner_admin_member',$group_admin);
 
-            $group_auth=$group_admin;
-    
-            $group_factory = GroupFactory::factory('GroupAdmin');
-            $group_admins  = $group_factory->get($group_admin->group_id,5);
-    
-            $page_code = $this->getPageCode($group_admins);
+            $group_auth   = $group_admin;
+            $group_admins = GroupFactory::factory('GroupAdmin')->get($group_admin->group_id,5);
+            $page_code    = $this->getPageCode($group_admins);
             
             $view = view('users.groups.index_admins', compact('group_admins','group_auth'))->render();
             return response()->json(['view' => $view, 'page_code' => $page_code]);

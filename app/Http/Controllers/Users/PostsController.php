@@ -22,23 +22,19 @@ class PostsController extends Controller
     }
     
     ##################################       index      ###############################
-    public function index_posts(Request $request):View|JsonResponse
+    public function index_posts(Request $request , Friends $friends , PostsAbstractFactory $posts_factory):View|JsonResponse
     {
         try {
             $auth_id     = Auth::id();
-            $friends     = new Friends();
             $friends_ids = $friends->fetchIds($auth_id);
             $group_name  = true;
     
             array_unshift($friends_ids,$auth_id);
     
             $shared_posts_ids = customPosts::getSharedIds($friends_ids);
-    
-            $groupFactory   = GroupFactory::factory('Group');
-            $groupJoinedIds = $groupFactory->getJoinedIds($friends_ids);
+            $groupJoinedIds   = GroupFactory::factory('Group')->getJoinedIds($friends_ids);
     
             //abstract factory design pattern
-            $posts_factory = new PostsAbstractFactory();
             $posts         = $posts_factory->postsPage()->fetchPosts(3,$friends_ids,$groupJoinedIds ,null,$shared_posts_ids);
             
             if ($request->ajax()) {
@@ -53,10 +49,9 @@ class PostsController extends Controller
     }
 
     ##################################      store      ##################################
-    public function store(PostsRequest $request):JsonResponse
+    public function store(PostsRequest $request , UploadAllFiles $files):JsonResponse
     {
         try {
-            $files      = new UploadAllFiles();
             $all_files  = $files->uploadAll($request);
             $group_name = false;
             
@@ -77,12 +72,11 @@ class PostsController extends Controller
     }
 
     ##################################      update      ###############################
-    public function update(PostsRequest $request,Posts $post):JsonResponse
+    public function update(PostsRequest $request ,Posts $post , UploadAllFiles $files):JsonResponse
     {
         try {
             $this->authorize('update_or_delete',$post);
 
-            $files     = new UploadAllFiles();
             $all_files = $files->uploadAll($request,$post);
             
             $post->update([

@@ -2,11 +2,10 @@
 
 namespace App\Listeners;
 
-use App\Events\UpdateGroupOwner;
-use App\Models\Groups;
 use App\Models\Roles;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Models\Groups;
+use App\Events\UpdateGroupOwner;
+use Illuminate\Support\Facades\DB;
 
 class UpdateGroupOwnerListener
 {
@@ -28,9 +27,12 @@ class UpdateGroupOwnerListener
      */
     public function handle(UpdateGroupOwner $event)
     {
+        DB::beginTransaction();
         $event->group_admin->update(['role_id'=>Roles::group_owner]);
         
         $group=Groups::findOrFail($event->group_admin->group_id);
         $group->update(['user_id'=>$event->group_admin->user_id]);
+
+        DB::commit();
     }
 }

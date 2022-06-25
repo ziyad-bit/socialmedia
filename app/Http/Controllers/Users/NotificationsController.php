@@ -18,7 +18,7 @@ class NotificationsController extends Controller
     public function show_more(int $last_notif_id):JsonResponse
     {
         try {
-            $notifications = Notifs::get($last_notif_id);
+            $notifications = Notifs::get_more($last_notif_id);
                             
             $view=view('users.notifications.show',compact('notifications'))->render();
             return response()->json(['view'=>$view]);

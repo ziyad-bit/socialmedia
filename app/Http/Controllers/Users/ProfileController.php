@@ -24,11 +24,10 @@ class ProfileController extends Controller
     }
 
     ##################################     index auth profile    #################################
-    public function index(Request $request):View|JsonResponse|RedirectResponse
+    public function index(Request $request, Friends $friends, PostsAbstractFactory $posts_factory):View|JsonResponse|RedirectResponse
     {
         try {
             $auth_id       = Auth::id();
-            $friends       = new Friends();
             $friends_ids   = $friends->fetchIds($auth_id );
             $friends_count = count($friends_ids);
 
@@ -36,15 +35,14 @@ class ProfileController extends Controller
 
             array_unshift($friends_ids,$auth_id );
 
-            $posts_factory = new PostsAbstractFactory();
-            $posts         = $posts_factory->usersProfilePage()->fetchPosts(3,$friends_ids,[],null,[],$auth_id );
+            $posts = $posts_factory->usersProfilePage()->fetchPosts(3,$friends_ids,[],null,[],$auth_id );
             
             $page_code = $this->getPageCode($posts);
             $posts     = $posts->map(function($posts){
                     $posts->shares = $posts->shares->take(3);
                     return $posts;
                 });
-                
+
             if ($request->ajax()) {
                 $view = view('users.posts.index_posts', compact('posts' , 'group_name'))->render();
                 return response()->json(['view' => $view,'page_code'=>$page_code]);
@@ -57,10 +55,9 @@ class ProfileController extends Controller
     }
 
     ##################################     show auth friends    #################################
-    public function show(Request $request):View|JsonResponse
+    public function show(Request $request, Friends $friends):View|JsonResponse
     {
         try {
-            $friends = new Friends();
             $friends = $friends->fetch(Auth::id(),5);
 
             if ($request->ajax()) {
@@ -75,12 +72,11 @@ class ProfileController extends Controller
     }
 
     ##################################     index user profile    #################################
-    public function index_profile(Request $request,string $name):View|JsonResponse
+    public function index_profile(Request $request, string $name , Friends $friends , PostsAbstractFactory $posts_factory):View|JsonResponse
     {
         try {
             $auth_id      = Auth::id();
             $name         = str_replace('-',' ',$name);
-            $friends      = new Friends();
             $related_user = $friends->getProfileData($name);
             
             $group_name   = false;
@@ -92,7 +88,6 @@ class ProfileController extends Controller
                 
                 array_unshift($user_friends_ids,$auth_id);
         
-                $posts_factory = new PostsAbstractFactory();
                 $posts         = $posts_factory->usersProfilePage()->fetchPosts(3,$mutual_friends_ids,[],null,[],$user->id);
             }
 
@@ -110,11 +105,10 @@ class ProfileController extends Controller
     }
 
     ##################################     show user mutual friends    #################################
-    public function show_friends(Request $request,string $name):View|JsonResponse
+    public function show_friends(Request $request, string $name , Friends $friends):View|JsonResponse
     {
         try {
             $user               = User::where('name',$name)->firstOrFail();
-            $friends            = new Friends();
             $mutual_friends     = $friends->fetchMutual($user->id,5);
 
             $page_code = $this->getPageCode($mutual_friends);
