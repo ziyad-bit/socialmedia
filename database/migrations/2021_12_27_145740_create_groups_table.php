@@ -19,8 +19,6 @@ class CreateGroupsTable extends Migration
             $table->string('slug',50)->unique();
             $table->string('photo',100);
             $table->text('description');
-            $table->string('trans_lang',4);
-            $table->bigInteger('trans_of',false,true)->default(0);
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('admin_id')->nullable()->constrained('admins')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

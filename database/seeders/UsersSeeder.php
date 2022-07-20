@@ -32,7 +32,7 @@ class UsersSeeder extends Seeder
             ]); 
 
             if ($i > 50) {
-                $user=User::find(57);
+                $user=User::find(56);
                 $users=User::inRandomOrder()->take(10)->pluck('id')->toArray();
                 $user->auth_add_friends()->attach($users);
             }

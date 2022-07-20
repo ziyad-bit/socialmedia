@@ -18,12 +18,12 @@ class Group_usersFactory extends Factory
     {
         $users  = collect(User::all()->modelKeys());
         $groups = collect(Groups::all()->modelKeys());
-        $roles  = collect(Roles::all()->modelKeys());
+        $roles  = collect(Roles::all()->modelKeys()); 
 
         return [
             'user_id'  => $users->random(),
             'group_id' => $groups->random(),
-            'role_id'  => $roles->random(),
+            'role_id'  => $roles->random(), 
             'status'   => rand(0,2),
         ];
     }

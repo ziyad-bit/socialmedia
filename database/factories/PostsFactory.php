@@ -25,7 +25,6 @@ class PostsFactory extends Factory
             'user_id'  => $users->random(),
             'group_id' => $groups->random(),
             'photo'    => $this->faker->word(),
-            
         ];
     }
 }

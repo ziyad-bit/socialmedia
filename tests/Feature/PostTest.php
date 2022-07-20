@@ -7,13 +7,13 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Posts;
 use App\Models\Shares;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PostTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseMigrations;
 
     public $auth_user;
     public $data;
@@ -39,7 +39,7 @@ class PostTest extends TestCase
     }
 
     ###############################      test index_posts     ################################
-    public function test_index_posts():void
+    public function test_fetch_data_in_index_posts_method():void
     {
         $user = User::factory()->create();
 
@@ -48,7 +48,10 @@ class PostTest extends TestCase
             'user_id'   => $user->id,
         ]);
 
-        $post=Posts::factory()->create(['text' => 'unique post40']);
+        $post=Posts::factory()->create([
+            'text'    => 'unique post40',
+            'user_id' => $user->id,
+        ]);
 
         Shares::factory()->create([
             'post_id' => $post->id,
@@ -75,7 +78,7 @@ class PostTest extends TestCase
     }
 
     ###############################      test store     ################################
-    public function test_store():void
+    public function test_database_insertion_in_store_method():void
     {
         $data=$this->data;
         
@@ -88,7 +91,7 @@ class PostTest extends TestCase
     }
 
     ###############################      test update     ################################
-    public function test_update():void
+    public function test_database_update_in_update_method():void
     {
         $post=Posts::factory()->create(['user_id' => $this->auth_user->id]);
 
@@ -103,7 +106,7 @@ class PostTest extends TestCase
     }
 
     ###############################      test delete     ################################
-    public function test_delete():void
+    public function test_remove_data_in_delete_method():void
     {
         $post=Posts::factory()->create(['user_id' => $this->auth_user->id]);
 

@@ -13,15 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(UsersSeeder::class);
-        //$this->call(AdminsSeeder::class);
-       /*  $this->call(GroupsSeeder::class);
+        //$this->call(UsersSeeder::class);
+        $this->call(AdminsSeeder::class);
+        $this->call(GroupsSeeder::class);
         $this->call(RolesSeeder::class);
         $this->call(PostsSeeder::class);
         $this->call(LikesSeeder::class);
         $this->call(SharesSeeder::class);
         $this->call(CommentsSeeder::class);
         $this->call(MessagesSeeder::class);
-        $this->call(LanguagesSeeder::class);  */
+        $this->call(LanguagesSeeder::class); 
     }
 }

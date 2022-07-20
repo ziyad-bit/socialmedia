@@ -88,7 +88,7 @@ class ProfileController extends Controller
                 
                 array_unshift($user_friends_ids,$auth_id);
         
-                $posts         = $posts_factory->usersProfilePage()->fetchPosts(3,$mutual_friends_ids,[],null,[],$user->id);
+                $posts  = $posts_factory->usersProfilePage()->fetchPosts(3,$mutual_friends_ids,[],null,[],$user->id);
             }
 
             $page_code = $this->getPageCode($posts);

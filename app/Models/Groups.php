@@ -47,9 +47,4 @@ class Groups extends Model
     {
         return $q->select('name','description','photo','created_at','id','slug');
     }
-
-    public function scopeDefaultLang($q)
-    {
-        return $q->where('trans_lang', default_lang());
-    }
 }

@@ -7,12 +7,13 @@ use App\Models\Groups;
 use App\Models\Roles;
 use Tests\TestCase;
 use App\Models\User;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Session;
 
 class GroupReqsTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseMigrations;
 
     public $auth_user;
     public $data;
@@ -37,7 +38,7 @@ class GroupReqsTest extends TestCase
     }
     
     #################################     test store     ###############################
-    public function test_store():void
+    public function test_database_insertion_in_store_method():void
     {
         $data=$this->data;
         $response = $this->post('/group-requests',$data);
@@ -49,12 +50,13 @@ class GroupReqsTest extends TestCase
     }
 
     #################################     test show    ###############################
-    public function test_show():void
+    public function test_get_group_reqs_from_database_in_show_method():void
     {
         $auth_user=$this->auth_user;
 
         $user  = User::factory()->create();
         $group = Groups::factory()->create();
+        //$role = Roles::factory()->create();
 
         Group_users::factory()->create([
             'user_id'  => $user->id,
@@ -78,14 +80,16 @@ class GroupReqsTest extends TestCase
     }
 
     #################################     test update    ###############################
-    public function test_update():void
+    public function test_approve_req_in_update_method():void
     {
         $auth_user=$this->auth_user;
 
         $user  = User::factory()->create();
         $group = Groups::factory()->create();
+        $role  = Roles::factory()->create(['id'=>1]);
+        $role  = Roles::factory()->create(['id'=>2]);
 
-        $group_user=Group_users::factory()->create([
+        $group_user = Group_users::factory()->create([
             'user_id'  => $user->id,
             'group_id' => $group->id,
             'status'   => 0,
@@ -95,39 +99,40 @@ class GroupReqsTest extends TestCase
             'user_id'  => $auth_user->id,
             'group_id' => $group->id,
             'status'   => 1,
-            'role_id'  => 2
+            'role_id'  => $role->id
         ]);
 
         $data=$this->data;
 
         $response = $this->call('put','/group-requests/'.$group_user->id,$data);
 
+        
         $response->assertStatus(200);
         $response->assertJson(['success'=>true]);
-        
+
         $this->assertDatabaseHas('group_users',['id'=> $group_user->id ,'status'=> 1]);
     }
 
     #################################     test ignore    ###############################
-    public function test_ignore():void
+    public function test_ignore_req_in_ignore_method():void
     {
         $auth_user=$this->auth_user;
 
         $user  = User::factory()->create();
         $group = Groups::factory()->create();
+        $role  = Roles::factory()->create(['id'=>2]);
 
         $group_user=Group_users::factory()->create([
             'user_id'  => $user->id,
             'group_id' => $group->id,
             'status'   => 0,
-            'role_id'  => null
         ]);
 
         Group_users::factory()->create([
             'user_id'  => $auth_user->id,
             'group_id' => $group->id,
             'status'   => 1,
-            'role_id'  => 2
+            'role_id'  => $role->id
         ]);
 
         $data=$this->data;
@@ -140,18 +145,19 @@ class GroupReqsTest extends TestCase
         $this->assertDatabaseHas('group_users',['id'=> $group_user->id ,'status'=> 2]);
     }
 
-    #################################     test delete (leave group)   ###############################
-    public function test_delete():void
+    #################################     test delete (leave group)    ###############################
+    public function test_auth_user_leave_group_in_delete_method():void
     {
-        $auth_user=$this->auth_user;
+        $auth_user = $this->auth_user;
 
         $group = Groups::factory()->create();
+        $role  = Roles::factory()->create(['id'=>1]);
 
-        $group_user_auth=Group_users::factory()->create([
+        $group_user_auth = Group_users::factory()->create([
             'user_id'  => $auth_user->id,
             'group_id' => $group->id,
             'status'   => 1,
-            'role_id'  => 1
+            'role_id'  => $role->id
         ]);
 
         $data=$this->data;
