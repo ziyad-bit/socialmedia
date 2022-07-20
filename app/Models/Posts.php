@@ -7,59 +7,58 @@ use Illuminate\Database\Eloquent\Model;
 
 class Posts extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $guarded = [];
-    protected $table = 'posts';
+	protected $guarded=[];
 
-    
+	protected $table='posts';
 
-    #####################################     relations     ##############################
-    public function users()
-    {
-        return $this->belongsTo('App\Models\User', 'user_id');
-    }
+	//####################################     relations     ##############################
+	public function users()
+	{
+		return $this->belongsTo('App\Models\User', 'user_id');
+	}
 
-    public function group()
-    {
-        return $this->belongsTo('App\Models\Groups', 'group_id');
-    }
+	public function group()
+	{
+		return $this->belongsTo('App\Models\Groups', 'group_id');
+	}
 
-    public function comments()
-    {
-        return $this->hasMany('App\Models\Comments', 'post_id')->orderByDesc('id')->take(4);
-    }
+	public function comments()
+	{
+		return $this->hasMany('App\Models\Comments', 'post_id')->orderByDesc('id')->take(4);
+	}
 
-    public function likes()
-    {
-        return $this->hasMany('App\Models\Likes', 'post_id');
-    }
+	public function likes()
+	{
+		return $this->hasMany('App\Models\Likes', 'post_id');
+	}
 
-    public function shares()
-    {
-        return $this->hasMany('App\Models\Shares', 'post_id');
-    }
+	public function shares()
+	{
+		return $this->hasMany('App\Models\Shares', 'post_id');
+	}
 
-    #####################################     scopes     ##############################
-    public function scopeSelection($q)
-    {
-        return $q->select('text', 'id', 'created_at', 'user_id', 'group_id', 'video', 'file', 'photo');
-    }
+	//####################################     scopes     ##############################
+	public function scopeSelection($q)
+	{
+		return $q->select('text', 'id', 'created_at', 'user_id', 'group_id', 'video', 'file', 'photo');
+	}
 
-    //accessors
+	//accessors
 
-    public function getPhotoAttribute($photo)
-    {
-        return $photo ? 'images/posts/' . $photo : '';
-    }
+	public function getPhotoAttribute($photo)
+	{
+		return $photo ? 'images/posts/' . $photo : '';
+	}
 
-    public function getFileAttribute($file)
-    {
-        return $file ? 'files/' . $file : '';
-    }
+	public function getFileAttribute($file)
+	{
+		return $file ? 'files/' . $file : '';
+	}
 
-    public function getVideoAttribute($video)
-    {
-        return $video ? 'videos/' . $video : '';
-    }
+	public function getVideoAttribute($video)
+	{
+		return $video ? 'videos/' . $video : '';
+	}
 }

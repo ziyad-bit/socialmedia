@@ -7,20 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Shares extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $guarded=[];
-    protected $table='shares';
+	protected $guarded=[];
 
-    public $timestamps=false;
+	protected $table='shares';
 
-    public function posts()
-    {
-        return $this->belongsTo('App\Models\Posts','post_id');
-    }
+	public $timestamps=false;
 
-    public function users()
-    {
-        return $this->belongsTo('App\Models\User','user_id')->take(300);
-    }
+	public function posts()
+	{
+		return $this->belongsTo('App\Models\Posts', 'post_id');
+	}
+
+	public function users()
+	{
+		return $this->belongsTo('App\Models\User', 'user_id')->take(300);
+	}
 }

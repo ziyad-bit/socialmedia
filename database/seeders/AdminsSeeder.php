@@ -9,23 +9,22 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminsSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        $faker=Factory::create();
+	/**
+	 * Run the database seeds.
+	 *
+	 * @return void
+	 */
+	public function run()
+	{
+		$faker=Factory::create();
 
-        for ($i=0; $i <10 ; $i++) { 
-            Admins::create([
-                'name'     => 'ziyad',
-                'photo'    => 'user.jpg',
-                'email'    => $faker->unique()->email(),
-                'password' => Hash::make('12121212'),
-            ]);
-        }
-        
-    }
+		for ($i=0; $i<10; $i++) {
+			Admins::create([
+				'name'=>'ziyad',
+				'photo'=>'user.jpg',
+				'email'=>$faker->unique()->email(),
+				'password'=>Hash::make('12121212'),
+			]);
+		}
+	}
 }

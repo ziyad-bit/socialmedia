@@ -7,20 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Searches extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $guarded=[];
-    protected $table='searches';
+	protected $guarded=[];
 
-    #############################    relations   ########################################
-    public function users()
-    {
-        return $this->belongsTo('App/Models/User','user_id');
-    }
+	protected $table='searches';
 
-    #############################    scope   ########################################
-    public function scopeSelection($q)
-    {
-        return $q->select('search','user_id');
-    }
+	//############################    relations   ########################################
+	public function users()
+	{
+		return $this->belongsTo('App/Models/User', 'user_id');
+	}
+
+	//############################    scope   ########################################
+	public function scopeSelection($q)
+	{
+		return $q->select('search', 'user_id');
+	}
 }

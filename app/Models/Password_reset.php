@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Password_reset extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $guarded=[];
+	protected $guarded=[];
 }

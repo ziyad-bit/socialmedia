@@ -7,25 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comments extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $guarded=[];
-    protected $table='comments';
+	protected $guarded=[];
 
-    #####################################     relations     ##############################
-    public function post()
-    {
-        return $this->belongsTo('App\Models\Posts','post_id');
-    }
+	protected $table='comments';
 
-    public function user()
-    {
-        return $this->belongsTo('App\Models\User','user_id');
-    }
+	//####################################     relations     ##############################
+	public function post()
+	{
+		return $this->belongsTo('App\Models\Posts', 'post_id');
+	}
 
-    #####################################     scopes       ##############################
-    public function scopeSelection($q)
-    {
-        return $q->select('text','id','created_at','user_id','post_id');
-    }
+	public function user()
+	{
+		return $this->belongsTo('App\Models\User', 'user_id');
+	}
+
+	//####################################     scopes       ##############################
+	public function scopeSelection($q)
+	{
+		return $q->select('text', 'id', 'created_at', 'user_id', 'post_id');
+	}
 }

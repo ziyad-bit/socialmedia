@@ -7,14 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Roles extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $guarded=[];
-    protected $table='roles';
+	protected $guarded=[];
 
-    public $timestamps=false;
+	protected $table='roles';
 
-    public const group_member = 1;
-    public const group_admin  = 2;
-    public const group_owner  = 3;
+	public $timestamps=false;
+
+	public const group_member=1;
+
+	public const group_admin=2;
+
+	public const group_owner=3;
 }

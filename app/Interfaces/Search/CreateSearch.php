@@ -4,5 +4,5 @@ namespace App\Interfaces\Search;
 
 interface CreateSearch
 {
-    public function createSearch():object;
+	public function createSearch():object;
 }

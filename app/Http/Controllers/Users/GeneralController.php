@@ -7,13 +7,13 @@ use Illuminate\Contracts\View\View;
 
 class GeneralController extends Controller
 {
-    public function getDataDeletion():View
-    {
-        return view('users.general.data_deletion');
-    }
+	public function getDataDeletion():View
+	{
+		return view('users.general.data_deletion');
+	}
 
-    public function getPrivacyPolicy():View
-    {
-        return view('users.general.privacy_policy');
-    }
+	public function getPrivacyPolicy():View
+	{
+		return view('users.general.privacy_policy');
+	}
 }

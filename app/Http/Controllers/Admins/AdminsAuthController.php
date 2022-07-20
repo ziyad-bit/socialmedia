@@ -2,88 +2,90 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Models\Admins;
 use App\Events\ResetPassword;
-use App\Models\Password_reset;
 use App\Events\UpdatePasswordEvent;
-use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\{Auth};
 use App\Http\Requests\AdminAuthRequest;
-use Illuminate\Http\{Request,RedirectResponse};
+use App\Models\Admins;
+use App\Models\Password_reset;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\{Auth};
 
 class AdminsAuthController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:admins' )->only('logout');
-        $this->middleware('guest:admins')->except('logout');
-    }
-    ####################################      getlogin      ################################
-    public function getLogin():View
-    {
-        return view('admins.auth.login');
-    }
+	public function __construct()
+	{
+		$this->middleware('auth:admins')->only('logout');
+		$this->middleware('guest:admins')->except('logout');
+	}
 
-    ####################################      login      ################################
-    public function login(Request $request):RedirectResponse
-    {
-        $credentials=$request->only('email','password');
+	//###################################      getlogin      ################################
+	public function getLogin():View
+	{
+		return view('admins.auth.login');
+	}
 
-        if (auth()->guard('admins')->attempt($credentials,$request->filled('remember_me'))) {
-            return redirect('admins/dashboard');
-        } else{
-            return redirect('admins/login')->with(['error'=>'incorrect password or email']);
-        }
-    }
+	//###################################      login      ################################
+	public function login(Request $request):RedirectResponse
+	{
+		$credentials=$request->only('email', 'password');
 
-    ####################################      getresetPasswordLink      ################################
-    public function getresetPasswordLink():View
-    {
-        return view('admins.auth.email');
-    }
+		if (auth()->guard('admins')->attempt($credentials, $request->filled('remember_me'))) {
+			return redirect('admins/dashboard');
+		} else {
+			return redirect('admins/login')->with(['error'=>'incorrect password or email']);
+		}
+	}
 
-    ####################################      sendResetPasswordLink      ################################
-    public function sendResetPasswordLink(AdminAuthRequest $request):RedirectResponse
-    {
-        $email = $request->email;
-        $admin = Admins::where('email',$email)->first();
+	//###################################      getresetPasswordLink      ################################
+	public function getresetPasswordLink():View
+	{
+		return view('admins.auth.email');
+	}
 
-        if ($admin ) {
-            event(new ResetPassword($email));
-        }else{
-            return redirect()->back()->with('error','incorrect email');
-        }
+	//###################################      sendResetPasswordLink      ################################
+	public function sendResetPasswordLink(AdminAuthRequest $request):RedirectResponse
+	{
+		$email=$request->email;
+		$admin=Admins::where('email', $email)->first();
 
-        return redirect()->back()->with('success','reset password link is sent to your email');
-    }
+		if ($admin) {
+			event(new ResetPassword($email));
+		} else {
+			return redirect()->back()->with('error', 'incorrect email');
+		}
 
-    ####################################      updatePassword      ################################
-    public function updatePassword(AdminAuthRequest $request):RedirectResponse
-    {
-        $email              = $request->email;
-        $password_reset_ins = Password_reset::where(['token'=>$request->token,'email'=>$email])->first();
+		return redirect()->back()->with('success', 'reset password link is sent to your email');
+	}
 
-        if ($password_reset_ins != null) {
-            event(new UpdatePasswordEvent($email,$request->password));
-        }else{
-            return redirect()->back()->with('error','incorrect email');
-        }
+	//###################################      updatePassword      ################################
+	public function updatePassword(AdminAuthRequest $request):RedirectResponse
+	{
+		$email=$request->email;
+		$password_reset_ins=Password_reset::where(['token'=>$request->token, 'email'=>$email])->first();
 
-        return redirect()->back()->with('success','you updated your password successfully');
-    }
+		if ($password_reset_ins!=null) {
+			event(new UpdatePasswordEvent($email, $request->password));
+		} else {
+			return redirect()->back()->with('error', 'incorrect email');
+		}
 
-    ####################################      editPassword      ################################
-    public function editPassword():View
-    {
-        return view('admins.auth.edit_password');
-    }
+		return redirect()->back()->with('success', 'you updated your password successfully');
+	}
 
-    ####################################      logout      ################################
-    public function logout():RedirectResponse
-    {
-        Auth::logout();
+	//###################################      editPassword      ################################
+	public function editPassword():View
+	{
+		return view('admins.auth.edit_password');
+	}
 
-        return redirect('admins/login');
-    }
+	//###################################      logout      ################################
+	public function logout():RedirectResponse
+	{
+		Auth::logout();
+
+		return redirect('admins/login');
+	}
 }

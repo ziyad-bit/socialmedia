@@ -7,37 +7,37 @@ use Illuminate\Console\Command;
 
 class CancelPunish extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'cancel:punish';
+	/**
+	 * The name and signature of the console command.
+	 *
+	 * @var string
+	 */
+	protected $signature='cancel:punish';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
+	/**
+	 * The console command description.
+	 *
+	 * @var string
+	 */
+	protected $description='Command description';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+	/**
+	 * Create a new command instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
-    {
-        CancelPunishJob::dispatch();
-    }
+	/**
+	 * Execute the console command.
+	 *
+	 * @return int
+	 */
+	public function handle()
+	{
+		CancelPunishJob::dispatch();
+	}
 }

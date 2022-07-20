@@ -7,15 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Likes extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $guarded=[];
-    protected $table='likes';
+	protected $guarded=[];
 
-    public $timestamps=false;
+	protected $table='likes';
 
-    public function posts()
-    {
-        return $this->belongsTo('App\Models\Posts','post_id');
-    }
+	public $timestamps=false;
+
+	public function posts()
+	{
+		return $this->belongsTo('App\Models\Posts', 'post_id');
+	}
 }

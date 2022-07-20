@@ -9,30 +9,33 @@ use Illuminate\Queue\SerializesModels;
 
 class StoreFriendRequestEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+	use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $receiver_id;
-    public $req_data;
-    public $auth_user;
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct(int $receiver_id ,array $req_data,array $auth_user)
-    {
-        $this->receiver_id = $receiver_id;
-        $this->req_data    = $req_data;
-        $this->auth_user   = $auth_user;
-    }
+	public $receiver_id;
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('channel-name');
-    }
+	public $req_data;
+
+	public $auth_user;
+
+	/**
+	 * Create a new event instance.
+	 *
+	 * @return void
+	 */
+	public function __construct(int $receiver_id, array $req_data, array $auth_user)
+	{
+		$this->receiver_id=$receiver_id;
+		$this->req_data=$req_data;
+		$this->auth_user=$auth_user;
+	}
+
+	/**
+	 * Get the channels the event should broadcast on.
+	 *
+	 * @return \Illuminate\Broadcasting\Channel|array
+	 */
+	public function broadcastOn()
+	{
+		return new PrivateChannel('channel-name');
+	}
 }

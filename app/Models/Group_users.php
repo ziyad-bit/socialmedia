@@ -7,17 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Group_users extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $guarded=[];
-    protected $table='group_users';
+	protected $guarded=[];
 
-    //status
-    public const join_req     = 0;
-    public const approved_req = 1;
-    public const ignored_req  = 2;
+	protected $table='group_users';
 
-    //punish
-    public const not_punished = 0;
-    public const punished     = 1;
+	//status
+	public const join_req=0;
+
+	public const approved_req=1;
+
+	public const ignored_req=2;
+
+	//punish
+	public const not_punished=0;
+
+	public const punished=1;
 }

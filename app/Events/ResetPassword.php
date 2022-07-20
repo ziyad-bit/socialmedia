@@ -9,27 +9,27 @@ use Illuminate\Queue\SerializesModels;
 
 class ResetPassword
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+	use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public string $email;
+	public string $email;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct(string $email)
-    {
-        $this->email=$email;
-    }
+	/**
+	 * Create a new event instance.
+	 *
+	 * @return void
+	 */
+	public function __construct(string $email)
+	{
+		$this->email=$email;
+	}
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('channel-name');
-    }
+	/**
+	 * Get the channels the event should broadcast on.
+	 *
+	 * @return \Illuminate\Broadcasting\Channel|array
+	 */
+	public function broadcastOn()
+	{
+		return new PrivateChannel('channel-name');
+	}
 }

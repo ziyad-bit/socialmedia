@@ -6,37 +6,37 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateUsersTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->tinyInteger('online',false,true)->default(1)->comment('0 = offline , 1 = online ');
-            $table->string('name',100)->unique();
-            $table->string('work',50)->nullable();
-            $table->string('marital_status',10)->nullable();
-            $table->string('photo',250);
-            $table->string('email',100)->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password',60);
-            $table->rememberToken();
-            $table->timestamps();
-        });
-    }
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('users', function (Blueprint $table) {
+			$table->id();
+			$table->tinyInteger('online', false, true)->default(1)->comment('0 = offline , 1 = online ');
+			$table->string('name', 100)->unique();
+			$table->string('work', 50)->nullable();
+			$table->string('marital_status', 10)->nullable();
+			$table->string('photo', 250);
+			$table->string('email', 100)->unique();
+			$table->timestamp('email_verified_at')->nullable();
+			$table->string('password', 60);
+			$table->rememberToken();
+			$table->timestamps();
+		});
+	}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('users');
-    }
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::dropIfExists('users');
+	}
 }
 /*
 posts =>  'photo','user_id','text','updated_at','created_at','file','video' , group_id
@@ -45,7 +45,7 @@ users
 
 admins
 
-messages => sender_id , receiver_id , message , updated_at , created_at 
+messages => sender_id , receiver_id , message , updated_at , created_at
 
 groups => name , description , user_id ,  updated_at , created_at
 
@@ -60,6 +60,6 @@ shares user_id , post_id , updated_at , created_at
 roles name , description
 
 php artisan make:migration create_name_table
-php artisan make:controller name -m 
+php artisan make:controller name -m
 php artisan make:model name -s
 */

@@ -2,63 +2,64 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Models\Admins;
-use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminsRequest;
+use App\Models\Admins;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\{RedirectResponse};
 
 class AdminsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:admins' );
-    }
+	public function __construct()
+	{
+		$this->middleware('auth:admins');
+	}
 
-    ####################################      index      ################################
-    public function index():view
-    {
-        $admins=Admins::cursorPaginate(5);
-        return view('admins.admin.index',compact('admins'));
-    }
+	//###################################      index      ################################
+	public function index():view
+	{
+		$admins=Admins::cursorPaginate(5);
 
-    ####################################      create      ################################
-    public function create():view
-    {
-        return view('admins.admin.create');
-    }
+		return view('admins.admin.index', compact('admins'));
+	}
 
-    ####################################      store      ################################
-    public function store(AdminsRequest $request):RedirectResponse
-    {
-        Admins::create($request->except('photo_id'));
+	//###################################      create      ################################
+	public function create():view
+	{
+		return view('admins.admin.create');
+	}
 
-        return redirect()->back()->with('success','you created admin successfully');
-    }
+	//###################################      store      ################################
+	public function store(AdminsRequest $request):RedirectResponse
+	{
+		Admins::create($request->except('photo_id'));
 
-    ####################################      create      ################################
-    public function edit(int $id):view
-    {
-        $admin=Admins::findOrFail($id);
+		return redirect()->back()->with('success', 'you created admin successfully');
+	}
 
-        return view('admins.admin.edit',compact('admin'));
-    }
+	//###################################      create      ################################
+	public function edit(int $id):view
+	{
+		$admin=Admins::findOrFail($id);
 
-    ####################################      update      ################################
-    public function update(int $id,AdminsRequest $request):RedirectResponse
-    {
-        $admin=Admins::find($id);
-        $admin->update($request->except('photo_id'));
+		return view('admins.admin.edit', compact('admin'));
+	}
 
-        return redirect()->back()->with('success','you updated admin successfully');
-    }
+	//###################################      update      ################################
+	public function update(int $id, AdminsRequest $request):RedirectResponse
+	{
+		$admin=Admins::find($id);
+		$admin->update($request->except('photo_id'));
 
-    ####################################      delete      ################################
-    public function delete(int $id):RedirectResponse
-    {
-        $admin=Admins::find($id);
-        $admin->delete();
+		return redirect()->back()->with('success', 'you updated admin successfully');
+	}
 
-        return redirect()->back()->with('success','you deleted admin successfully');
-    }
+	//###################################      delete      ################################
+	public function delete(int $id):RedirectResponse
+	{
+		$admin=Admins::find($id);
+		$admin->delete();
+
+		return redirect()->back()->with('success', 'you deleted admin successfully');
+	}
 }

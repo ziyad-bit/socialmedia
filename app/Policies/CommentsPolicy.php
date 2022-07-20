@@ -2,17 +2,17 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\Comments;
-use Illuminate\Auth\Access\Response;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class CommentsPolicy
 {
-    use HandlesAuthorization;
+	use HandlesAuthorization;
 
-    public function update_or_delete(User $user,Comments $comments)
-    {
-        return $user->id === $comments->user_id ? Response::allow() : Response::deny('something went wrong');
-    }
+	public function update_or_delete(User $user, Comments $comments)
+	{
+		return $user->id===$comments->user_id ? Response::allow() : Response::deny('something went wrong');
+	}
 }

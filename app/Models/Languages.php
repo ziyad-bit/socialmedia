@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Languages extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $guarded=[];
-    protected $table='languages';
+	protected $guarded=[];
 
-    public $timestamps=false;
-    
+	protected $table='languages';
+
+	public $timestamps=false;
 }

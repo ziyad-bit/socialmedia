@@ -10,51 +10,52 @@ use Illuminate\Http\RedirectResponse;
 
 class LanguagesController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:admins' );
-    }
+	public function __construct()
+	{
+		$this->middleware('auth:admins');
+	}
 
-    ####################################      index      ################################
-    public function index():View
-    {
-        $languages=Languages::cursorPaginate(5);
-        return view('admins.languages.index',compact('languages'));
-    }
+	//###################################      index      ################################
+	public function index():View
+	{
+		$languages=Languages::cursorPaginate(5);
 
-    ####################################      create      ################################
-    public function create():View
-    {
-        return view('admins.languages.create');
-    }
+		return view('admins.languages.index', compact('languages'));
+	}
 
-    ####################################      store      ###############################
-    public function store(LanguagesRequest $request):RedirectResponse
-    {
-        Languages::create($request->validated());
+	//###################################      create      ################################
+	public function create():View
+	{
+		return view('admins.languages.create');
+	}
 
-        return redirect()->back()->with('success','you added language successfully');
-    }
+	//###################################      store      ###############################
+	public function store(LanguagesRequest $request):RedirectResponse
+	{
+		Languages::create($request->validated());
 
-    ####################################      edit      ###############################
-    public function edit(Languages $admins_language):View
-    {
-        return view('admins.languages.edit',compact('admins_language'));
-    }
+		return redirect()->back()->with('success', 'you added language successfully');
+	}
 
-    ####################################      update      ###############################
-    public function update(LanguagesRequest $request,Languages $admins_language):RedirectResponse
-    {
-        $admins_language->update($request->validated());
+	//###################################      edit      ###############################
+	public function edit(Languages $admins_language):View
+	{
+		return view('admins.languages.edit', compact('admins_language'));
+	}
 
-        return redirect()->back()->with('success','you updated language successfully');
-    }
+	//###################################      update      ###############################
+	public function update(LanguagesRequest $request, Languages $admins_language):RedirectResponse
+	{
+		$admins_language->update($request->validated());
 
-    ####################################      destroy      ###############################
-    public function destroy(Languages $admins_language):RedirectResponse
-    {
-        $admins_language->delete();
-        
-        return redirect()->back()->with('success','you deleted language successfully');
-    }
+		return redirect()->back()->with('success', 'you updated language successfully');
+	}
+
+	//###################################      destroy      ###############################
+	public function destroy(Languages $admins_language):RedirectResponse
+	{
+		$admins_language->delete();
+
+		return redirect()->back()->with('success', 'you deleted language successfully');
+	}
 }

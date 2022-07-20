@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateSharesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('shares', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('post_id')->constrained('posts')->onDelete('cascade')->onUpdate('cascade');
-        });
-    }
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('shares', function (Blueprint $table) {
+			$table->id();
+			$table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+			$table->foreignId('post_id')->constrained('posts')->onDelete('cascade')->onUpdate('cascade');
+		});
+	}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('shares');
-    }
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::dropIfExists('shares');
+	}
 }
