@@ -14,9 +14,9 @@ class RolesFactory extends Factory
 	public function definition()
 	{
 		return [
-			'id'=>rand(1, 3),
-			'name'=>$this->faker->name(),
-			'description'=>$this->faker->sentence(),
+			'id'          => rand(1, 3),
+			'name'        => $this->faker->name(),
+			'description' => $this->faker->sentence(),
 		];
 	}
 }

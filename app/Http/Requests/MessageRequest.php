@@ -24,15 +24,15 @@ class MessageRequest extends FormRequest
 	public function rules()
 	{
 		return [
-			'receiver_id'=>'required|numeric',
-			'text'=>'required|string|max:250',
+			'receiver_id' => 'required|numeric',
+			'text'        => 'required|string|max:250',
 		];
 	}
 
 	protected function prepareForValidation()
 	{
 		$this->merge([
-			'text'=>filter_var($this->text, FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+			'text' => filter_var($this->text, FILTER_SANITIZE_FULL_SPECIAL_CHARS),
 		]);
 	}
 }

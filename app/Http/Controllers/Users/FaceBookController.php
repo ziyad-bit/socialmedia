@@ -23,16 +23,16 @@ class FaceBookController extends Controller
 	//##############################      callback      ##############################
 	public function callback()
 	{
-		$facebook_user=Socialite::driver('facebook')->stateless()->user();
+		$facebook_user = Socialite::driver('facebook')->stateless()->user();
 
-		$user=User::where('facebook_id', $facebook_user->id)->first();
+		$user = User::where('facebook_id', $facebook_user->id)->first();
 
 		if (!$user) {
-			$user=User::create([
-				'name'=>$facebook_user->name,
-				'email'=>$facebook_user->email,
-				'facebook_id'=>$facebook_user->id,
-				'email_verified_at'=>now(),
+			$user = User::create([
+				'name'              => $facebook_user->name,
+				'email'             => $facebook_user->email,
+				'facebook_id'       => $facebook_user->id,
+				'email_verified_at' => now(),
 			]);
 		}
 

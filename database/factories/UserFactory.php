@@ -16,13 +16,13 @@ class UserFactory extends Factory
 	public function definition()
 	{
 		return [
-			'name'=>$this->faker->unique()->name(),
-			'photo'=>'user.jpg',
-			'email'=>$this->faker->unique()->safeEmail(),
-			'email_verified_at'=>now(),
-			'online'=>0,
-			'password'=>Hash::make('12121212'), // password
-			'remember_token'=>Str::random(10),
+			'name'              => $this->faker->unique()->name(),
+			'photo'             => 'user.jpg',
+			'email'             => $this->faker->unique()->safeEmail(),
+			'email_verified_at' => now(),
+			'online'            => 0,
+			'password'          => Hash::make('12121212'), // password
+			'remember_token'    => Str::random(10),
 		];
 	}
 
@@ -35,7 +35,7 @@ class UserFactory extends Factory
 	{
 		return $this->state(function (array $attributes) {
 			return [
-				'email_verified_at'=>null,
+				'email_verified_at' => null,
 			];
 		});
 	}

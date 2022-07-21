@@ -25,9 +25,9 @@ class StoreGroup
 	 */
 	public function __construct(Request $request, string $photo_name, bool $is_admin)
 	{
-		$this->photo_name=$photo_name;
-		$this->request=$request;
-		$this->is_admin=$is_admin;
+		$this->photo_name = $photo_name;
+		$this->request    = $request;
+		$this->is_admin   = $is_admin;
 	}
 
 	/**

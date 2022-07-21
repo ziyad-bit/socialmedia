@@ -28,7 +28,7 @@ class GeneralServiceProvider extends ServiceProvider
 	 */
 	public function boot(Request $request)
 	{
-		if (!request()->is(getLang() . '/admins/*')&&!$request->expectsJson()) {
+		if (!request()->is(getLang() . '/admins/*') && !$request->expectsJson()) {
 			View::composer('*', NotifsComposer::class);
 		}
 

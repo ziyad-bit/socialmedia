@@ -24,19 +24,19 @@ class LanguagesRequest extends FormRequest
 	public function rules()
 	{
 		return [
-			'name'=>'required|string|max:20|min:3',
-			'abbr'=>'required|string|max:5|min:2',
-			'direction'=>'required',
+			'name'      => 'required|string|max:20|min:3',
+			'abbr'      => 'required|string|max:5|min:2',
+			'direction' => 'required',
 		];
 	}
 
 	public function messages()
 	{
 		return [
-			'name.required'=>'you should enter name',
-			'name.max'=>'you should enter less than 20 characters',
-			'email.required'=>'you should enter email',
-			'email.min'=>'you should enter more than 3 characters',
+			'name.required'  => 'you should enter name',
+			'name.max'       => 'you should enter less than 20 characters',
+			'email.required' => 'you should enter email',
+			'email.min'      => 'you should enter more than 3 characters',
 		];
 	}
 }

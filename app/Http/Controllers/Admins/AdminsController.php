@@ -18,7 +18,7 @@ class AdminsController extends Controller
 	//###################################      index      ################################
 	public function index():view
 	{
-		$admins=Admins::cursorPaginate(5);
+		$admins = Admins::cursorPaginate(5);
 
 		return view('admins.admin.index', compact('admins'));
 	}
@@ -40,7 +40,7 @@ class AdminsController extends Controller
 	//###################################      create      ################################
 	public function edit(int $id):view
 	{
-		$admin=Admins::findOrFail($id);
+		$admin = Admins::findOrFail($id);
 
 		return view('admins.admin.edit', compact('admin'));
 	}
@@ -48,7 +48,7 @@ class AdminsController extends Controller
 	//###################################      update      ################################
 	public function update(int $id, AdminsRequest $request):RedirectResponse
 	{
-		$admin=Admins::find($id);
+		$admin = Admins::find($id);
 		$admin->update($request->except('photo_id'));
 
 		return redirect()->back()->with('success', 'you updated admin successfully');
@@ -57,7 +57,7 @@ class AdminsController extends Controller
 	//###################################      delete      ################################
 	public function delete(int $id):RedirectResponse
 	{
-		$admin=Admins::find($id);
+		$admin = Admins::find($id);
 		$admin->delete();
 
 		return redirect()->back()->with('success', 'you deleted admin successfully');

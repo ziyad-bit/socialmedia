@@ -6,7 +6,7 @@ trait UploadFile
 {
 	public function uploadFile(object $file, string $path):string
 	{
-		$fileName=$file->hashName();
+		$fileName = $file->hashName();
 		$file->move($path, $fileName);
 
 		return $fileName;

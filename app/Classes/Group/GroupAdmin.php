@@ -14,7 +14,7 @@ class GroupAdmin implements Get
 	public function get(int $group_id, int $items_num):CursorPaginator
 	{
 		return User::selection()->with('group_joined:id')
-			->whereHas('group_joined', fn ($q)=>$q->where(['role_id'=>Roles::group_admin, 'group_id'=>$group_id]))
+			->whereHas('group_joined', fn ($q) => $q->where(['role_id' => Roles::group_admin, 'group_id' => $group_id]))
 			->notAuth()->cursorPaginate($items_num);
 	}
 

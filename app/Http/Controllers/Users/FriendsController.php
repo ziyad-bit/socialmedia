@@ -30,14 +30,14 @@ class FriendsController extends Controller
 	public function show_requests(Request $request):View|JsonResponse|RedirectResponse
 	{
 		try {
-			$friend_reqs=Friends::getRequests();
+			$friend_reqs = Friends::getRequests();
 
-			$page_code=$this->getPageCode($friend_reqs);
+			$page_code = $this->getPageCode($friend_reqs);
 
 			if ($request->ajax()) {
-				$view=view('users.friends.next_requests', compact('friend_reqs'))->render();
+				$view = view('users.friends.next_requests', compact('friend_reqs'))->render();
 
-				return response()->json(['view'=>$view, 'page_code'=>$page_code]);
+				return response()->json(['view' => $view, 'page_code' => $page_code]);
 			}
 
 			return view('users.friends.index', compact('friend_reqs', 'page_code'));
@@ -50,24 +50,24 @@ class FriendsController extends Controller
 	public function store(FriendRequest $request):JsonResponse
 	{
 		try {
-			$auth_user=['user_id'=>Auth::id()];
-			$req_data=$request->validated()+$auth_user;
-			$req=Friends_user::where($req_data)->first();
+			$auth_user = ['user_id' => Auth::id()];
+			$req_data  = $request->validated() + $auth_user;
+			$req       = Friends_user::where($req_data)->first();
 
-			if ($req==null) {
-				$receiver_id=$request->friend_id;
+			if ($req == null) {
+				$receiver_id = $request->friend_id;
 
 				event(new StoreFriendRequestEvent($receiver_id, $req_data, $auth_user));
 				event(new ReceiveReqNotify($receiver_id));
 			} else {
-				return response()->json(['error'=>__("messages.you can't send request again")]);
+				return response()->json(['error' => __("messages.you can't send request again")]);
 			}
 
-			return response()->json(['success'=>__('messages.you send it successfully')]);
+			return response()->json(['success' => __('messages.you send it successfully')]);
 		} catch (\Exception) {
 			DB::rollBack();
 
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 
@@ -77,13 +77,13 @@ class FriendsController extends Controller
 		try {
 			$this->authorize('update_or_delete', $friend);
 
-			$friend->update(['status'=>Friends_user::friend]);
+			$friend->update(['status' => Friends_user::friend]);
 
 			Cache::forget('friends_ids_' . Auth::id());
 
-			return response()->json(['success'=>__('messages.you approve it successfully')]);
+			return response()->json(['success' => __('messages.you approve it successfully')]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 
@@ -93,11 +93,11 @@ class FriendsController extends Controller
 		try {
 			$this->authorize('update_or_delete', $friend);
 
-			$friend->update(['status'=>Friends_user::ignored_user]);
+			$friend->update(['status' => Friends_user::ignored_user]);
 
-			return response()->json(['success'=>__('messages.you ignore it successfully')]);
+			return response()->json(['success' => __('messages.you ignore it successfully')]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 
@@ -111,9 +111,9 @@ class FriendsController extends Controller
 
 			Cache::forget('friends_ids_' . Auth::id());
 
-			return response()->json(['success'=>'you unfriend successfully']);
+			return response()->json(['success' => 'you unfriend successfully']);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 }

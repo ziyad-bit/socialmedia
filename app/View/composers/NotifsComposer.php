@@ -15,10 +15,10 @@ class NotifsComposer
 	public function __construct(Notifs $notifs)
 	{
 		if (Auth::check()) {
-			$notifs=$notifs->get();
+			$notifs = $notifs->get();
 
-			$this->all_notifications=$notifs['all_notifications'];
-			$this->notifs_count=$notifs['notifs_count'];
+			$this->all_notifications = $notifs['all_notifications'];
+			$this->notifs_count      = $notifs['notifs_count'];
 		}
 	}
 
@@ -31,6 +31,6 @@ class NotifsComposer
 	 */
 	public function compose(View $view)
 	{
-		$view->with(['all_notifications'=>$this->all_notifications, 'notifs_count'=>$this->notifs_count]);
+		$view->with(['all_notifications' => $this->all_notifications, 'notifs_count' => $this->notifs_count]);
 	}
 }

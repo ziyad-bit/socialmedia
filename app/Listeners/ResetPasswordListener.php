@@ -17,7 +17,6 @@ class ResetPasswordListener
 	 */
 	public function __construct()
 	{
-
 	}
 
 	/**
@@ -29,11 +28,11 @@ class ResetPasswordListener
 	 */
 	public function handle(ResetPassword $event)
 	{
-		$token=Str::random(60);
+		$token = Str::random(60);
 
-		$email=$event->email;
+		$email = $event->email;
 
-		Password_reset::insert(['token'=>$token, 'email'=>$email, 'created_at'=>now()]);
+		Password_reset::insert(['token' => $token, 'email' => $email, 'created_at' => now()]);
 
 		Mail::to($email)->send(new ResetPasswordMail($token, $email));
 	}

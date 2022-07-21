@@ -24,14 +24,14 @@ class SearchRequest extends FormRequest
 	public function rules()
 	{
 		return [
-			'search'=>'required|string|max:50',
+			'search' => 'required|string|max:50',
 		];
 	}
 
 	protected function prepareForValidation()
 	{
 		$this->merge([
-			'search'=>filter_var($this->search, FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+			'search' => filter_var($this->search, FILTER_SANITIZE_FULL_SPECIAL_CHARS),
 		]);
 	}
 }

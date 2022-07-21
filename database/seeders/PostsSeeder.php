@@ -17,16 +17,16 @@ class PostsSeeder extends Seeder
 	 */
 	public function run()
 	{
-		$users=collect(User::all()->modelKeys());
-		$groups=collect(Groups::all()->modelKeys());
-		$faker=Factory::create();
+		$users  = collect(User::all()->modelKeys());
+		$groups = collect(Groups::all()->modelKeys());
+		$faker  = Factory::create();
 
-		for ($i=0; $i<1000; $i++) {
+		for ($i = 0; $i < 1000; $i++) {
 			Posts::create([
-				'text'=>$faker->paragraph(),
-				'user_id'=>$users->random(),
-				'group_id'=>$groups->random(),
-				'photo'=>'0c1g15lpwtk85PuMtW9WndK8RLPwMp90wwBgJj9h.jpg',
+				'text'     => $faker->paragraph(),
+				'user_id'  => $users->random(),
+				'group_id' => $groups->random(),
+				'photo'    => '0c1g15lpwtk85PuMtW9WndK8RLPwMp90wwBgJj9h.jpg',
 			]);
 		}
 	}

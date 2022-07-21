@@ -19,11 +19,11 @@ class User extends Authenticatable implements MustVerifyEmail
 	 *
 	 * @var array<int, string>
 	 */
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $searchable=[
-		'columns'=>[
-			'users.name'=>10,
+	protected $searchable = [
+		'columns' => [
+			'users.name' => 10,
 		],
 	];
 
@@ -32,7 +32,7 @@ class User extends Authenticatable implements MustVerifyEmail
 	 *
 	 * @var array<int, string>
 	 */
-	protected $hidden=[
+	protected $hidden = [
 		'password',
 		'remember_token',
 	];
@@ -42,8 +42,8 @@ class User extends Authenticatable implements MustVerifyEmail
 	 *
 	 * @var array<string, string>
 	 */
-	protected $casts=[
-		'email_verified_at'=>'datetime',
+	protected $casts = [
+		'email_verified_at' => 'datetime',
 	];
 
 	//############################    relations   ########################################
@@ -103,12 +103,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
 	public function scopeFriends_add_auth($q)
 	{
-		return $q->where(['status'=>1, 'friend_id'=>Auth::id()]);
+		return $q->where(['status' => 1, 'friend_id' => Auth::id()]);
 	}
 
 	public function scopeAuth_add_friends($q)
 	{
-		return $q->where(['status'=>1, 'user_id'=>Auth::id()]);
+		return $q->where(['status' => 1, 'user_id' => Auth::id()]);
 	}
 
 	public function scopeAuthUser($q)

@@ -13,17 +13,17 @@ class Messages extends Model
 {
 	use HasFactory , SearchableTrait;
 
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $table='messages';
+	protected $table = 'messages';
 
-	protected $searchable=[
-		'columns'=>[
-			'users.name'=>10,
+	protected $searchable = [
+		'columns' => [
+			'users.name' => 10,
 		],
-		'joins'=>[
-			'users'=>['messages.sender_id', 'users.id'],
-			'users'=>['messages.receiver_id', 'users.id'],
+		'joins' => [
+			'users' => ['messages.sender_id', 'users.id'],
+			'users' => ['messages.receiver_id', 'users.id'],
 		],
 	];
 
@@ -56,15 +56,15 @@ class Messages extends Model
 
 	public function scopeGetMsgs(Builder $query, int $id):Builder
 	{
-		return $query->where(fn ($q)=>$q->auth_receiver()->where('sender_id', $id))
-			->orWhere(fn ($q)=>$q->Where('receiver_id', $id)->auth_sender());
+		return $query->where(fn ($q) => $q->auth_receiver()->where('sender_id', $id))
+			->orWhere(fn ($q)           => $q->Where('receiver_id', $id)->auth_sender());
 	}
 
 	//mutators
 
 	public function setTextAttribute(string $text):string
 	{
-		return $this->attributes['text']=Crypt::encrypt($text);
+		return $this->attributes['text'] = Crypt::encrypt($text);
 	}
 
 	//accessors

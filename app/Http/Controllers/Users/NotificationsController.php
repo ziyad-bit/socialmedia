@@ -18,13 +18,13 @@ class NotificationsController extends Controller
 	public function show_more(int $last_notif_id):JsonResponse
 	{
 		try {
-			$notifications=Notifs::get_more($last_notif_id);
+			$notifications = Notifs::get_more($last_notif_id);
 
-			$view=view('users.notifications.show', compact('notifications'))->render();
+			$view = view('users.notifications.show', compact('notifications'))->render();
 
-			return response()->json(['view'=>$view]);
+			return response()->json(['view' => $view]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 
@@ -32,13 +32,13 @@ class NotificationsController extends Controller
 	public function update():JsonResponse
 	{
 		try {
-			$unseen_notifs_ids=Notifs::get_ids();
+			$unseen_notifs_ids = Notifs::get_ids();
 
-			Notifications::whereIn('id', $unseen_notifs_ids)->update(['seen'=>1]);
+			Notifications::whereIn('id', $unseen_notifs_ids)->update(['seen' => 1]);
 
 			return response()->json([]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 }

@@ -9,9 +9,9 @@ class Languages extends Model
 {
 	use HasFactory;
 
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $table='languages';
+	protected $table = 'languages';
 
-	public $timestamps=false;
+	public $timestamps = false;
 }

@@ -11,22 +11,22 @@ class Groups extends Model
 {
 	use HasFactory ,SearchableTrait , Sluggable;
 
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $table='groups';
+	protected $table = 'groups';
 
-	protected $searchable=[
-		'columns'=>[
-			'groups.name'=>10,
-			'groups.description'=>7,
+	protected $searchable = [
+		'columns' => [
+			'groups.name'        => 10,
+			'groups.description' => 7,
 		],
 	];
 
 	public function sluggable(): array
 	{
 		return [
-			'slug'=>[
-				'source'=>'name',
+			'slug' => [
+				'source' => 'name',
 			],
 		];
 	}

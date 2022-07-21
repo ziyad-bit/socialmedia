@@ -20,7 +20,7 @@ class StoreSearches
 	 */
 	public function __construct(string $search)
 	{
-		$this->search=$search;
+		$this->search = $search;
 	}
 
 	/**

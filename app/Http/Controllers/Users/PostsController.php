@@ -27,22 +27,22 @@ class PostsController extends Controller
 	public function index_posts(Request $request, Friends $friends, PostsAbstractFactory $posts_factory):View|JsonResponse
 	{
 		try {
-			$auth_id=Auth::id();
-			$friends_ids=$friends->fetchIds($auth_id);
-			$group_name=true;
+			$auth_id     = Auth::id();
+			$friends_ids = $friends->fetchIds($auth_id);
+			$group_name  = true;
 
 			array_unshift($friends_ids, $auth_id);
 
-			$shared_posts_ids=customPosts::getSharedIds($friends_ids);
-			$groupJoinedIds=GroupFactory::factory('Group')->getJoinedIds($friends_ids);
+			$shared_posts_ids = customPosts::getSharedIds($friends_ids);
+			$groupJoinedIds   = GroupFactory::factory('Group')->getJoinedIds($friends_ids);
 
 			//abstract factory design pattern
-			$posts=$posts_factory->postsPage()->fetchPosts(3, $friends_ids, $groupJoinedIds, null, $shared_posts_ids);
+			$posts = $posts_factory->postsPage()->fetchPosts(3, $friends_ids, $groupJoinedIds, null, $shared_posts_ids);
 
 			if ($request->ajax()) {
-				$view=view('users.posts.index_posts', compact('posts', 'group_name'))->render();
+				$view = view('users.posts.index_posts', compact('posts', 'group_name'))->render();
 
-				return response()->json(['view'=>$view]);
+				return response()->json(['view' => $view]);
 			}
 
 			return view('users.posts.index', compact('posts', 'group_name'));
@@ -55,23 +55,23 @@ class PostsController extends Controller
 	public function store(PostsRequest $request, UploadAllFiles $files):JsonResponse
 	{
 		try {
-			$all_files=$files->uploadAll($request);
-			$group_name=false;
+			$all_files  = $files->uploadAll($request);
+			$group_name = false;
 
-			$post=Posts::create([
-				'user_id'=>Auth::id(),
-				'photo'=>$all_files['photo'],
-				'file'=>$all_files['file'],
-				'video'=>$all_files['video'],
-			]+$request->validated());
+			$post = Posts::create([
+				'user_id' => Auth::id(),
+				'photo'   => $all_files['photo'],
+				'file'    => $all_files['file'],
+				'video'   => $all_files['video'],
+			] + $request->validated());
 
-			$share='';
+			$share = '';
 
-			$view=view('users.posts.add_post', compact('post', 'share', 'group_name'))->render();
+			$view = view('users.posts.add_post', compact('post', 'share', 'group_name'))->render();
 
-			return response()->json(['success'=>__('messages.you created it successfully'), 'view'=>$view]);
+			return response()->json(['success' => __('messages.you created it successfully'), 'view' => $view]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 
@@ -81,18 +81,18 @@ class PostsController extends Controller
 		try {
 			$this->authorize('update_or_delete', $post);
 
-			$all_files=$files->uploadAll($request, $post);
+			$all_files = $files->uploadAll($request, $post);
 
 			$post->update([
-				'photo'=>$all_files['photo'],
-				'file'=>$all_files['file'],
-				'video'=>$all_files['video'],
-				'text'=>$request->text,
+				'photo' => $all_files['photo'],
+				'file'  => $all_files['file'],
+				'video' => $all_files['video'],
+				'text'  => $request->text,
 			]);
 
-			return response()->json(['success'=>__('messages.you updated it successfully'), 'post'=>$post]);
+			return response()->json(['success' => __('messages.you updated it successfully'), 'post' => $post]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 
@@ -103,9 +103,9 @@ class PostsController extends Controller
 			$this->authorize('update_or_delete', $post);
 			$post->delete();
 
-			return response()->json(['success_msg'=>__('messages.you deleted it successfully')]);
+			return response()->json(['success_msg' => __('messages.you deleted it successfully')]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 }

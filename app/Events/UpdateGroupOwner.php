@@ -21,7 +21,7 @@ class UpdateGroupOwner
 	 */
 	public function __construct(Group_users $group_admin)
 	{
-		$this->group_admin=$group_admin;
+		$this->group_admin = $group_admin;
 	}
 
 	/**

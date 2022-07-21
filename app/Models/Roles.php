@@ -9,15 +9,15 @@ class Roles extends Model
 {
 	use HasFactory;
 
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $table='roles';
+	protected $table = 'roles';
 
-	public $timestamps=false;
+	public $timestamps = false;
 
-	public const group_member=1;
+	public const group_member = 1;
 
-	public const group_admin=2;
+	public const group_admin = 2;
 
-	public const group_owner=3;
+	public const group_owner = 3;
 }

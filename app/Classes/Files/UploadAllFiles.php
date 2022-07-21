@@ -11,35 +11,35 @@ class UploadAllFiles
 {
 	use UploadFile,UploadImage;
 
-	public function uploadAll(Request $request, Posts $post=null):array
+	public function uploadAll(Request $request, Posts $post = null):array
 	{
-		$photo=$request->file('photo');
+		$photo = $request->file('photo');
 		if ($photo) {
-			$photo=$this->uploadPhoto($photo, 'images/posts/', 560);
+			$photo = $this->uploadPhoto($photo, 'images/posts/', 560);
 		} else {
 			if ($post) {
-				$photo=$post->photo;
+				$photo = $post->photo;
 			}
 		}
 
-		$file=$request->file('file');
+		$file = $request->file('file');
 		if ($file) {
-			$file=$this->uploadFile($file, 'images/files');
+			$file = $this->uploadFile($file, 'images/files');
 		} else {
 			if ($post) {
-				$file=$post->file;
+				$file = $post->file;
 			}
 		}
 
-		$video=$request->file('video');
+		$video = $request->file('video');
 		if ($video) {
-			$video=$this->uploadFile($video, 'images/videos');
+			$video = $this->uploadFile($video, 'images/videos');
 		} else {
 			if ($post) {
-				$video=$post->video;
+				$video = $post->video;
 			}
 		}
 
-		return ['photo'=>$photo, 'file'=>$file, 'video'=>$video];
+		return ['photo' => $photo, 'file' => $file, 'video' => $video];
 	}
 }

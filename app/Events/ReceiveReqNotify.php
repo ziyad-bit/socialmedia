@@ -26,11 +26,11 @@ class ReceiveReqNotify implements ShouldBroadcast
 	 */
 	public function __construct(int $receiver_id)
 	{
-		$user=Auth::user();
+		$user = Auth::user();
 
-		$this->user_name=$user->name;
-		$this->user_photo=$user->photo;
-		$this->receiver_id=$receiver_id;
+		$this->user_name   = $user->name;
+		$this->user_photo  = $user->photo;
+		$this->receiver_id = $receiver_id;
 	}
 
 	/**

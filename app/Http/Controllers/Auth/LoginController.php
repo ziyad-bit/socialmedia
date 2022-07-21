@@ -27,9 +27,9 @@ class LoginController extends Controller
 	 *
 	 * @var string
 	 */
-	protected $redirectTo=RouteServiceProvider::HOME;
+	protected $redirectTo = RouteServiceProvider::HOME;
 
-	protected $decayMinutes=60;
+	protected $decayMinutes = 60;
 
 	/**
 	 * Create a new controller instance.

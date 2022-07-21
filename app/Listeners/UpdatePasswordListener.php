@@ -17,7 +17,6 @@ class UpdatePasswordListener
 	 */
 	public function __construct()
 	{
-
 	}
 
 	/**
@@ -31,12 +30,12 @@ class UpdatePasswordListener
 	{
 		DB::beginTransaction();
 
-		$email=$event->email;
+		$email = $event->email;
 
 		Password_reset::where('email', $email)->delete();
 
 		Admins::where('email', $email)
-			->update(['password'=>Hash::make($event->password)]);
+			->update(['password' => Hash::make($event->password)]);
 
 		DB::commit();
 	}

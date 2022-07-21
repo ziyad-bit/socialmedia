@@ -18,9 +18,9 @@ class LikesController extends Controller
 	public function store(LikesRequest $request):JsonResponse
 	{
 		try {
-			$like_arr=['user_id'=>Auth::id(), 'post_id'=>$request->post_id];
+			$like_arr = ['user_id' => Auth::id(), 'post_id' => $request->post_id];
 
-			$like=Likes::where($like_arr)->first();
+			$like = Likes::where($like_arr)->first();
 
 			if ($like) {
 				$like->delete();
@@ -30,7 +30,7 @@ class LikesController extends Controller
 
 			return response()->json();
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 }

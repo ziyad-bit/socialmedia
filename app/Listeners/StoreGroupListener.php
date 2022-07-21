@@ -19,7 +19,6 @@ class StoreGroupListener
 	 */
 	public function __construct()
 	{
-
 	}
 
 	/**
@@ -31,25 +30,25 @@ class StoreGroupListener
 	 */
 	public function handle(StoreGroup $event)
 	{
-		$slug=SlugService::createSlug(Groups::class, 'slug', $event->request->name);
+		$slug = SlugService::createSlug(Groups::class, 'slug', $event->request->name);
 
-		if ($event->is_admin==true) {
-			$owner=['admin_id'=>Auth::id()];
+		if ($event->is_admin == true) {
+			$owner = ['admin_id' => Auth::id()];
 		} else {
-			$owner=['user_id'=>Auth::id()];
+			$owner = ['user_id' => Auth::id()];
 		}
 
 		DB::beginTransaction();
 
-		$group=Groups::create($event->request->except('photo')+['photo'=>$event->photo_name,
-			'slug'=>$slug,
-		]+$owner);
+		$group = Groups::create($event->request->except('photo') + ['photo' => $event->photo_name,
+			'slug'                                                             => $slug,
+		] + $owner);
 
 		Group_users::create([
-			'group_id'=>$group->id,
-			'role_id'=>Roles::group_owner,
-			'status'=>Group_users::approved_req,
-		]+$owner);
+			'group_id' => $group->id,
+			'role_id'  => Roles::group_owner,
+			'status'   => Group_users::approved_req,
+		] + $owner);
 
 		DB::commit();
 	}

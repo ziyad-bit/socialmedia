@@ -18,10 +18,10 @@ class DashboardController extends Controller
 	//###################################      index      ################################
 	public function index()
 	{
-		$users=User::all()->count();
-		$admins=Admins::all()->count();
-		$posts=Posts::all()->count();
-		$comments=Comments::all()->count();
+		$users    = User::all()->count();
+		$admins   = Admins::all()->count();
+		$posts    = Posts::all()->count();
+		$comments = Comments::all()->count();
 
 		return view('admins.auth.dashboard', compact('users', 'admins', 'posts', 'comments'));
 	}

@@ -9,11 +9,11 @@ class Likes extends Model
 {
 	use HasFactory;
 
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $table='likes';
+	protected $table = 'likes';
 
-	public $timestamps=false;
+	public $timestamps = false;
 
 	public function posts()
 	{

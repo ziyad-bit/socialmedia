@@ -9,19 +9,19 @@ class Group_users extends Model
 {
 	use HasFactory;
 
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $table='group_users';
+	protected $table = 'group_users';
 
 	//status
-	public const join_req=0;
+	public const join_req = 0;
 
-	public const approved_req=1;
+	public const approved_req = 1;
 
-	public const ignored_req=2;
+	public const ignored_req = 2;
 
 	//punish
-	public const not_punished=0;
+	public const not_punished = 0;
 
-	public const punished=1;
+	public const punished = 1;
 }

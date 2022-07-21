@@ -30,11 +30,11 @@ class MessageSend implements ShouldBroadcast
 	 */
 	public function __construct(array $data, User $user)
 	{
-		$this->text=$data['text'];
-		$this->receiver_id=$data['receiver_id'];
-		$this->sender_id=$user->id;
-		$this->user_name=$user->name;
-		$this->user_photo=$user->photo;
+		$this->text        = $data['text'];
+		$this->receiver_id = $data['receiver_id'];
+		$this->sender_id   = $user->id;
+		$this->user_name   = $user->name;
+		$this->user_photo  = $user->photo;
 	}
 
 	/**

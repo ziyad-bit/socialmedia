@@ -5,7 +5,7 @@ return [
 	// Uncomment the languages that your site supports - or add new ones.
 	// These are sorted by the native name, which is the order you might show them in a language selector.
 	// Regional languages are sorted by their base language, so "British English" sorts as "English, British"
-	'supportedLocales'=>[
+	'supportedLocales' => [
 		//'ace'         => ['name' => 'Achinese',               'script' => 'Latn', 'native' => 'Aceh', 'regional' => ''],
 		//'af'          => ['name' => 'Afrikaans',              'script' => 'Latn', 'native' => 'Afrikaans', 'regional' => 'af_ZA'],
 		//'agq'         => ['name' => 'Aghem',                  'script' => 'Latn', 'native' => 'Aghem', 'regional' => ''],
@@ -42,7 +42,7 @@ return [
 		//'et'          => ['name' => 'Estonian',               'script' => 'Latn', 'native' => 'eesti', 'regional' => 'et_EE'],
 		//'na'          => ['name' => 'Nauru',                  'script' => 'Latn', 'native' => 'Ekakairũ Naoero', 'regional' => ''],
 		//'guz'         => ['name' => 'Ekegusii',               'script' => 'Latn', 'native' => 'Ekegusii', 'regional' => ''],
-		'en'=>['name'=>'English',                'script'=>'Latn', 'native'=>'English', 'regional'=>'en_GB'],
+		'en' => ['name' => 'English',                'script' => 'Latn', 'native' => 'English', 'regional' => 'en_GB'],
 		//'en-AU'       => ['name' => 'Australian English',     'script' => 'Latn', 'native' => 'Australian English', 'regional' => 'en_AU'],
 		//'en-GB'       => ['name' => 'British English',        'script' => 'Latn', 'native' => 'British English', 'regional' => 'en_GB'],
 		//'en-CA'       => ['name' => 'Canadian English',       'script' => 'Latn', 'native' => 'Canadian English', 'regional' => 'en_CA'],
@@ -53,7 +53,7 @@ return [
 		//'ewo'         => ['name' => 'Ewondo',                 'script' => 'Latn', 'native' => 'ewondo', 'regional' => ''],
 		//'ee'          => ['name' => 'Ewe',                    'script' => 'Latn', 'native' => 'eʋegbe', 'regional' => ''],
 		//'fil'         => ['name' => 'Filipino',               'script' => 'Latn', 'native' => 'Filipino', 'regional' => 'fil_PH'],
-		'fr'=>['name'=>'French',                 'script'=>'Latn', 'native'=>'français', 'regional'=>'fr_FR'],
+		'fr' => ['name' => 'French',                 'script' => 'Latn', 'native' => 'français', 'regional' => 'fr_FR'],
 		//'fr-CA'       => ['name' => 'Canadian French',        'script' => 'Latn', 'native' => 'français canadien', 'regional' => 'fr_CA'],
 		//'fy'          => ['name' => 'Western Frisian',        'script' => 'Latn', 'native' => 'frysk', 'regional' => 'fy_DE'],
 		//'fur'         => ['name' => 'Friulian',               'script' => 'Latn', 'native' => 'furlan', 'regional' => 'fur_IT'],
@@ -236,7 +236,7 @@ return [
 		//'he'          => ['name' => 'Hebrew',                 'script' => 'Hebr', 'native' => 'עברית', 'regional' => 'he_IL'],
 		//'ug'          => ['name' => 'Uyghur',                 'script' => 'Arab', 'native' => 'ئۇيغۇرچە', 'regional' => 'ug_CN'],
 		//'ur'          => ['name' => 'Urdu',                   'script' => 'Arab', 'native' => 'اردو', 'regional' => 'ur_PK'],
-		'ar'=>['name'=>'Arabic',                 'script'=>'Arab', 'native'=>'العربية', 'regional'=>'ar_AE'],
+		'ar' => ['name' => 'Arabic',                 'script' => 'Arab', 'native' => 'العربية', 'regional' => 'ar_AE'],
 		//'uz-Arab'     => ['name' => 'Uzbek (Arabic)',         'script' => 'Arab', 'native' => 'اۉزبېک', 'regional' => ''],
 		//'tg-Arab'     => ['name' => 'Tajik (Arabic)',         'script' => 'Arab', 'native' => 'تاجیکی', 'regional' => 'tg_TJ'],
 		//'sd'          => ['name' => 'Sindhi',                 'script' => 'Arab', 'native' => 'سنڌي', 'regional' => 'sd_IN'],
@@ -309,7 +309,7 @@ return [
 	// again if the session expires.
 	//
 	// If false, system will take app.php locale attribute
-	'useAcceptLanguageHeader'=>true,
+	'useAcceptLanguageHeader' => true,
 
 	// If `hideDefaultLocaleInURL` is true, then a url without locale
 	// is identical with the same url with default locale.
@@ -326,24 +326,24 @@ return [
 	// If `useAcceptLanguageHeader` is true, then the first time
 	// the locale will be determined from browser and redirect to that language.
 	// After that, `hideDefaultLocaleInURL` behaves as usual.
-	'hideDefaultLocaleInURL'=>false,
+	'hideDefaultLocaleInURL' => false,
 
 	// If you want to display the locales in particular order in the language selector you should write the order here.
 	//CAUTION: Please consider using the appropriate locale code otherwise it will not work
 	//Example: 'localesOrder' => ['es','en'],
-	'localesOrder'=>[],
+	'localesOrder' => [],
 
 	//  If you want to use custom lang url segments like 'at' instead of 'de-AT', you can use the mapping to tallow the LanguageNegotiator to assign the descired locales based on HTTP Accept Language Header. For example you want ot use 'at', so map HTTP Accept Language Header 'de-AT' to 'at' (['de-AT' => 'at']).
-	'localesMapping'=>[],
+	'localesMapping' => [],
 
 	// Locale suffix for LC_TIME and LC_MONETARY
 	// Defaults to most common ".UTF-8". Set to blank on Windows systems, change to ".utf8" on CentOS and similar.
-	'utf8suffix'=>env('LARAVELLOCALIZATION_UTF8SUFFIX', '.UTF-8'),
+	'utf8suffix' => env('LARAVELLOCALIZATION_UTF8SUFFIX', '.UTF-8'),
 
 	// URLs which should not be processed, e.g. '/nova', '/nova/*', '/nova-api/*' or specific application URLs
 	// Defaults to []
-	'urlsIgnored'=>['/skipped'],
+	'urlsIgnored' => ['/skipped'],
 
-	'httpMethodsIgnored'=>['POST', 'PUT', 'PATCH', 'DELETE'],
+	'httpMethodsIgnored' => ['POST', 'PUT', 'PATCH', 'DELETE'],
 
 ];

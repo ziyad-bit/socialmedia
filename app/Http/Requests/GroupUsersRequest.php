@@ -24,7 +24,7 @@ class GroupUsersRequest extends FormRequest
 	public function rules()
 	{
 		return [
-			'group_id'=>'required|numeric',
+			'group_id' => 'required|numeric',
 		];
 	}
 }

@@ -25,25 +25,25 @@ class AdminsRequest extends FormRequest
 	public function rules()
 	{
 		return [
-			'name'=>'required_without:id|string|max:50|min:3',
-			'email'=>'required_without:id|email|max:50|min:10|unique:admins,email,' . Auth::user()->id,
-			'password'=>'required_without:id|string|max:50|min:8',
-			'photo'=>'required_without:photo_id|image|mimes:jpg,gif,jpeg,png,webp|max:14',
+			'name'     => 'required_without:id|string|max:50|min:3',
+			'email'    => 'required_without:id|email|max:50|min:10|unique:admins,email,' . Auth::user()->id,
+			'password' => 'required_without:id|string|max:50|min:8',
+			'photo'    => 'required_without:photo_id|image|mimes:jpg,gif,jpeg,png,webp|max:14',
 		];
 	}
 
 	public function messages()
 	{
 		return [
-			'name.required_without'=>'you should enter name',
-			'name.max'=>'you should enter less than 20 characters',
-			'email.required_without'=>'you should enter email',
-			'email.min'=>'you should enter more than 3 characters',
-			'email.unique'=>'this email is used',
-			'password.required_without'=>'you should enter password',
-			'password.min'=>'you should enter more than 6 characters',
-			'photo.required_without'=>'you should select photo',
-			'photo.image'=>'photo is invalid',
+			'name.required_without'     => 'you should enter name',
+			'name.max'                  => 'you should enter less than 20 characters',
+			'email.required_without'    => 'you should enter email',
+			'email.min'                 => 'you should enter more than 3 characters',
+			'email.unique'              => 'this email is used',
+			'password.required_without' => 'you should enter password',
+			'password.min'              => 'you should enter more than 6 characters',
+			'photo.required_without'    => 'you should select photo',
+			'photo.image'               => 'photo is invalid',
 		];
 	}
 }

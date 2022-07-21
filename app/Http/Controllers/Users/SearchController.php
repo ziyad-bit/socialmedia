@@ -23,25 +23,25 @@ class SearchController extends Controller
 	public function index(SearchRequest $request, PaginateSearchFactory $search_factory): View | JsonResponse
 	{
 		try {
-			$search=$request->search;
+			$search = $request->search;
 
 			/** @var  \App\Classes\Search\PaginateSearch $search_ins */
-			$search_ins=$search_factory->createSearch();
+			$search_ins = $search_factory->createSearch();
 
-			$friends=$search_ins->paginateFriends($search, 3);
-			$users=$search_ins->paginateUsers($search, 3);
-			$groups_joined=$search_ins->paginateGroupsJoined($search, 3);
-			$groups=$search_ins->paginateGroups($search, 3);
+			$friends       = $search_ins->paginateFriends($search, 3);
+			$users         = $search_ins->paginateUsers($search, 3);
+			$groups_joined = $search_ins->paginateGroupsJoined($search, 3);
+			$groups        = $search_ins->paginateGroups($search, 3);
 
-			$next_page=true;
-			if (!$groups->hasMorePages()&&!$users->hasMorePages()&&!$friends->hasMorePages()&&!$groups_joined->hasMorePages()) {
-				$next_page=false;
+			$next_page = true;
+			if (!$groups->hasMorePages() && !$users->hasMorePages() && !$friends->hasMorePages() && !$groups_joined->hasMorePages()) {
+				$next_page = false;
 			}
 
 			if ($request->ajax()) {
-				$view=view('users.search.next_search', compact('users', 'groups', 'friends', 'groups_joined'))->render();
+				$view = view('users.search.next_search', compact('users', 'groups', 'friends', 'groups_joined'))->render();
 
-				return response()->json(['view'=>$view, 'next_page'=>$next_page]);
+				return response()->json(['view' => $view, 'next_page' => $next_page]);
 			} else {
 				$request->flash();
 				event(new StoreSearches($search));
@@ -58,19 +58,19 @@ class SearchController extends Controller
 	public function show(SearchRequest $request, GetSearchFactory $search_factory): JsonResponse
 	{
 		try {
-			$search=$request->search;
+			$search = $request->search;
 
 			/** @var  \App\Classes\Search\GetSearch $search_ins */
-			$search_ins=$search_factory->createSearch();
+			$search_ins = $search_factory->createSearch();
 
-			$friends=$search_ins->get_friends($search, 3);
-			$users=$search_ins->getUsers($search, 3);
-			$groups_joined=$search_ins->getGroupsJoined($search, 3);
-			$groups=$search_ins->getGroups($search, 3);
+			$friends       = $search_ins->get_friends($search, 3);
+			$users         = $search_ins->getUsers($search, 3);
+			$groups_joined = $search_ins->getGroupsJoined($search, 3);
+			$groups        = $search_ins->getGroups($search, 3);
 
-			return response()->json(['users'=>$users, 'friends'=>$friends, 'groups'=>$groups, 'groups_joined'=>$groups_joined]);
+			return response()->json(['users' => $users, 'friends' => $friends, 'groups' => $groups, 'groups_joined' => $groups_joined]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 
@@ -78,12 +78,12 @@ class SearchController extends Controller
 	public function show_recent(): JsonResponse
 	{
 		try {
-			$recent_searches=Searches::selection()->where('user_id', Auth::id())->limit(5)
+			$recent_searches = Searches::selection()->where('user_id', Auth::id())->limit(5)
 			->orderByDesc('id')->get();
 
-			return response()->json(['recent_searches'=>$recent_searches]);
+			return response()->json(['recent_searches' => $recent_searches]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 }

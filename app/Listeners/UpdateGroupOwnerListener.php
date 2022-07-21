@@ -16,7 +16,6 @@ class UpdateGroupOwnerListener
 	 */
 	public function __construct()
 	{
-
 	}
 
 	/**
@@ -29,10 +28,10 @@ class UpdateGroupOwnerListener
 	public function handle(UpdateGroupOwner $event)
 	{
 		DB::beginTransaction();
-		$event->group_admin->update(['role_id'=>Roles::group_owner]);
+		$event->group_admin->update(['role_id' => Roles::group_owner]);
 
-		$group=Groups::findOrFail($event->group_admin->group_id);
-		$group->update(['user_id'=>$event->group_admin->user_id]);
+		$group = Groups::findOrFail($event->group_admin->group_id);
+		$group->update(['user_id' => $event->group_admin->user_id]);
 
 		DB::commit();
 	}

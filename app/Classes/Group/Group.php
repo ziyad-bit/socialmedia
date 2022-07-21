@@ -13,7 +13,7 @@ class Group implements Get
 	//#############################    get admins   ##################################
 	public function get(int $auth_id, int $items_num):CursorPaginator
 	{
-		return Groups::selection()->whereHas('group_users', fn ($q)=>$q->where('user_id', $auth_id))
+		return Groups::selection()->whereHas('group_users', fn ($q) => $q->where('user_id', $auth_id))
 			->cursorPaginate($items_num);
 	}
 

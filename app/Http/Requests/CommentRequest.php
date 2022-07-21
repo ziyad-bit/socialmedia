@@ -24,23 +24,23 @@ class CommentRequest extends FormRequest
 	public function rules()
 	{
 		return [
-			'text'=>'required|string|max:250',
-			'post_id'=>'required|numeric',
+			'text'    => 'required|string|max:250',
+			'post_id' => 'required|numeric',
 		];
 	}
 
 	public function messages()
 	{
 		return [
-			'required'=>'this field is required',
-			'max'=>'you should enter less than 250 characters',
+			'required' => 'this field is required',
+			'max'      => 'you should enter less than 250 characters',
 		];
 	}
 
 	protected function prepareForValidation()
 	{
 		$this->merge([
-			'text'=>filter_var($this->text, FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+			'text' => filter_var($this->text, FILTER_SANITIZE_FULL_SPECIAL_CHARS),
 		]);
 	}
 }

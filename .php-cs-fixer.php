@@ -1,14 +1,17 @@
 <?php
 
+use PhpCsFixer\Config;
+
 $finder = Symfony\Component\Finder\Finder::create()
     ->notPath('vendor')
     ->notPath('bootstrap')
     ->notPath('storage')
+	->notPath('routes')
     ->in(__DIR__)
     ->name('*.php')
     ->notName('*.blade.php');
 
-	$config = new PhpCsFixer\Config();
+	$config = new Config();
 return $config
     ->setRules([
 		'@PSR2' => true,
@@ -27,9 +30,7 @@ return $config
 		'single_quote' => true,
 		// converts double quotes to single quotes. Works!
 
-		'binary_operator_spaces' => [
-			'default' => 'no_space',
-		],
+		'binary_operator_spaces' => ['default' => 'align_single_space'],
 
 		'blank_line_after_opening_tag' => true,
 		// gives blank line after php tag opening tag.
@@ -123,7 +124,7 @@ return $config
 		'unary_operator_spaces' => true,
 		'whitespace_after_comma_in_array' => true,
 
-		'class_attributes_separation' => true,
+		
 		// Methods gets separated with one blank line. Not tested.
 	])
 	->setIndent("\t")

@@ -18,7 +18,7 @@ class LanguagesController extends Controller
 	//###################################      index      ################################
 	public function index():View
 	{
-		$languages=Languages::cursorPaginate(5);
+		$languages = Languages::cursorPaginate(5);
 
 		return view('admins.languages.index', compact('languages'));
 	}

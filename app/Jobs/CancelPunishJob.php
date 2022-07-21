@@ -21,14 +21,14 @@ class CancelPunishJob implements ShouldQueue
 	 */
 	public function handle(Group_users $group_users)
 	{
-		$start=Carbon::now()->subweek()->startOfDay();
-		$end=Carbon::now()->subweek()->endOfDay();
+		$start = Carbon::now()->subweek()->startOfDay();
+		$end   = Carbon::now()->subweek()->endOfDay();
 
-		$users_ids=$group_users::whereBetween('updated_at', [$start, $end])
+		$users_ids = $group_users::whereBetween('updated_at', [$start, $end])
 			->where('punish', $group_users::punished)->pluck('id')->toArray();
 
-		if ($users_ids!=[]) {
-			$group_users::whereIn('id', $users_ids)->update(['punish'=>0]);
+		if ($users_ids != []) {
+			$group_users::whereIn('id', $users_ids)->update(['punish' => 0]);
 		}
 	}
 }

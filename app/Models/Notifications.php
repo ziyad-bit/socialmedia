@@ -12,13 +12,13 @@ class Notifications extends Model
 {
 	use HasFactory;
 
-	public const all=0;
+	public const all = 0;
 
-	public const one=1;
+	public const one = 1;
 
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $table='notifications';
+	protected $table = 'notifications';
 
 	//####################################     relations     ##############################
 	public function user():BelongsTo
@@ -39,7 +39,7 @@ class Notifications extends Model
 
 	public function scopeForAuth(Builder $query):Builder
 	{
-		return $query->selection()->with(['user'=>fn ($q)=>$q->selection()])
+		return $query->selection()->with(['user' => fn ($q) => $q->selection()])
 			->where('receiver_id', Auth::id());
 	}
 }

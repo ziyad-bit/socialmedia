@@ -33,33 +33,33 @@ class GroupsController extends Controller
 	public function index_posts(Request $request, Friends $friends, PostsAbstractFactory $posts_factory, string $slug):View|JsonResponse|RedirectResponse
 	{
 		try {
-			$group_factory=GroupFactory::factory('Group');
+			$group_factory = GroupFactory::factory('Group');
 
-			$group=$group_factory->getSpecific($slug);
-			$group_users_count=$group_factory->get_users_count($group->id);
-			$group_auth=$group_factory->getAuth($group->id);
+			$group             = $group_factory->getSpecific($slug);
+			$group_users_count = $group_factory->get_users_count($group->id);
+			$group_auth        = $group_factory->getAuth($group->id);
 
-			$group_name=false;
-			$posts=null;
-			$page_code=null;
+			$group_name = false;
+			$posts      = null;
+			$page_code  = null;
 
 			if ($group_auth) {
-				if ($group_auth->role_id!=null||$group_auth->punish==Group_users::punished) {
-					$friends_ids=$friends->fetchIds(Auth::id());
-					$posts=$posts_factory->groupPage()->fetchPosts(3, $friends_ids, [], $group->id);
+				if ($group_auth->role_id != null || $group_auth->punish == Group_users::punished) {
+					$friends_ids = $friends->fetchIds(Auth::id());
+					$posts       = $posts_factory->groupPage()->fetchPosts(3, $friends_ids, [], $group->id);
 
-					$page_code=$this->getPageCode($posts);
-					$posts=$posts->map(function ($posts) {
-						$posts->shares=$posts->shares->take(3);
+					$page_code      = $this->getPageCode($posts);
+					$posts          = $posts->map(function ($posts) {
+						$posts->shares = $posts->shares->take(3);
 
 						return $posts;
 					});
 
 
 					if ($request->ajax()) {
-						$view=view('users.posts.index_posts', compact('posts', 'group_name'))->render();
+						$view = view('users.posts.index_posts', compact('posts', 'group_name'))->render();
 
-						return response()->json(['view'=>$view, 'page_code'=>$page_code]);
+						return response()->json(['view' => $view, 'page_code' => $page_code]);
 					}
 				}
 			}
@@ -74,14 +74,14 @@ class GroupsController extends Controller
 	public function index_groups(Request $request):View|JsonResponse
 	{
 		try {
-			$groups_joined=GroupFactory::factory('Group')->get(Auth::id(), 10);
+			$groups_joined = GroupFactory::factory('Group')->get(Auth::id(), 10);
 
-			$page_code=$this->getPageCode($groups_joined);
+			$page_code = $this->getPageCode($groups_joined);
 
 			if ($request->ajax()) {
-				$view=view('users.posts.index_posts', compact('posts', 'page_code'))->render();
+				$view = view('users.posts.index_posts', compact('posts', 'page_code'))->render();
 
-				return response()->json(['view'=>$view, 'page_code'=>$page_code]);
+				return response()->json(['view' => $view, 'page_code' => $page_code]);
 			}
 
 			return view('users.groups.index', compact('groups_joined'));
@@ -100,16 +100,16 @@ class GroupsController extends Controller
 	public function store(GroupRequest $request):RedirectResponse
 	{
 		try {
-			$photo_name=$this->uploadPhoto($request->file('photo'), 'images/groups/', 300);
-			$is_admin=false;
+			$photo_name = $this->uploadPhoto($request->file('photo'), 'images/groups/', 300);
+			$is_admin   = false;
 
 			event(new StoreGroup($request, $photo_name, $is_admin));
 
-			return redirect()->back()->with(['success'=>__('messages.you created it successfully')]);
+			return redirect()->back()->with(['success' => __('messages.you created it successfully')]);
 		} catch (\Exception) {
 			DB::rollBack();
 
-			return redirect()->back()->with(['error'=>__('messages.something went wrong')]);
+			return redirect()->back()->with(['error' => __('messages.something went wrong')]);
 		}
 	}
 
@@ -117,21 +117,21 @@ class GroupsController extends Controller
 	public function update(GroupRequest $request, Groups $group):JsonResponse
 	{
 		try {
-			$group_auth=$this->getAuthInGroup($group->id);
+			$group_auth = $this->getAuthInGroup($group->id);
 			$this->authorize('owner', $group_auth);
 
-			$photo=$request->file('photo');
+			$photo = $request->file('photo');
 			if (!$photo) {
-				$photo_name=$group->photo;
+				$photo_name = $group->photo;
 			} else {
-				$photo_name=$this->uploadPhoto($photo, 'images/groups/', 300);
+				$photo_name = $this->uploadPhoto($photo, 'images/groups/', 300);
 			}
 
-			$group->update($request->except(['photo', 'photo_id'])+['photo'=>$photo_name]);
+			$group->update($request->except(['photo', 'photo_id']) + ['photo' => $photo_name]);
 
-			return response()->json(['success'=>__('messages.you updated it successfully')]);
+			return response()->json(['success' => __('messages.you updated it successfully')]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 
@@ -139,14 +139,14 @@ class GroupsController extends Controller
 	public function destroy(Groups $group):RedirectResponse
 	{
 		try {
-			$group_auth=$this->getAuthInGroup($group->id);
+			$group_auth = $this->getAuthInGroup($group->id);
 			$this->authorize('owner', $group_auth);
 
 			$group->delete();
 
-			return redirect()->route('groups.index_groups')->with(['success'=>__('messages.you deleted it successfully')]);
+			return redirect()->route('groups.index_groups')->with(['success' => __('messages.you deleted it successfully')]);
 		} catch (\Exception) {
-			return redirect()->route('groups.posts.index', $group->slug)->with(['error'=>__('something went wrong')]);
+			return redirect()->route('groups.posts.index', $group->slug)->with(['error' => __('something went wrong')]);
 		}
 	}
 }

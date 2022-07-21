@@ -24,7 +24,7 @@ class ShareRequest extends FormRequest
 	public function rules()
 	{
 		return [
-			'post_id'=>'required|numeric',
+			'post_id' => 'required|numeric',
 		];
 	}
 }

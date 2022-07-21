@@ -13,6 +13,6 @@ class CommentsPolicy
 
 	public function update_or_delete(User $user, Comments $comments)
 	{
-		return $user->id===$comments->user_id ? Response::allow() : Response::deny('something went wrong');
+		return $user->id === $comments->user_id ? Response::allow() : Response::deny('something went wrong');
 	}
 }

@@ -24,18 +24,18 @@ class PostsRequest extends FormRequest
 	public function rules()
 	{
 		return [
-			'text'=>'required|string|min:2|max:500',
-			'video'=>'nullable|file|mimes:mp4,mov,flv,avi|max:1000000',
-			'photo'=>'nullable|image|mimes:gif,png,jpg|max:100000',
-			'group_id'=>'nullable|numeric',
-			'file'=>'nullable|file|max:100000',
+			'text'     => 'required|string|min:2|max:500',
+			'video'    => 'nullable|file|mimes:mp4,mov,flv,avi|max:1000000',
+			'photo'    => 'nullable|image|mimes:gif,png,jpg|max:100000',
+			'group_id' => 'nullable|numeric',
+			'file'     => 'nullable|file|max:100000',
 		];
 	}
 
 	protected function prepareForValidation()
 	{
 		$this->merge([
-			'text'=>filter_var($this->text, FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+			'text' => filter_var($this->text, FILTER_SANITIZE_FULL_SPECIAL_CHARS),
 		]);
 	}
 }

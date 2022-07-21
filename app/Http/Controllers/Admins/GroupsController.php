@@ -24,7 +24,7 @@ class GroupsController extends Controller
 	//###################################      index      ################################
 	public function index():View
 	{
-		$groups=Groups::selection()->cursorPaginate(5);
+		$groups = Groups::selection()->cursorPaginate(5);
 
 		return view('admins.groups.index', compact('groups'));
 	}
@@ -39,16 +39,16 @@ class GroupsController extends Controller
 	public function store(GroupRequest $request):RedirectResponse
 	{
 		try {
-			$photo_name=$this->uploadPhoto($request->file('photo'), 'images/groups/', 300);
-			$is_admin=true;
+			$photo_name = $this->uploadPhoto($request->file('photo'), 'images/groups/', 300);
+			$is_admin   = true;
 
 			event(new StoreGroup($request, $photo_name, $is_admin));
 
-			return redirect()->back()->with(['success'=>__('messages.you created it successfully')]);
+			return redirect()->back()->with(['success' => __('messages.you created it successfully')]);
 		} catch (\Exception) {
 			DB::rollback();
 
-			return redirect()->back()->with(['error'=>__('messages.something went wrong')]);
+			return redirect()->back()->with(['error' => __('messages.something went wrong')]);
 		}
 	}
 
@@ -61,16 +61,16 @@ class GroupsController extends Controller
 	//###################################      update      ################################
 	public function update(GroupRequest $request, Groups $admins_group):RedirectResponse
 	{
-		$photo=$request->file('photo');
+		$photo = $request->file('photo');
 		if (!$photo) {
-			$photo_name=$admins_group->photo;
+			$photo_name = $admins_group->photo;
 		} else {
-			$photo_name=$this->uploadPhoto($photo, 'images/groups/', 300);
+			$photo_name = $this->uploadPhoto($photo, 'images/groups/', 300);
 		}
 
-		$admins_group->update($request->except(['photo', 'photo_id'])+['photo'=>$photo_name]);
+		$admins_group->update($request->except(['photo', 'photo_id']) + ['photo' => $photo_name]);
 
-		return redirect()->back()->with(['success'=>__('messages.you updated it successfully')]);
+		return redirect()->back()->with(['success' => __('messages.you updated it successfully')]);
 	}
 
 	//###################################      destroy      ################################
@@ -78,6 +78,6 @@ class GroupsController extends Controller
 	{
 		$admins_group->delete();
 
-		return redirect()->back()->with(['success'=>__('messages.you deleted it successfully')]);
+		return redirect()->back()->with(['success' => __('messages.you deleted it successfully')]);
 	}
 }

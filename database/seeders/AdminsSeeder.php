@@ -16,14 +16,14 @@ class AdminsSeeder extends Seeder
 	 */
 	public function run()
 	{
-		$faker=Factory::create();
+		$faker = Factory::create();
 
-		for ($i=0; $i<10; $i++) {
+		for ($i = 0; $i < 10; $i++) {
 			Admins::create([
-				'name'=>'ziyad',
-				'photo'=>'user.jpg',
-				'email'=>$faker->unique()->email(),
-				'password'=>Hash::make('12121212'),
+				'name'     => 'ziyad',
+				'photo'    => 'user.jpg',
+				'email'    => $faker->unique()->email(),
+				'password' => Hash::make('12121212'),
 			]);
 		}
 	}

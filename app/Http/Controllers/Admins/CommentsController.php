@@ -18,7 +18,7 @@ class CommentsController extends Controller
 	//###################################      index      ################################
 	public function index():View
 	{
-		$comments=Comments::cursorPaginate(5);
+		$comments = Comments::cursorPaginate(5);
 
 		return view('admins.comment.index', compact('comments'));
 	}

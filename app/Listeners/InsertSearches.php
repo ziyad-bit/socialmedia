@@ -15,7 +15,6 @@ class InsertSearches
 	 */
 	public function __construct()
 	{
-
 	}
 
 	/**
@@ -27,6 +26,6 @@ class InsertSearches
 	 */
 	public function handle(StoreSearches $event)
 	{
-		Searches::create(['search'=>$event->search, 'user_id'=>Auth::id()]);
+		Searches::create(['search' => $event->search, 'user_id' => Auth::id()]);
 	}
 }

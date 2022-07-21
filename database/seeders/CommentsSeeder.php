@@ -17,15 +17,15 @@ class CommentsSeeder extends Seeder
 	 */
 	public function run()
 	{
-		$users=collect(User::all()->modelKeys());
-		$posts=collect(Posts::all()->modelKeys());
-		$faker=Factory::create();
+		$users = collect(User::all()->modelKeys());
+		$posts = collect(Posts::all()->modelKeys());
+		$faker = Factory::create();
 
-		for ($i=0; $i<1000; $i++) {
+		for ($i = 0; $i < 1000; $i++) {
 			Comments::create([
-				'text'=>$faker->sentence(),
-				'user_id'=>$users->random(),
-				'post_id'=>$posts->random(),
+				'text'    => $faker->sentence(),
+				'user_id' => $users->random(),
+				'post_id' => $posts->random(),
 			]);
 		}
 	}

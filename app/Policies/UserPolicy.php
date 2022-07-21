@@ -13,6 +13,6 @@ class UserPolicy
 
 	public function update_or_delete(User $user, Posts $post)
 	{
-		return $user->id===$post->user_id ? Response::allow() : Response::deny('something went wrong');
+		return $user->id === $post->user_id ? Response::allow() : Response::deny('something went wrong');
 	}
 }

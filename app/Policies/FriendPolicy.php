@@ -13,6 +13,6 @@ class FriendPolicy
 
 	public function update_or_delete(User $user, Friends_user $friend)
 	{
-		return $user->id===$friend->friend_id||$user->id===$friend->user_id ? Response::allow() : Response::deny('something went wrong');
+		return $user->id === $friend->friend_id || $user->id === $friend->user_id ? Response::allow() : Response::deny('something went wrong');
 	}
 }

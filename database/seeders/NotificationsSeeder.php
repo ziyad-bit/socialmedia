@@ -15,14 +15,14 @@ class NotificationsSeeder extends Seeder
 	 */
 	public function run()
 	{
-		$users=collect(User::all()->modelKeys());
+		$users = collect(User::all()->modelKeys());
 
-		for ($i=0; $i<10; $i++) {
+		for ($i = 0; $i < 10; $i++) {
 			Notifications::create([
-				'type'=>'friend_request',
-				'seen'=>rand(0, 1),
-				'receiver_id'=>$users->random(),
-				'user_id'=>$users->random(),
+				'type'        => 'friend_request',
+				'seen'        => rand(0, 1),
+				'receiver_id' => $users->random(),
+				'user_id'     => $users->random(),
 			]);
 		}
 	}

@@ -15,12 +15,12 @@ class SharesFactory extends Factory
 	 */
 	public function definition()
 	{
-		$posts=collect(Posts::all()->modelKeys());
-		$users=collect(User::all()->modelKeys());
+		$posts = collect(Posts::all()->modelKeys());
+		$users = collect(User::all()->modelKeys());
 
 		return [
-			'post_id'=>$posts->random(),
-			'user_id'=>$users->random(),
+			'post_id' => $posts->random(),
+			'user_id' => $users->random(),
 		];
 	}
 }

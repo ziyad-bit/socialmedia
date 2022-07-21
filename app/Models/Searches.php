@@ -9,9 +9,9 @@ class Searches extends Model
 {
 	use HasFactory;
 
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $table='searches';
+	protected $table = 'searches';
 
 	//############################    relations   ########################################
 	public function users()

@@ -15,24 +15,24 @@ class LanguagesSeeder extends Seeder
 	public function run()
 	{
 		Languages::create([
-			'name'=>'arabic',
-			'direction'=>'rtl',
-			'abbr'=>'ar',
-			'active'=>'1',
+			'name'      => 'arabic',
+			'direction' => 'rtl',
+			'abbr'      => 'ar',
+			'active'    => '1',
 		]);
 
 		Languages::create([
-			'name'=>'english',
-			'direction'=>'ltr',
-			'abbr'=>'en',
-			'active'=>'1',
+			'name'      => 'english',
+			'direction' => 'ltr',
+			'abbr'      => 'en',
+			'active'    => '1',
 		]);
 
 		Languages::create([
-			'name'=>'french',
-			'direction'=>'ltr',
-			'abbr'=>'fr',
-			'active'=>'1',
+			'name'      => 'french',
+			'direction' => 'ltr',
+			'abbr'      => 'fr',
+			'active'    => '1',
 		]);
 	}
 }

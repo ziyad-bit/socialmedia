@@ -24,9 +24,9 @@ class StoreFriendRequestEvent
 	 */
 	public function __construct(int $receiver_id, array $req_data, array $auth_user)
 	{
-		$this->receiver_id=$receiver_id;
-		$this->req_data=$req_data;
-		$this->auth_user=$auth_user;
+		$this->receiver_id = $receiver_id;
+		$this->req_data    = $req_data;
+		$this->auth_user   = $auth_user;
 	}
 
 	/**

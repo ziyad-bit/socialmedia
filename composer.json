@@ -9,7 +9,6 @@
         "beyondcode/laravel-websockets": "^1.12",
         "cviebrock/eloquent-sluggable": "8.0.8",
         "fruitcake/laravel-cors": "^3.0",
-        "squizlabs/php_codesniffer": "3.*",
         "guzzlehttp/guzzle": "^6.3.1",
         "intervention/image": "^2.7",
         "laravel/framework": "^8.75",
@@ -74,5 +73,4 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true
-   
 }

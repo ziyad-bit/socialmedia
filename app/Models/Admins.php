@@ -10,17 +10,17 @@ class Admins extends Authenticatable
 {
 	use HasFactory;
 
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $table='admins';
+	protected $table = 'admins';
 
-	protected $hidden=[
+	protected $hidden = [
 		'password',
 	];
 
 	//mutators
 	public function setPasswordAttribute($password)
 	{
-		return $this->attributes['password']=Hash::make($password);
+		return $this->attributes['password'] = Hash::make($password);
 	}
 }

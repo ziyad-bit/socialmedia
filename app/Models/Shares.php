@@ -9,11 +9,11 @@ class Shares extends Model
 {
 	use HasFactory;
 
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $table='shares';
+	protected $table = 'shares';
 
-	public $timestamps=false;
+	public $timestamps = false;
 
 	public function posts()
 	{

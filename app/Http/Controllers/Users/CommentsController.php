@@ -21,13 +21,13 @@ class CommentsController extends Controller
 	public function store(CommentRequest $request): JsonResponse
 	{
 		try {
-			$comment=Comments::create($request->validated()+['user_id'=>Auth::id()]);
+			$comment = Comments::create($request->validated() + ['user_id' => Auth::id()]);
 
-			$view=view('users.posts.add_comments', compact('comment'))->render();
+			$view = view('users.posts.add_comments', compact('comment'))->render();
 
-			return response()->json(['view'=>$view]);
+			return response()->json(['view' => $view]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 
@@ -35,13 +35,13 @@ class CommentsController extends Controller
 	public function show(int $post_id): JsonResponse
 	{
 		try {
-			$comments=Posts::findOrFail($post_id)->comments;
+			$comments = Posts::findOrFail($post_id)->comments;
 
-			$view=view('users.posts.index_comments', compact('comments'))->render();
+			$view = view('users.posts.index_comments', compact('comments'))->render();
 
-			return response()->json(['view'=>$view]);
+			return response()->json(['view' => $view]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 
@@ -49,18 +49,18 @@ class CommentsController extends Controller
 	public function show_more(int $com_id, int $post_id): JsonResponse
 	{
 		try {
-			$comments=Comments::selection()->with(['user'=>fn ($q)=>$q->selection()])->where('post_id', $post_id)
+			$comments = Comments::selection()->with(['user' => fn ($q) => $q->selection()])->where('post_id', $post_id)
 				->where('id', '<', $com_id)->orderByDesc('id')->limit(5)->get();
 
-			if ($comments->count()==0) {
+			if ($comments->count() == 0) {
 				return response()->json([], 404);
 			}
 
-			$view=view('users.posts.index_comments', compact('comments'))->render();
+			$view = view('users.posts.index_comments', compact('comments'))->render();
 
-			return response()->json(['view'=>$view]);
+			return response()->json(['view' => $view]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 
@@ -71,9 +71,9 @@ class CommentsController extends Controller
 			$this->authorize('update_or_delete', $comment);
 			$comment->update($request->except('post_id'));
 
-			return response()->json(['success_msg'=>__('messages.you updated it successfully')]);
+			return response()->json(['success_msg' => __('messages.you updated it successfully')]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 
@@ -84,9 +84,9 @@ class CommentsController extends Controller
 			$this->authorize('update_or_delete', $comment);
 			$comment->delete();
 
-			return response()->json(['success_msg'=>__('messages.you deleted it successfully')]);
+			return response()->json(['success_msg' => __('messages.you deleted it successfully')]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 }

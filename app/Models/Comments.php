@@ -9,9 +9,9 @@ class Comments extends Model
 {
 	use HasFactory;
 
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $table='comments';
+	protected $table = 'comments';
 
 	//####################################     relations     ##############################
 	public function post()

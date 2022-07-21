@@ -30,12 +30,12 @@ class AdminsAuthController extends Controller
 	//###################################      login      ################################
 	public function login(Request $request):RedirectResponse
 	{
-		$credentials=$request->only('email', 'password');
+		$credentials = $request->only('email', 'password');
 
 		if (auth()->guard('admins')->attempt($credentials, $request->filled('remember_me'))) {
 			return redirect('admins/dashboard');
 		} else {
-			return redirect('admins/login')->with(['error'=>'incorrect password or email']);
+			return redirect('admins/login')->with(['error' => 'incorrect password or email']);
 		}
 	}
 
@@ -48,8 +48,8 @@ class AdminsAuthController extends Controller
 	//###################################      sendResetPasswordLink      ################################
 	public function sendResetPasswordLink(AdminAuthRequest $request):RedirectResponse
 	{
-		$email=$request->email;
-		$admin=Admins::where('email', $email)->first();
+		$email = $request->email;
+		$admin = Admins::where('email', $email)->first();
 
 		if ($admin) {
 			event(new ResetPassword($email));
@@ -63,10 +63,10 @@ class AdminsAuthController extends Controller
 	//###################################      updatePassword      ################################
 	public function updatePassword(AdminAuthRequest $request):RedirectResponse
 	{
-		$email=$request->email;
-		$password_reset_ins=Password_reset::where(['token'=>$request->token, 'email'=>$email])->first();
+		$email              = $request->email;
+		$password_reset_ins = Password_reset::where(['token' => $request->token, 'email' => $email])->first();
 
-		if ($password_reset_ins!=null) {
+		if ($password_reset_ins != null) {
 			event(new UpdatePasswordEvent($email, $request->password));
 		} else {
 			return redirect()->back()->with('error', 'incorrect email');

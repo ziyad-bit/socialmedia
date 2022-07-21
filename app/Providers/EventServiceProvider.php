@@ -15,11 +15,11 @@ class EventServiceProvider extends ServiceProvider
 	 *
 	 * @var array<class-string, array<int, class-string>>
 	 */
-	protected $listen=[
-		Registered::class=>[
+	protected $listen = [
+		Registered::class => [
 			SendEmailVerificationNotification::class,
 		],
-		StoreSearches::class=>[
+		StoreSearches::class => [
 			InsertSearches::class,
 		],
 	];
@@ -31,7 +31,6 @@ class EventServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-
 	}
 
 	public function shouldDiscoverEvents()

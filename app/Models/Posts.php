@@ -9,9 +9,9 @@ class Posts extends Model
 {
 	use HasFactory;
 
-	protected $guarded=[];
+	protected $guarded = [];
 
-	protected $table='posts';
+	protected $table = 'posts';
 
 	//####################################     relations     ##############################
 	public function users()

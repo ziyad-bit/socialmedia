@@ -12,14 +12,14 @@ class CancelPunish extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature='cancel:punish';
+	protected $signature = 'cancel:punish';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description='Command description';
+	protected $description = 'Command description';
 
 	/**
 	 * Create a new command instance.

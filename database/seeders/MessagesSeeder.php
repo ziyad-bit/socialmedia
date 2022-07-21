@@ -16,14 +16,14 @@ class MessagesSeeder extends Seeder
 	 */
 	public function run()
 	{
-		$users=collect(User::all()->modelKeys());
-		$faker=Factory::create();
+		$users = collect(User::all()->modelKeys());
+		$faker = Factory::create();
 
-		for ($i=0; $i<1000; $i++) {
+		for ($i = 0; $i < 1000; $i++) {
 			Messages::create([
-				'receiver_id'=>$users->random(),
-				'sender_id'=>$users->random(),
-				'text'=>$faker->sentence(),
+				'receiver_id' => $users->random(),
+				'sender_id'   => $users->random(),
+				'text'        => $faker->sentence(),
 			]);
 		}
 	}

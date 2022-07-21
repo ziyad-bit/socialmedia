@@ -20,23 +20,23 @@ class SharesController extends Controller
 	public function store(ShareRequest $request):JsonResponse
 	{
 		try {
-			$post_id=$request->post_id;
-			$data=['post_id'=>$post_id, 'user_id'=>Auth::id()];
+			$post_id = $request->post_id;
+			$data    = ['post_id' => $post_id, 'user_id' => Auth::id()];
 
-			$share=Shares::where($data)->first();
+			$share = Shares::where($data)->first();
 			if ($share) {
-				return response()->json(['error'=>'you shared this post before'], 422);
+				return response()->json(['error' => 'you shared this post before'], 422);
 			}
 
 			Shares::create($data);
 
-			$post=Posts::findOrFail($post_id);
-			$share=true;
-			$view=view('users.posts.add_post', compact('post', 'share'))->render();
+			$post  = Posts::findOrFail($post_id);
+			$share = true;
+			$view  = view('users.posts.add_post', compact('post', 'share'))->render();
 
-			return response()->json(['success'=>'you shared this post successfully', 'view'=>$view]);
+			return response()->json(['success' => 'you shared this post successfully', 'view' => $view]);
 		} catch (\Exception) {
-			return response()->json(['error'=>'something went wrong'], 500);
+			return response()->json(['error' => 'something went wrong'], 500);
 		}
 	}
 }

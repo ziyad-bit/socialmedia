@@ -21,8 +21,8 @@ class ResetPasswordMail extends Mailable
 	 */
 	public function __construct(string $token, string $email)
 	{
-		$this->token=$token;
-		$this->email=$email;
+		$this->token = $token;
+		$this->email = $email;
 	}
 
 	/**
@@ -33,7 +33,7 @@ class ResetPasswordMail extends Mailable
 	public function build()
 	{
 		return $this->markdown('admins.emails.reset_password', [
-			'url'=>config('app.url') . '/admins/reset/password/' . $this->token . '/' . $this->email,
+			'url' => config('app.url') . '/admins/reset/password/' . $this->token . '/' . $this->email,
 		]);
 	}
 }

@@ -18,7 +18,6 @@ class StoreFriendRequestListener
 	 */
 	public function __construct()
 	{
-
 	}
 
 	/**
@@ -33,11 +32,11 @@ class StoreFriendRequestListener
 		DB::beginTransaction();
 
 		Friends_user::create($event->req_data);
-		Notifications::create(['type'=>'friend_req', 'receiver_id'=>$event->receiver_id]+$event->auth_user);
+		Notifications::create(['type' => 'friend_req', 'receiver_id' => $event->receiver_id] + $event->auth_user);
 
 		DB::commit();
 
-		$auth_id=Auth::id();
+		$auth_id = Auth::id();
 		Cache::forget('notifs_' . $auth_id);
 		Cache::forget('notifs_count_' . $auth_id);
 	}

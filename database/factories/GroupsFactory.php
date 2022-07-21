@@ -14,14 +14,14 @@ class GroupsFactory extends Factory
 	 */
 	public function definition()
 	{
-		$users=collect(User::all()->modelKeys());
+		$users = collect(User::all()->modelKeys());
 
 		return [
-			'user_id'=>$users->random(),
-			'name'=>$this->faker->name(),
-			'photo'=>'KheHNgueMoDQO3TVSdWJAKh6PejfqV5WtMp9AQL3.jpg',
-			'description'=>$this->faker->paragraph(2),
-			'slug'=>$this->faker->name(),
+			'user_id'     => $users->random(),
+			'name'        => $this->faker->name(),
+			'photo'       => 'KheHNgueMoDQO3TVSdWJAKh6PejfqV5WtMp9AQL3.jpg',
+			'description' => $this->faker->paragraph(2),
+			'slug'        => $this->faker->name(),
 		];
 	}
 }
