@@ -4,7 +4,7 @@ namespace App\Classes\Group;
 
 use App\Models\Group_users;
 use App\Models\User;
-use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 
 class GroupReq
 {

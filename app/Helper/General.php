@@ -46,4 +46,6 @@ function diff_date($date):string
 	} elseif ($date_diff >= 483840) {
 		return $date->diffInYears(date('Y-m-d H:i:s')) . ' years ago';
 	}
+
+	return '';
 }

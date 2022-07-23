@@ -10,6 +10,7 @@ use App\Http\Requests\SearchRequest;
 use App\Models\Searches;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class SearchController extends Controller
@@ -20,7 +21,7 @@ class SearchController extends Controller
 	}
 
 	//######################################    index    #####################################
-	public function index(SearchRequest $request, PaginateSearchFactory $search_factory): View | JsonResponse
+	public function index(SearchRequest $request, PaginateSearchFactory $search_factory): View | JsonResponse | RedirectResponse
 	{
 		try {
 			$search = $request->search;

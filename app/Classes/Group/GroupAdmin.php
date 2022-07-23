@@ -6,7 +6,7 @@ use App\Interfaces\Group\Get;
 use App\Models\Group_users;
 use App\Models\Roles;
 use App\Models\User;
-use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 
 class GroupAdmin implements Get
 {

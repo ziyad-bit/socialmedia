@@ -1,0 +1,18 @@
+includes:
+    - phpstan.neon.dist
+
+parameters:
+
+	ignoreErrors:
+		- '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder::[a-zA-Z0-9\\_]()#'
+		- '#PHPDoc#'
+		- '#Access to an undefined property App\\Models\\Posts::\$comments#'
+		- '#Access to an undefined property App\\Models\\Groups::\$groups#'
+		- '#Call to an undefined method Carbon\\Carbon::[a-zA-Z0-9\\_]()#'
+		- '#Relation#'
+		- '#Array has 2 duplicate keys with value#'
+		-
+			message: '#Call to function compact\(\) contains possibly undefined variable#'
+			path: app\Http\Controllers\Users\ProfileController.php
+		
+

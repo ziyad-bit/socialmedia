@@ -6,8 +6,8 @@ use App\Models\Friends_user;
 use App\Models\User;
 use App\Traits\GetFriends;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\CursorPaginator;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 

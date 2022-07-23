@@ -58,7 +58,7 @@ class ProfileController extends Controller
 	}
 
 	//#################################     show auth friends    #################################
-	public function show(Request $request, Friends $friends):View|JsonResponse
+	public function show(Request $request, Friends $friends):View|JsonResponse| RedirectResponse
 	{
 		try {
 			$friends = $friends->fetch(Auth::id(), 5);
@@ -76,7 +76,7 @@ class ProfileController extends Controller
 	}
 
 	//#################################     index user profile    #################################
-	public function index_profile(Request $request, string $name, Friends $friends, PostsAbstractFactory $posts_factory):View|JsonResponse
+	public function index_profile(Request $request, string $name, Friends $friends, PostsAbstractFactory $posts_factory):View|JsonResponse| RedirectResponse
 	{
 		try {
 			$auth_id      = Auth::id();
@@ -92,15 +92,14 @@ class ProfileController extends Controller
 
 				array_unshift($user_friends_ids, $auth_id);
 
-				$posts = $posts_factory->usersProfilePage()->fetchPosts(3, $mutual_friends_ids, [], null, [], $user->id);
-			}
+				$posts     = $posts_factory->usersProfilePage()->fetchPosts(3, $mutual_friends_ids, [], null, [], $user->id);
+				$page_code = $this->getPageCode($posts);
 
-			$page_code = $this->getPageCode($posts);
+				if ($request->ajax()) {
+					$view = view('users.posts.index_posts', compact('posts'))->render();
 
-			if ($request->ajax()) {
-				$view = view('users.posts.index_posts', compact('posts'))->render();
-
-				return response()->json(['view' => $view, 'page_code' => $page_code]);
+					return response()->json(['view' => $view, 'page_code' => $page_code]);
+				}
 			}
 
 			return view('users.profile.index_user', compact('group_name', 'posts', 'page_code', 'mutual_friends_num', 'related_user'));
@@ -110,7 +109,7 @@ class ProfileController extends Controller
 	}
 
 	//#################################     show user mutual friends    #################################
-	public function show_friends(Request $request, string $name, Friends $friends):View|JsonResponse
+	public function show_friends(Request $request, string $name, Friends $friends):View|JsonResponse| RedirectResponse
 	{
 		try {
 			$user           = User::where('name', $name)->firstOrFail();

@@ -3,7 +3,7 @@
 namespace App\Classes\Search;
 
 use App\AbstractClasses\Search;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Contracts\Pagination\Paginator;
 
 class PaginateSearch extends Search
 {

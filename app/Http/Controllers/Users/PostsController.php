@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Classes\Files\UploadAllFiles;
+use App\Models\Posts;
+use Illuminate\Http\Request;
 use App\Classes\Friends\Friends;
+use Illuminate\Http\JsonResponse;
 use App\Classes\Group\GroupFactory;
+use App\Http\Requests\PostsRequest;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Classes\Files\UploadAllFiles;
+use Illuminate\Http\RedirectResponse;
 use App\Classes\Posts\Posts as customPosts;
 use App\Classes\Posts\PostsAbstractFactory;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\PostsRequest;
-use App\Models\Posts;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
@@ -24,7 +25,7 @@ class PostsController extends Controller
 	}
 
 	//#################################       index      ###############################
-	public function index_posts(Request $request, Friends $friends, PostsAbstractFactory $posts_factory):View|JsonResponse
+	public function index_posts(Request $request, Friends $friends, PostsAbstractFactory $posts_factory):View|JsonResponse| RedirectResponse
 	{
 		try {
 			$auth_id     = Auth::id();

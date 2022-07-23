@@ -124,7 +124,7 @@ return $config
 		'unary_operator_spaces' => true,
 		'whitespace_after_comma_in_array' => true,
 
-		
+		'class_attributes_separation' => false,
 		// Methods gets separated with one blank line. Not tested.
 	])
 	->setIndent("\t")

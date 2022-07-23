@@ -40,6 +40,7 @@ class GroupsController extends Controller
 			$group_auth        = $group_factory->getAuth($group->id);
 
 			$group_name = false;
+
 			$posts      = null;
 			$page_code  = null;
 
@@ -71,7 +72,7 @@ class GroupsController extends Controller
 	}
 
 	//################################    index_groups   ###################################
-	public function index_groups(Request $request):View|JsonResponse
+	public function index_groups(Request $request):View|JsonResponse|RedirectResponse
 	{
 		try {
 			$groups_joined = GroupFactory::factory('Group')->get(Auth::id(), 10);
@@ -79,7 +80,7 @@ class GroupsController extends Controller
 			$page_code = $this->getPageCode($groups_joined);
 
 			if ($request->ajax()) {
-				$view = view('users.posts.index_posts', compact('posts', 'page_code'))->render();
+				$view = view('users.posts.index_posts', compact('groups_joined', 'page_code'))->render();
 
 				return response()->json(['view' => $view, 'page_code' => $page_code]);
 			}

@@ -2,7 +2,7 @@
 
 namespace App\Interfaces\Group;
 
-use Illuminate\Pagination\CursorPaginator;
+use  Illuminate\Contracts\Pagination\CursorPaginator;
 
 interface Get
 {

@@ -24,7 +24,7 @@ class StoreGroupListener
 	/**
 	 * Handle the event.
 	 *
-	 * @param  \App\Events\StoreGroupOwner  $event
+	 * @param  \App\Events\StoreGroup $event
 	 *
 	 * @return void
 	 */

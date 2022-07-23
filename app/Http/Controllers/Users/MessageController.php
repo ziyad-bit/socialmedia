@@ -12,6 +12,7 @@ use App\Http\Requests\SearchRequest;
 use App\Models\Messages;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +24,7 @@ class MessageController extends Controller
 	}
 
 	//############################     index_friends     #######################################
-	public function index_friends(Request $request, Friends $friends):View|JsonResponse
+	public function index_friends(Request $request, Friends $friends):View|JsonResponse|RedirectResponse
 	{
 		try {
 			$auth_friends = $friends->getByOnlineOrder(5);

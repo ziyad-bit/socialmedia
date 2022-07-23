@@ -31,12 +31,8 @@ class CancelPunish extends Command
 		parent::__construct();
 	}
 
-	/**
-	 * Execute the console command.
-	 *
-	 * @return int
-	 */
-	public function handle()
+	
+	public function handle():void
 	{
 		CancelPunishJob::dispatch();
 	}

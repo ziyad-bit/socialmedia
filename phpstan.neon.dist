@@ -1,0 +1,12 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    noModelMake: false
+	
+    paths:
+        - app
+
+    # The level 9 is the highest level
+    level: 5
+	

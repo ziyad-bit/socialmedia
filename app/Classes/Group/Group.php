@@ -5,7 +5,7 @@ namespace App\Classes\Group;
 use App\Interfaces\Group\Get;
 use App\Models\Group_users;
 use App\Models\Groups;
-use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Support\Facades\Auth;
 
 class Group implements Get

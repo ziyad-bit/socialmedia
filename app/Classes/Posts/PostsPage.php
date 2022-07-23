@@ -4,8 +4,8 @@ namespace App\Classes\Posts;
 
 use App\Interfaces\Posts\FetchPosts;
 use App\Traits\GetPosts;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\CursorPaginator;
+use Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 
 class PostsPage implements FetchPosts
 {
